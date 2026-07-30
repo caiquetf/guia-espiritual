@@ -25,7 +25,12 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      # ref explícito: quando a sincronização chama este workflow, o commit que
+      # disparou a execução é anterior ao que o robô acabou de criar com os dados
+      # novos. Sem isso, a publicação sairia com o dados.json antigo.
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
