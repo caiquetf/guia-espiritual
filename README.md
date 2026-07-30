@@ -98,4 +98,19 @@ O menu **⋯** (celular) traz também **Baixar modelo de planilha** e **Exportar
   no **`localStorage` do navegador** e sobrevivem até a próxima atualização oficial,
   quando são substituídas pela versão nova. Use **Exportar CSV** para guardar uma cópia.
 - Os cadastros que vêm pré-carregados são **fictícios**, apenas para demonstração.
-- O Tailwind é carregado via CDN. Sem internet, um CSS de fallback embutido mantém o app legível e totalmente funcional.
+- O CSS já vem **embutido no arquivo**: nenhuma requisição externa, carrega na hora e
+  funciona offline. Ele é gerado pelo Tailwind a partir das classes realmente usadas.
+
+## Mexendo no visual
+
+O `index.html` continua sendo um arquivo só, pronto para abrir. Mas se você **adicionar ou
+remover uma classe do Tailwind** no HTML, é preciso regerar o CSS embutido:
+
+```sh
+npm install     # só na primeira vez
+npm run css
+```
+
+O comando recompila e reescreve o bloco `<style>` do `index.html`. Estilos próprios
+(cores, textura, ornamentos, ícones) ficam no segundo `<style>`, escrito à mão — esses
+podem ser editados direto, sem recompilar.

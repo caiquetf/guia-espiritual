@@ -1,0 +1,11 @@
+{
+  "name": "guia-espiritual",
+  "private": true,
+  "description": "Guia e diretório de espaços espirituais de Piracicaba e região",
+  "scripts": {
+    "css": "node build/embutir-css.mjs"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.17"
+  }
+}
