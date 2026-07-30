@@ -170,7 +170,10 @@
 <div id="formModal" hidden class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm overflow-y-auto p-3 sm:p-6">
   <form id="entryForm" class="modal-in max-w-2xl mx-auto my-4 bg-night-900 border border-sand-800 rounded-2xl shadow-2xl overflow-hidden">
     <div class="p-5 border-b border-sand-800/80 flex items-center justify-between">
-      <h2 id="formTitle" class="font-display text-lg text-sand-50">Novo cadastro</h2>
+      <div>
+        <h2 id="formTitle" class="font-display text-lg text-sand-50">Novo cadastro</h2>
+        <p class="text-[11px] text-sand-400 mt-0.5">Válido só neste navegador · a planilha continua sendo a fonte do site</p>
+      </div>
       <button type="button" onclick="closeForm()" class="w-8 h-8 rounded-lg bg-sand-800 hover:bg-sand-700">✕</button>
     </div>
     <div class="p-5 grid gap-3 sm:grid-cols-2" id="formFields"></div>
@@ -828,11 +831,23 @@ function openDetails(id){
       class="flex-1 min-w-[140px] text-sm py-2.5 rounded-lg font-medium transition ${hasPhone?'bg-emerald-600/90 hover:bg-emerald-500 text-white':'bg-sand-900 text-sand-600 cursor-not-allowed'}">🟢 Chamar no WhatsApp</button>
     <button onclick="copiarFicha('${d.id}')" class="flex-1 min-w-[140px] text-sm py-2.5 rounded-lg bg-sand-800 hover:bg-sand-700 transition">📋 Copiar ficha</button>
     <button onclick="enviarCliente('${d.id}')" class="flex-1 min-w-[140px] text-sm py-2.5 rounded-lg bg-clay-700 hover:bg-clay-500 transition">📤 Enviar para cliente</button>
-    <button onclick="openForm('${d.id}')" class="text-sm px-3 py-2.5 rounded-lg border border-sand-800 hover:bg-sand-800 transition">✏️</button>`;
+    <div class="w-full flex gap-2 pt-2 mt-1 border-t border-sand-800/60">
+      <button onclick="openForm('${d.id}')" class="flex-1 text-sm py-2.5 rounded-lg border border-sand-800 hover:bg-sand-800 transition">✏️ Editar</button>
+      <button onclick="excluirCadastro('${d.id}')" class="flex-1 text-sm py-2.5 rounded-lg border border-red-900/70 text-red-300 hover:bg-red-950/50 transition">🗑️ Excluir</button>
+    </div>`;
 
   document.getElementById('modal').hidden = false;
   document.body.style.overflow = 'hidden';
 }
+/** Exclusão vale só neste navegador — a fonte dos cadastros é a planilha. */
+function excluirCadastro(id){
+  const d = byId(id); if (!d) return;
+  if (!confirm(`Excluir "${d.nome}" da sua lista?\n\nA exclusão vale apenas neste navegador. Para tirar o espaço do site publicado, remova a linha na planilha de respostas.`)) return;
+  DATA = DATA.filter(x => x.id !== id);
+  save(); closeModal(); render();
+  toast('Cadastro excluído deste navegador.', 'ok');
+}
+
 function closeModal(){
   document.getElementById('modal').hidden = true;
   if (document.getElementById('formModal').hidden) document.body.style.overflow = '';
