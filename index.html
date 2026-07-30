@@ -320,6 +320,8 @@ let nextId = 1;
 function normalize(r){
   const o = { id: r.id || 'e' + (nextId++) };
   FIELDS.forEach(f => o[f.key] = (r[f.key] ?? '').toString().trim());
+  o.tradicao   = corrigirGrafia(o.tradicao);
+  o.cidade     = corrigirCidade(o.cidade);
   o.grupo      = r.grupo || grupoTradicao(o.tradicao);
   o.modalidade = matchModality(o.modalidade);
   return o;
@@ -327,6 +329,70 @@ function normalize(r){
 
 function deaccent(s){ return (s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,''); }
 function norm(s){ return deaccent(s).toLowerCase().replace(/\s+/g,' ').trim(); }
+
+/* ── Correção de grafia: acentos e maiúsculas. Nunca troca uma palavra por outra. ── */
+
+// Grafias corretas de termos que aparecem escritos sem acento ou em caixa alta.
+const ORTOGRAFIA = {
+  'umbanda':'Umbanda', 'umbandista':'Umbandista', 'candomble':'Candomblé', 'candomble':'Candomblé',
+  'quimbanda':'Quimbanda', 'kimbanda':'Quimbanda', 'macumba':'Macumba', 'jurema':'Jurema',
+  'buzios':'Búzios', 'taro':'Tarô', 'cartomancia':'Cartomancia', 'cartomante':'Cartomante',
+  'oraculista':'Oraculista', 'oraculo':'Oráculo', 'baralho':'Baralho', 'cigano':'Cigano', 'cigana':'Cigana',
+  'orixa':'Orixá', 'orixas':'Orixás', 'exu':'Exu', 'pombagira':'Pombagira', 'pomba':'Pomba', 'gira':'Gira',
+  'caboclo':'Caboclo', 'cabocla':'Cabocla', 'preto':'Preto', 'velho':'Velho', 'erê':'Erê', 'ere':'Erê',
+  'espiritismo':'Espiritismo', 'espirita':'Espírita', 'kardecismo':'Kardecismo', 'kardecista':'Kardecista',
+  'reiki':'Reiki', 'reikiana':'Reikiana', 'reikiano':'Reikiano', 'holistico':'Holístico', 'holistica':'Holística',
+  'terapia':'Terapia', 'terapeuta':'Terapeuta', 'magia':'Magia', 'bruxa':'Bruxa', 'bruxo':'Bruxo',
+  'bruxaria':'Bruxaria', 'wicca':'Wicca', 'xamanismo':'Xamanismo', 'espiritualidade':'Espiritualidade',
+  'ile':'Ilê', 'axe':'Axé', 'ase':'Asé', 'ifa':'Ifá', 'babalorixa':'Babalorixá', 'iyalorixa':'Iyalorixá',
+  'ialorixa':'Ialorixá', 'babalawo':'Babalawo', 'terreiro':'Terreiro', 'tenda':'Tenda', 'centro':'Centro'
+};
+
+// Palavras que ficam em minúscula no meio de um nome próprio em português.
+const MINUSCULAS = new Set(['de','da','do','das','dos','e','em','com','na','no','nas','nos','a','o','ao','à']);
+
+function tituloPt(texto){
+  return texto.toLowerCase().split(/(\s+|\/|-)/).map((parte, i) => {
+    if (!parte || /^(\s+|\/|-)$/.test(parte)) return parte;
+    if (i > 0 && MINUSCULAS.has(parte)) return parte;
+    return parte.charAt(0).toUpperCase() + parte.slice(1);
+  }).join('');
+}
+
+/**
+ * Ajusta apenas a forma escrita: acentos que faltam e maiúsculas.
+ * O vocabulário da pessoa é preservado — nenhuma palavra é substituída por outra.
+ */
+function corrigirGrafia(texto){
+  const t = (texto || '').trim();
+  if (!t) return '';
+  // Texto todo em caixa alta ou todo minúsculo indica só o jeito de digitar,
+  // não uma escolha de estilo — nesse caso normaliza as maiúsculas.
+  const uniforme = t === t.toUpperCase() || t === t.toLowerCase();
+  const base = uniforme ? tituloPt(t) : t;
+  return base.replace(/[A-Za-zÀ-ÿ]+/g, p => {
+    const c = ORTOGRAFIA[norm(p)];
+    if (!c) return p;
+    // Em texto de caixa mista, a capitalização foi escolhida por quem respondeu:
+    // corrige só o que muda letras (acento, grafia), nunca só a maiúscula.
+    if (!uniforme && c.toLowerCase() === p.toLowerCase()) return p;
+    return c;
+  });
+}
+
+/** Mesma ideia para cidades: corrige a grafia, sem nunca deduzir de outro campo. */
+const CIDADES = ['Piracicaba','Limeira','Rio Claro','Americana',"Santa Bárbara d'Oeste",'Capivari',
+  'São Pedro','Charqueada','Saltinho','Rio das Pedras','Tietê','Laranjal Paulista','Iracemápolis',
+  'Cordeirópolis','Nova Odessa','Sumaré','Araras','Leme','Conchal','Ipeúna','Corumbataí','Analândia',
+  'Rafard','Mombuca','Elias Fausto','Monte Mor','Campinas','Botucatu','São Manuel','Anhembi','Torrinha',
+  'Águas de São Pedro','Santa Maria da Serra','Jumirim','Cerquilho','Boituva','Porto Feliz'];
+
+function corrigirCidade(texto){
+  const t = (texto || '').trim();
+  if (!t) return '';
+  const achada = CIDADES.find(c => norm(c) === norm(t));
+  return achada || corrigirGrafia(t);
+}
 
 /** Agrupa a resposta numa categoria — usado só para a cor do selo e para o
     filtro. O que aparece na tela é sempre o texto que a pessoa escreveu. */
