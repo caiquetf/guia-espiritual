@@ -145,6 +145,18 @@ linhas[0].forEach((h, i) => {
 });
 const faltando = FIELDS.map(f => f.key).filter(k => !Object.values(map).includes(k));
 if (faltando.length) console.log('\nCampos do app sem coluna correspondente: ' + faltando.join(', '));
+
+// DIAGNOSTICO=1 mostra os valores distintos de cada coluna — útil para ajustar o
+// mapeamento. Fica desligado por padrão: os logs do Actions são públicos.
+if (process.env.DIAGNOSTICO === '1'){
+  console.log('\nValores distintos por coluna:');
+  linhas[0].forEach((h, i) => {
+    const vals = [...new Set(linhas.slice(1).map(l => (l[i]||'').trim()).filter(Boolean))];
+    console.log(`\n  ${h}`);
+    vals.slice(0, 6).forEach(v => console.log(`    · ${v.slice(0, 90)}`));
+    if (vals.length > 6) console.log(`    … mais ${vals.length - 6}`);
+  });
+}
 console.log('');
 
 if (!reconhecidas){
