@@ -137,8 +137,18 @@ if (linhas.length < 2){
 
 const map = mapHeaders(linhas[0]);
 const reconhecidas = Object.keys(map).length;
+
+// Relatório de mapeamento — facilita descobrir cabeçalhos que mudaram no formulário.
+console.log('\nMapeamento das colunas da planilha:');
+linhas[0].forEach((h, i) => {
+  console.log(`  ${map[i] ? '[' + map[i].padEnd(10) + ']' : '[ IGNORADA ]'} ${h}`);
+});
+const faltando = FIELDS.map(f => f.key).filter(k => !Object.values(map).includes(k));
+if (faltando.length) console.log('\nCampos do app sem coluna correspondente: ' + faltando.join(', '));
+console.log('');
+
 if (!reconhecidas){
-  console.error('Nenhuma coluna do formulário foi reconhecida. Cabeçalhos encontrados:\n  ' + linhas[0].join('\n  '));
+  console.error('Nenhuma coluna do formulário foi reconhecida.');
   process.exit(1);
 }
 
