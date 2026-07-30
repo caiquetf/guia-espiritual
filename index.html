@@ -320,7 +320,7 @@ let nextId = 1;
 function normalize(r){
   const o = { id: r.id || 'e' + (nextId++) };
   FIELDS.forEach(f => o[f.key] = (r[f.key] ?? '').toString().trim());
-  o.tradicao   = matchTradition(o.tradicao);
+  o.grupo      = r.grupo || grupoTradicao(o.tradicao);
   o.modalidade = matchModality(o.modalidade);
   return o;
 }
@@ -328,9 +328,11 @@ function normalize(r){
 function deaccent(s){ return (s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,''); }
 function norm(s){ return deaccent(s).toLowerCase().replace(/\s+/g,' ').trim(); }
 
-function matchTradition(v){
+/** Agrupa a resposta numa categoria — usado só para a cor do selo e para o
+    filtro. O que aparece na tela é sempre o texto que a pessoa escreveu. */
+function grupoTradicao(v){
   const n = norm(v);
-  if (!n) return 'Outros';
+  if (!n) return '';
   const exact = TRADITIONS.find(t => norm(t.name) === n);
   if (exact) return exact.name;
   if (/umbanda/.test(n)) return 'Umbanda';
@@ -340,19 +342,21 @@ function matchTradition(v){
   if (/taro|cartoman|carta|baralho|oracul/.test(n)) return 'Cartomancia/Tarô';
   if (/holist|terapia|reiki|floral|cristal|yoga|integrativ/.test(n)) return 'Holístico/Terapia';
   if (/magia|bruxaria|wicca|feiti/.test(n)) return 'Magia';
-  if (/espirit|kardec|doutrina|centro espirita/.test(n)) return 'Espiritismo/Kardecismo';
+  if (/espiritismo|kardec|doutrina espirita|centro espirita/.test(n)) return 'Espiritismo/Kardecismo';
   return 'Outros';
 }
 function matchModality(v){
   const n = norm(v);
-  if (!n) return 'Presencial';
+  if (!n) return '';
   const online = /online|remoto|virtual|distancia|video/.test(n);
   const pres   = /presencial|local|no espaco|sede/.test(n);
   if (/ambas|ambos|os dois|hibrid|presencial e online|online e presencial/.test(n) || (online && pres)) return 'Ambas';
   if (online) return 'Online';
-  return 'Presencial';
+  if (pres) return 'Presencial';
+  return '';
 }
-function tradMeta(name){ return TRADITIONS.find(t => t.name === name) || TRADITIONS[TRADITIONS.length-1]; }
+const SEM_CATEGORIA = { name:'', icon:'•', cls:'bg-sand-800/40 text-sand-300 border-sand-700' };
+function tradMeta(name){ return TRADITIONS.find(t => t.name === name) || SEM_CATEGORIA; }
 function modIcon(m){ return (MODALITIES.find(x=>x.name===m)||{icon:'📍'}).icon; }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -487,10 +491,11 @@ function filtered(){
   const terms = q ? q.split(' ').filter(Boolean) : [];
   return DATA.filter(d => {
     if (state.city && d.cidade !== state.city) return false;
-    if (state.trads.size && !state.trads.has(d.tradicao)) return false;
+    if (state.trads.size && !state.trads.has(d.grupo)) return false;
     if (state.mods.size){
       // quem atende "Ambas" aparece tanto no filtro Presencial quanto no Online
-      const ok = d.modalidade === 'Ambas' || [...state.mods].some(m => d.modalidade === m);
+      // sem modalidade preenchida, o cadastro não é alcançado por esse filtro
+      const ok = d.modalidade && (d.modalidade === 'Ambas' || [...state.mods].some(m => d.modalidade === m));
       if (!ok) return false;
     }
     if (terms.length){
@@ -538,15 +543,15 @@ const mapsLink = d => 'https://www.google.com/maps/search/?api=1&query=' +
 /** Texto formatado, pronto para colar no WhatsApp do cliente. */
 function fichaTexto(d){
   const L = [];
-  L.push('📍 *Indicação de Espaço Espiritual em ' + (d.cidade || 'Piracicaba e Região') + ':*');
+  L.push('📍 *Indicação de Espaço Espiritual' + (d.cidade ? ' em ' + d.cidade : '') + ':*');
   L.push('');
   L.push('*Nome:* ' + (d.nome || '—'));
-  L.push('*Tradição:* ' + d.tradicao);
+  if (d.tradicao) L.push('*Tradição:* ' + d.tradicao);
   if (d.dirigente) L.push('*Responsável:* ' + d.dirigente);
   const local = [d.bairro, d.cidade && d.cidade + '/SP'].filter(Boolean).join(' - ');
   if (local) L.push('*Bairro:* ' + local);
   if (d.endereco) L.push('*Endereço:* ' + d.endereco);
-  L.push('*Modalidade:* ' + d.modalidade);
+  if (d.modalidade) L.push('*Modalidade:* ' + d.modalidade);
   if (d.tempo) L.push('*Tempo de funcionamento:* ' + d.tempo);
   if (d.horarios) L.push('*Atendimentos/Giras:* ' + d.horarios);
   if (d.servicos) L.push('*Serviços:* ' + d.servicos);
@@ -628,7 +633,7 @@ function renderCityOptions(){
 
 function renderChips(){
   const counts = {};
-  DATA.forEach(d => counts[d.tradicao] = (counts[d.tradicao]||0)+1);
+  DATA.forEach(d => { if (d.grupo) counts[d.grupo] = (counts[d.grupo]||0)+1; });
 
   document.getElementById('tradChips').innerHTML = TRADITIONS
     .filter(t => counts[t.name] || state.trads.has(t.name))
@@ -648,7 +653,8 @@ function renderChips(){
 }
 
 function badge(d){
-  const t = tradMeta(d.tradicao);
+  if (!d.tradicao) return '';
+  const t = tradMeta(d.grupo);
   return `<span class="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full border ${t.cls}">${t.icon} ${esc(d.tradicao)}</span>`;
 }
 
@@ -657,12 +663,12 @@ function cardHTML(d){
   return `<article class="card-in group flex flex-col bg-night-900/70 border border-sand-900 hover:border-clay-700/70 rounded-2xl p-4 shadow-lg shadow-black/20 transition">
     <div class="flex items-start justify-between gap-2 mb-2">
       ${badge(d)}
-      <span class="text-[11px] text-sand-400 shrink-0">${modIcon(d.modalidade)} ${esc(d.modalidade)}</span>
+      ${d.modalidade ? `<span class="text-[11px] text-sand-400 shrink-0">${modIcon(d.modalidade)} ${esc(d.modalidade)}</span>` : ''}
     </div>
 
     <h3 class="font-display text-base leading-snug text-sand-50 line-clamp-2">${esc(d.nome) || '<span class="text-sand-500">Sem nome</span>'}</h3>
     ${d.dirigente ? `<p class="text-xs text-clay-300 mt-1">👤 ${esc(d.dirigente)}</p>` : ''}
-    <p class="text-xs text-sand-400 mt-1">📍 ${esc([d.bairro, d.cidade].filter(Boolean).join(' · ')) || 'Local não informado'}</p>
+    ${[d.bairro, d.cidade].filter(Boolean).length ? `<p class="text-xs text-sand-400 mt-1">📍 ${esc([d.bairro, d.cidade].filter(Boolean).join(' · '))}</p>` : ''}
 
     ${d.horarios ? `<p class="text-xs text-sand-300/90 mt-2.5 line-clamp-2">🕐 ${esc(d.horarios)}</p>` : ''}
     ${d.servicos ? `<p class="text-xs text-sand-400 mt-1.5 line-clamp-2">✨ ${esc(d.servicos)}</p>` : ''}
@@ -692,7 +698,9 @@ function rowHTML(d){
         ${badge(d)}
       </div>
       <p class="text-xs text-sand-400 mt-0.5 truncate">
-        ${d.dirigente ? '👤 ' + esc(d.dirigente) + ' · ' : ''}📍 ${esc([d.bairro,d.cidade].filter(Boolean).join(' · '))} · ${modIcon(d.modalidade)} ${esc(d.modalidade)}
+        ${[d.dirigente && '👤 ' + esc(d.dirigente),
+           [d.bairro,d.cidade].filter(Boolean).length && '📍 ' + esc([d.bairro,d.cidade].filter(Boolean).join(' · ')),
+           d.modalidade && modIcon(d.modalidade) + ' ' + esc(d.modalidade)].filter(Boolean).join(' · ')}
       </p>
       ${d.horarios ? `<p class="text-xs text-sand-300/80 mt-0.5 truncate">🕐 ${esc(d.horarios)}</p>` : ''}
     </div>
@@ -708,17 +716,17 @@ function rowHTML(d){
 
 function openDetails(id){
   const d = byId(id); if (!d) return;
-  const t = tradMeta(d.tradicao);
+  const t = tradMeta(d.grupo);
   const rede = linkify(d.redes);
 
   document.getElementById('modalHead').innerHTML = `
     <div class="w-12 h-12 shrink-0 rounded-xl grid place-items-center text-2xl border ${t.cls}">${t.icon}</div>
     <div class="min-w-0 flex-1">
       <h2 class="font-display text-xl leading-tight text-sand-50">${esc(d.nome)}</h2>
-      <p class="text-sm text-clay-300 mt-0.5">${esc(d.dirigente || '—')}</p>
+      ${d.dirigente ? `<p class="text-sm text-clay-300 mt-0.5">${esc(d.dirigente)}</p>` : ''}
       <div class="flex flex-wrap gap-1.5 mt-2">
         ${badge(d)}
-        <span class="text-[11px] px-2 py-0.5 rounded-full border border-sand-800 text-sand-300">${modIcon(d.modalidade)} ${esc(d.modalidade)}</span>
+        ${d.modalidade ? `<span class="text-[11px] px-2 py-0.5 rounded-full border border-sand-800 text-sand-300">${modIcon(d.modalidade)} ${esc(d.modalidade)}</span>` : ''}
       </div>
     </div>
     <button onclick="closeModal()" class="w-8 h-8 shrink-0 rounded-lg bg-sand-800 hover:bg-sand-700">✕</button>`;
@@ -737,7 +745,6 @@ function openDetails(id){
     row('📍','Localização', [d.bairro, d.cidade && d.cidade + '/SP'].filter(Boolean).join(' — ')),
     row('🏠','Endereço completo', d.endereco,
         `<a href="${mapsLink(d)}" target="_blank" rel="noopener" class="text-xs text-clay-300 hover:underline">Abrir no Google Maps ↗</a>`),
-    (!d.endereco ? `<div class="flex gap-3"><span class="w-6 text-center">🔒</span><div><p class="text-[11px] uppercase tracking-wide text-sand-500">Endereço</p><p class="text-sand-400">Não informado — atendimento online ou endereço sigiloso. Confirme pelo contato.</p></div></div>` : ''),
     row('🕐','Dias e horários das giras, trabalhos ou consultas', d.horarios),
     row('📅','Tempo de funcionamento', d.tempo),
     row('✨','Serviços prestados e trabalhos oferecidos', d.servicos),
@@ -782,10 +789,9 @@ function openForm(id){
       const v = esc(d ? d[f.key] : '');
       const cls = 'w-full mt-1 px-3 py-2 rounded-lg bg-night-800 border border-sand-800 focus:border-clay-500 outline-none text-sm';
       let input;
-      if (f.key === 'tradicao')
-        input = `<select name="tradicao" class="${cls}">${TRADITIONS.map(t=>`<option${d&&d.tradicao===t.name?' selected':''}>${esc(t.name)}</option>`).join('')}</select>`;
-      else if (f.key === 'modalidade')
-        input = `<select name="modalidade" class="${cls}">${MODALITIES.map(m=>`<option${d&&d.modalidade===m.name?' selected':''}>${esc(m.name)}</option>`).join('')}</select>`;
+      if (f.key === 'modalidade')
+        input = `<select name="modalidade" class="${cls}"><option value="">Não informado</option>${
+          MODALITIES.map(m=>`<option${d&&d.modalidade===m.name?' selected':''}>${esc(m.name)}</option>`).join('')}</select>`;
       else if (['servicos','regras','horarios','endereco'].includes(f.key))
         input = `<textarea name="${f.key}" rows="2" class="${cls} resize-y">${v}</textarea>`;
       else

@@ -87,9 +87,11 @@ function mapHeaders(headers){
   return map;
 }
 
-function matchTradition(v){
+/** Agrupa a resposta numa das categorias, só para o filtro. O texto original
+    é sempre preservado em `tradicao` e é ele que aparece na tela. */
+function grupoTradicao(v){
   const n = norm(v);
-  if (!n) return 'Outros';
+  if (!n) return '';
   if (/umbanda/.test(n)) return 'Umbanda';
   if (/candombl|ile ax|axe/.test(n)) return 'Candomblé';
   if (/quimbanda|esquerda|exu|pombagira/.test(n)) return 'Quimbanda';
@@ -97,7 +99,7 @@ function matchTradition(v){
   if (/taro|cartoman|carta|baralho|oracul/.test(n)) return 'Cartomancia/Tarô';
   if (/holist|terapia|reiki|floral|cristal|yoga|integrativ/.test(n)) return 'Holístico/Terapia';
   if (/magia|bruxaria|wicca|feiti/.test(n)) return 'Magia';
-  if (/espirit|kardec|doutrina|centro espirita/.test(n)) return 'Espiritismo/Kardecismo';
+  if (/espiritismo|kardec|doutrina espirita|centro espirita/.test(n)) return 'Espiritismo/Kardecismo';
   return 'Outros';
 }
 
@@ -116,39 +118,6 @@ function matchModality(v){
 function limpar(v){
   const t = (v||'').trim();
   return /^[-–—.\s]*$/.test(t) || /^(n\/a|na|nao tem|não tem|nenhum|nenhuma|sem)$/i.test(t) ? '' : t;
-}
-
-const CIDADES = ['Piracicaba','Limeira','Rio Claro','Americana',"Santa Bárbara d'Oeste",'Capivari',
-  'São Pedro','Charqueada','Saltinho','Rio das Pedras','Tietê','Laranjal Paulista','Iracemápolis',
-  'Cordeirópolis','Nova Odessa','Sumaré','Araras','Leme','Conchal','Ipeúna','Corumbataí','Analândia',
-  'Rafard','Mombuca','Elias Fausto','Monte Mor','Campinas','Botucatu','São Manuel','Anhembi','Torrinha'];
-
-/** O formulário não pergunta a cidade — tenta reconhecê-la no endereço. */
-function derivarCidade(...textos){
-  const n = norm(textos.join(' '));
-  for (const c of CIDADES) if (n.includes(norm(c))) return c;
-  return '';
-}
-
-/** Nem modalidade: deduz a partir do endereço e das orientações. */
-function derivarModalidade(rec){
-  const explicito = matchModality(rec.modalidade);
-  if (explicito) return explicito;
-
-  const texto = norm([rec.endereco, rec.regras, rec.servicos, rec.horarios].join(' '));
-  const dizOnline = /online|a distancia|remoto|whatsapp|video ?chamada/.test(texto);
-  const temEndereco = /\d/.test(rec.endereco || '') && !/^online/i.test(rec.endereco || '');
-
-  if (dizOnline && temEndereco) return 'Ambas';
-  if (dizOnline || !temEndereco) return 'Online';
-  return 'Presencial';
-}
-
-/** Alguns respondentes colocam o Instagram no campo de orientações. */
-function extrairRede(rec){
-  if (rec.redes) return rec.redes;
-  const m = [rec.regras, rec.servicos].join(' ').match(/@[A-Za-z0-9._]{3,}/);
-  return m ? m[0] : '';
 }
 
 /* ─────────────────────────────────────────────────────────── */
@@ -227,10 +196,8 @@ for (let r = 1; r < linhas.length; r++){
     continue;
   }
 
-  rec.tradicao   = matchTradition(rec.tradicao);
-  rec.cidade     = rec.cidade || derivarCidade(rec.endereco, rec.bairro, rec.nome);
-  rec.modalidade = derivarModalidade(rec);
-  rec.redes      = extrairRede(rec);
+  rec.grupo      = grupoTradicao(rec.tradicao);
+  rec.modalidade = matchModality(rec.modalidade);
   registros.push(rec);
 }
 
@@ -238,9 +205,9 @@ if (semAutorizacao){
   console.log(`${semAutorizacao} cadastro(s) sem autorização de divulgação — não publicados.`);
 }
 const semCidade = registros.filter(r => !r.cidade).length;
-if (semCidade){
-  console.log(`${semCidade} cadastro(s) sem cidade identificável no endereço — o filtro de cidade não os alcança.`);
-}
+if (semCidade) console.log(`${semCidade} cadastro(s) sem cidade preenchida — não aparecem no filtro de cidade.`);
+const semModalidade = registros.filter(r => !r.modalidade).length;
+if (semModalidade) console.log(`${semModalidade} cadastro(s) sem modalidade preenchida — não aparecem no filtro de modalidade.`);
 
 if (!registros.length){
   console.error('Nenhum cadastro válido encontrado na planilha.');

@@ -90,6 +90,10 @@ O menu **⋯** (celular) traz também **Baixar modelo de planilha** e **Exportar
 
 ## Observações
 
+- **Nada é deduzido.** O guia mostra apenas o que a pessoa preencheu no formulário:
+  campo em branco não aparece no cartão, nos detalhes nem na ficha, e o cadastro não é
+  alcançado pelos filtros daquele campo. A vertente é exibida com as palavras de quem
+  respondeu; a categorização existe só para colorir o selo e alimentar os chips.
 - Os cadastros oficiais vêm de `dados.json`. Importações e edições feitas no app ficam
   no **`localStorage` do navegador** e sobrevivem até a próxima atualização oficial,
   quando são substituídas pela versão nova. Use **Exportar CSV** para guardar uma cópia.
