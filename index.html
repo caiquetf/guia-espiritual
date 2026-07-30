@@ -196,6 +196,7 @@ const FIELDS = [
   { key:'nome',      label:'Nome do Espaço / Nome Profissional',          aliases:['nome do espaco','nome profissional','nome do espaco / nome profissional','nome'] },
   { key:'dirigente', label:'Dirigente / Responsável / Nome de Terreiro',  aliases:['dirigente','responsavel','nome de terreiro','dirigente / responsavel / nome de terreiro'] },
   { key:'tradicao',  label:'Tradição / Vertente Espiritual',              aliases:['tradicao','vertente','tradicao / vertente espiritual','vertente espiritual'] },
+  { key:'tempo',     label:'Tempo de funcionamento',                      aliases:['a quanto tempo o espaco funciona','tempo de funcionamento','ha quanto tempo'] },
   { key:'cidade',    label:'Município / Cidade da Região',                aliases:['municipio','cidade','municipio / cidade da regiao','cidade da regiao'] },
   { key:'bairro',    label:'Bairro / Localização',                        aliases:['bairro','localizacao','bairro / localizacao'] },
   { key:'endereco',  label:'Endereço Completo',                           aliases:['endereco completo','endereco','logradouro'] },
@@ -546,6 +547,7 @@ function fichaTexto(d){
   if (local) L.push('*Bairro:* ' + local);
   if (d.endereco) L.push('*Endereço:* ' + d.endereco);
   L.push('*Modalidade:* ' + d.modalidade);
+  if (d.tempo) L.push('*Tempo de funcionamento:* ' + d.tempo);
   if (d.horarios) L.push('*Atendimentos/Giras:* ' + d.horarios);
   if (d.servicos) L.push('*Serviços:* ' + d.servicos);
   if (d.regras)   L.push('*Regras/Observações:* ' + d.regras);
@@ -737,6 +739,7 @@ function openDetails(id){
         `<a href="${mapsLink(d)}" target="_blank" rel="noopener" class="text-xs text-clay-300 hover:underline">Abrir no Google Maps ↗</a>`),
     (!d.endereco ? `<div class="flex gap-3"><span class="w-6 text-center">🔒</span><div><p class="text-[11px] uppercase tracking-wide text-sand-500">Endereço</p><p class="text-sand-400">Não informado — atendimento online ou endereço sigiloso. Confirme pelo contato.</p></div></div>` : ''),
     row('🕐','Dias e horários das giras, trabalhos ou consultas', d.horarios),
+    row('📅','Tempo de funcionamento', d.tempo),
     row('✨','Serviços prestados e trabalhos oferecidos', d.servicos),
     row('📜','Orientações ao visitante / regras do espaço', d.regras),
     row('📞','Telefone / WhatsApp', d.telefone),

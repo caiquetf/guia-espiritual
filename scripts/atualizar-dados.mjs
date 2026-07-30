@@ -15,18 +15,19 @@ const SAIDA = 'dados.json';
 const FIELDS = [
   { key:'timestamp', label:'Carimbo de data/hora',                        aliases:['carimbo de data/hora','carimbo','timestamp','data/hora'] },
   { key:'email',     label:'Endereço de e-mail',                          aliases:['endereco de e-mail','e-mail','email','endereco de email'] },
-  { key:'nome',      label:'Nome do Espaço / Nome Profissional',          aliases:['nome do espaco','nome profissional','nome do espaco / nome profissional','nome'] },
-  { key:'dirigente', label:'Dirigente / Responsável / Nome de Terreiro',  aliases:['dirigente','responsavel','nome de terreiro','dirigente / responsavel / nome de terreiro'] },
-  { key:'tradicao',  label:'Tradição / Vertente Espiritual',              aliases:['tradicao','vertente','tradicao / vertente espiritual','vertente espiritual'] },
+  { key:'nome',      label:'Nome do Espaço / Nome Profissional',          aliases:['nome do espaco espiritual','nome do espaco','nome profissional','nome do espaco / nome profissional','nome'] },
+  { key:'dirigente', label:'Dirigente / Responsável / Nome de Terreiro',  aliases:['qual o nome do dirigente','dirigente','responsavel','nome de terreiro','dirigente / responsavel / nome de terreiro'] },
+  { key:'tradicao',  label:'Tradição / Vertente Espiritual',              aliases:['qual a vertente espiritual','tradicao','vertente','tradicao / vertente espiritual','vertente espiritual'] },
+  { key:'tempo',     label:'Tempo de funcionamento',                      aliases:['a quanto tempo o espaco funciona','ha quanto tempo o espaco funciona','tempo de funcionamento','ha quanto tempo','a quanto tempo'] },
   { key:'cidade',    label:'Município / Cidade da Região',                aliases:['municipio','cidade','municipio / cidade da regiao','cidade da regiao'] },
   { key:'bairro',    label:'Bairro / Localização',                        aliases:['bairro','localizacao','bairro / localizacao'] },
   { key:'endereco',  label:'Endereço Completo',                           aliases:['endereco completo','endereco','logradouro'] },
-  { key:'modalidade',label:'Modalidade de Atendimento',                   aliases:['modalidade','modalidade de atendimento','tipo de atendimento','atendimento'] },
+  { key:'modalidade',label:'Modalidade de Atendimento',                   aliases:['modalidade de atendimento','modalidade','presencial ou online','forma de atendimento'] },
   { key:'telefone',  label:'Telefone / WhatsApp com DDD',                 aliases:['telefone','whatsapp','celular','telefone / whatsapp com ddd','contato'] },
   { key:'redes',     label:'Redes Sociais / Instagram / Site',            aliases:['redes sociais','instagram','site','redes sociais / instagram / site','rede social'] },
-  { key:'horarios',  label:'Dias e Horários das Giras, Trabalhos ou Consultas', aliases:['dias e horarios','horarios','giras','dias e horarios das giras, trabalhos ou consultas','horario'] },
-  { key:'servicos',  label:'Serviços Prestados e Trabalhos oferecidos',   aliases:['servicos prestados','servicos','trabalhos oferecidos','servicos prestados e trabalhos oferecidos'] },
-  { key:'regras',    label:'Orientações ao Visitante / Regras do Espaço', aliases:['orientacoes ao visitante','regras','regras do espaco','orientacoes ao visitante / regras do espaco','observacoes'] }
+  { key:'horarios',  label:'Dias e Horários das Giras, Trabalhos ou Consultas', aliases:['quais dias e horarios acontecem os trabalhos','dias e horarios','horarios','giras','dias e horarios das giras, trabalhos ou consultas','horario'] },
+  { key:'servicos',  label:'Serviços Prestados e Trabalhos oferecidos',   aliases:['quais tipos de atendimentos realizados','tipos de atendimentos','tipos de atendimento','atendimentos realizados','servicos prestados','servicos','trabalhos oferecidos','servicos prestados e trabalhos oferecidos'] },
+  { key:'regras',    label:'Orientações ao Visitante / Regras do Espaço', aliases:['orientacoes para visitantes','orientacoes ao visitante','orientacoes','regras','regras do espaco','orientacoes ao visitante / regras do espaco','observacoes'] }
 ];
 
 const deaccent = s => (s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'');
@@ -102,11 +103,52 @@ function matchTradition(v){
 
 function matchModality(v){
   const n = norm(v);
-  if (!n) return 'Presencial';
+  if (!n) return '';
   const online = /online|remoto|virtual|distancia|video/.test(n);
   const pres   = /presencial|local|no espaco|sede/.test(n);
   if (/ambas|ambos|os dois|hibrid/.test(n) || (online && pres)) return 'Ambas';
-  return online ? 'Online' : 'Presencial';
+  if (online) return 'Online';
+  if (pres) return 'Presencial';
+  return '';
+}
+
+/** Respostas como "-", "--", "n/a" significam "não informado". */
+function limpar(v){
+  const t = (v||'').trim();
+  return /^[-–—.\s]*$/.test(t) || /^(n\/a|na|nao tem|não tem|nenhum|nenhuma|sem)$/i.test(t) ? '' : t;
+}
+
+const CIDADES = ['Piracicaba','Limeira','Rio Claro','Americana',"Santa Bárbara d'Oeste",'Capivari',
+  'São Pedro','Charqueada','Saltinho','Rio das Pedras','Tietê','Laranjal Paulista','Iracemápolis',
+  'Cordeirópolis','Nova Odessa','Sumaré','Araras','Leme','Conchal','Ipeúna','Corumbataí','Analândia',
+  'Rafard','Mombuca','Elias Fausto','Monte Mor','Campinas','Botucatu','São Manuel','Anhembi','Torrinha'];
+
+/** O formulário não pergunta a cidade — tenta reconhecê-la no endereço. */
+function derivarCidade(...textos){
+  const n = norm(textos.join(' '));
+  for (const c of CIDADES) if (n.includes(norm(c))) return c;
+  return '';
+}
+
+/** Nem modalidade: deduz a partir do endereço e das orientações. */
+function derivarModalidade(rec){
+  const explicito = matchModality(rec.modalidade);
+  if (explicito) return explicito;
+
+  const texto = norm([rec.endereco, rec.regras, rec.servicos, rec.horarios].join(' '));
+  const dizOnline = /online|a distancia|remoto|whatsapp|video ?chamada/.test(texto);
+  const temEndereco = /\d/.test(rec.endereco || '') && !/^online/i.test(rec.endereco || '');
+
+  if (dizOnline && temEndereco) return 'Ambas';
+  if (dizOnline || !temEndereco) return 'Online';
+  return 'Presencial';
+}
+
+/** Alguns respondentes colocam o Instagram no campo de orientações. */
+function extrairRede(rec){
+  if (rec.redes) return rec.redes;
+  const m = [rec.regras, rec.servicos].join(' ').match(/@[A-Za-z0-9._]{3,}/);
+  return m ? m[0] : '';
 }
 
 /* ─────────────────────────────────────────────────────────── */
@@ -164,15 +206,40 @@ if (!reconhecidas){
   process.exit(1);
 }
 
+// Coluna de consentimento: só publica quem autorizou expressamente a divulgação.
+const idxAutorizacao = linhas[0].findIndex(h => /autoriza|divulgac/.test(norm(h)));
+if (idxAutorizacao === -1){
+  console.log('Aviso: nenhuma coluna de autorização de divulgação encontrada — todos os cadastros serão publicados.');
+}
+
 const registros = [];
+let semAutorizacao = 0;
 for (let r = 1; r < linhas.length; r++){
   const rec = {};
   FIELDS.forEach(f => rec[f.key] = '');
-  linhas[r].forEach((v, i) => { if (map[i]) rec[map[i]] = (v||'').trim(); });
+  linhas[r].forEach((v, i) => { if (map[i]) rec[map[i]] = limpar(v); });
   if (!(rec.nome || rec.dirigente || rec.telefone)) continue;      // linha em branco
+
+  // Exige o "Autorizo a divulgação…". Cuidado: a outra opção da mesma pergunta diz
+  // "possuo autorização para cadastrar", que não é permissão para publicar.
+  if (idxAutorizacao !== -1 && !/\bautorizo\b|\bconcordo\b/.test(norm(linhas[r][idxAutorizacao] || ''))){
+    semAutorizacao++;
+    continue;
+  }
+
   rec.tradicao   = matchTradition(rec.tradicao);
-  rec.modalidade = matchModality(rec.modalidade);
+  rec.cidade     = rec.cidade || derivarCidade(rec.endereco, rec.bairro, rec.nome);
+  rec.modalidade = derivarModalidade(rec);
+  rec.redes      = extrairRede(rec);
   registros.push(rec);
+}
+
+if (semAutorizacao){
+  console.log(`${semAutorizacao} cadastro(s) sem autorização de divulgação — não publicados.`);
+}
+const semCidade = registros.filter(r => !r.cidade).length;
+if (semCidade){
+  console.log(`${semCidade} cadastro(s) sem cidade identificável no endereço — o filtro de cidade não os alcança.`);
 }
 
 if (!registros.length){
