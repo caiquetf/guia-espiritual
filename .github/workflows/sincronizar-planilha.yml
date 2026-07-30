@@ -21,7 +21,7 @@ jobs:
 
       - name: Buscar e converter a planilha
         env:
-          DIAGNOSTICO: ${{ vars.DIAGNOSTICO }}
+          DIAGNOSTICO: '1'
           # Planilha de respostas do formulário, publicada na web como CSV.
           # Para trocar sem mexer no código, crie a variável PLANILHA_CSV_URL em
           # Settings → Secrets and variables → Actions → Variables: ela tem prioridade.
