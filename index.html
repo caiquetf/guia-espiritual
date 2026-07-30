@@ -151,7 +151,8 @@
 
 <footer class="max-w-7xl mx-auto px-4 sm:px-6 pb-10 pt-2 text-center text-xs text-sand-500 space-y-1">
   <p>Guia e Diretório de Espaços Espirituais, Terreiros e Oraculistas — Piracicaba e Região.</p>
-  <p>Os dados ficam salvos apenas neste navegador. Sempre confirme horários e regras diretamente com o espaço.</p>
+  <p id="atualizado" class="text-sand-400"></p>
+  <p>Sempre confirme horários, regras e valores diretamente com o espaço antes de comparecer.</p>
 </footer>
 
 <input id="fileInput" type="file" accept=".csv,text/csv" hidden />
@@ -247,20 +248,71 @@ const SAMPLE = [
    3. ESTADO + PERSISTÊNCIA
    ═══════════════════════════════════════════════════════════════ */
 
-const STORE_KEY = 'guia-espiritual-piracicaba-v1';
+const STORE_KEY = 'guia-espiritual-piracicaba-v2';
+const DADOS_URL = 'dados.json';   // gerado a partir da planilha do Forms
 let DATA = [];
+let baseGeradoEm = '';            // versão dos dados oficiais em uso
 let state = { q:'', city:'', trads:new Set(), mods:new Set(), view:'grid' };
 
-function load(){
+function lerLocal(){
   try {
     const raw = localStorage.getItem(STORE_KEY);
-    if (raw){ const p = JSON.parse(raw); if (Array.isArray(p) && p.length) return p.map(normalize); }
+    if (raw){ const p = JSON.parse(raw); if (p && Array.isArray(p.registros)) return p; }
   } catch(e){ console.warn('Falha ao ler os dados salvos:', e); }
-  return SAMPLE.map(normalize);
+  return null;
 }
 function save(){
-  try { localStorage.setItem(STORE_KEY, JSON.stringify(DATA)); }
+  try { localStorage.setItem(STORE_KEY, JSON.stringify({ baseGeradoEm, registros: DATA })); }
   catch(e){ toast('Não foi possível salvar neste navegador.', 'error'); }
+}
+
+/**
+ * Carrega os dados na seguinte ordem de prioridade:
+ *   1. dados.json do site — a fonte oficial, vinda da planilha do formulário.
+ *      Se a versão mudou desde a última visita, ela substitui o que estava salvo.
+ *      Se é a mesma versão, o que está salvo vence (preserva edições locais).
+ *   2. O que estiver salvo no navegador.
+ *   3. Os cadastros de exemplo.
+ */
+async function carregarDados(){
+  const local = lerLocal();
+  let oficial = null;
+  try {
+    const r = await fetch(DADOS_URL, { cache:'no-store' });
+    if (r.ok) oficial = await r.json();
+  } catch(e){ /* sem rede, ou aberto direto do arquivo — segue para o plano B */ }
+
+  if (oficial && Array.isArray(oficial.registros) && oficial.registros.length){
+    if (local && local.baseGeradoEm && local.baseGeradoEm === oficial.geradoEm){
+      baseGeradoEm = local.baseGeradoEm;
+      DATA = local.registros.map(normalize);
+    } else {
+      baseGeradoEm = oficial.geradoEm || '';
+      DATA = oficial.registros.map(normalize);
+      save();
+    }
+    marcarAtualizacao(oficial.geradoEm);
+  } else if (local && local.registros.length){
+    baseGeradoEm = local.baseGeradoEm || '';
+    DATA = local.registros.map(normalize);
+  } else {
+    DATA = SAMPLE.map(normalize);
+    marcarAtualizacao(null, true);
+  }
+  render();
+}
+
+function marcarAtualizacao(iso, exemplo){
+  const el = document.getElementById('atualizado');
+  if (!el) return;
+  if (exemplo){
+    el.textContent = 'Exibindo cadastros de demonstração.';
+    return;
+  }
+  if (!iso) return;
+  const d = new Date(iso);
+  el.textContent = isNaN(d) ? '' :
+    'Cadastros atualizados em ' + d.toLocaleString('pt-BR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' }) + '.';
 }
 
 let nextId = 1;
@@ -862,8 +914,8 @@ document.addEventListener('keydown', e => {
 /* ═══════════════════════════════════════════════════════════════
    9. INICIALIZAÇÃO
    ═══════════════════════════════════════════════════════════════ */
-DATA = load();
-render();
+render();          // desenha os filtros e o esqueleto de imediato
+carregarDados();   // busca dados.json e redesenha quando chegar
 </script>
 </body>
 </html>

@@ -1,0 +1,62 @@
+name: Sincronizar planilha do formulário
+
+on:
+  schedule:
+    - cron: '17 * * * *'    # toda hora, aos 17 minutos
+  workflow_dispatch:
+
+jobs:
+  sincronizar:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      mudou: ${{ steps.commit.outputs.mudou }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Buscar e converter a planilha
+        env:
+          # Configure a URL em Settings → Secrets and variables → Actions → Variables,
+          # com o nome PLANILHA_CSV_URL. Sem ela, a sincronização é apenas pulada.
+          PLANILHA_CSV_URL: ${{ vars.PLANILHA_CSV_URL }}
+        run: |
+          set +e
+          node scripts/atualizar-dados.mjs
+          code=$?
+          set -e
+          if [ $code -eq 78 ]; then
+            echo "::notice::PLANILHA_CSV_URL ainda não foi configurada — nada a sincronizar."
+            exit 0
+          fi
+          exit $code
+
+      - name: Publicar as mudanças
+        id: commit
+        run: |
+          if [ -n "$(git status --porcelain dados.json)" ]; then
+            git config user.name  "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add dados.json
+            git commit -m "Atualiza cadastros a partir da planilha do formulário"
+            git push
+            echo "mudou=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Nenhuma mudança nos cadastros."
+            echo "mudou=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  # Um push feito pelo próprio Actions não dispara outros workflows,
+  # por isso a publicação é chamada explicitamente aqui.
+  publicar:
+    needs: sincronizar
+    if: needs.sincronizar.outputs.mudou == 'true'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    uses: ./.github/workflows/pages.yml

@@ -7,7 +7,31 @@ Aplicativo de página única (SPA) em **um único arquivo** — `index.html` —
 
 Abra `index.html` no navegador (duplo clique já basta — não precisa de servidor nem instalação).
 
-## Importar os cadastros do Google Forms
+## Sincronização automática com o formulário
+
+O site busca os cadastros de `dados.json`, gerado de hora em hora a partir da planilha
+de respostas do Google Forms. Para ligar:
+
+1. Na planilha de respostas: **Arquivo → Compartilhar → Publicar na web** →
+   escolha a aba de respostas e o formato **CSV** → **Publicar**. Copie a URL gerada.
+2. No repositório: **Settings → Secrets and variables → Actions → aba Variables →
+   New repository variable**, com nome `PLANILHA_CSV_URL` e a URL como valor.
+
+A partir daí, o fluxo é automático: alguém responde o formulário → em até uma hora o
+workflow busca a planilha, regrava `dados.json`, comita a mudança e republica o site.
+Sem a variável configurada, a sincronização apenas se registra como pulada e o site
+continua servindo o que já estava publicado.
+
+Para rodar na hora, sem esperar o agendamento: aba **Actions** →
+**Sincronizar planilha do formulário** → **Run workflow**.
+
+Testando localmente:
+
+```sh
+node scripts/atualizar-dados.mjs "https://docs.google.com/.../pub?output=csv"
+```
+
+## Importar um CSV manualmente
 
 1. No Google Forms, abra a planilha de respostas → **Arquivo → Fazer download → CSV**.
 2. No app, clique em **📥 Importar CSV** (ou arraste o arquivo para qualquer lugar da página).
@@ -66,6 +90,8 @@ O menu **⋯** (celular) traz também **Baixar modelo de planilha** e **Exportar
 
 ## Observações
 
-- Os dados ficam salvos apenas no **`localStorage` do navegador** — não há servidor nem envio para a internet. Use **Exportar CSV** para fazer backup.
+- Os cadastros oficiais vêm de `dados.json`. Importações e edições feitas no app ficam
+  no **`localStorage` do navegador** e sobrevivem até a próxima atualização oficial,
+  quando são substituídas pela versão nova. Use **Exportar CSV** para guardar uma cópia.
 - Os cadastros que vêm pré-carregados são **fictícios**, apenas para demonstração.
 - O Tailwind é carregado via CDN. Sem internet, um CSS de fallback embutido mantém o app legível e totalmente funcional.

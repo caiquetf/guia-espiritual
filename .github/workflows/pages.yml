@@ -6,6 +6,7 @@ on:
     # As duas estão listadas para o site continuar publicando caso a principal mude.
     branches: [main, claude/spiritual-spaces-directory-piracicaba-u66nt3]
   workflow_dispatch:
+  workflow_call:      # chamado pela sincronização da planilha
 
 permissions:
   contents: read
