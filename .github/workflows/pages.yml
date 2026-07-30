@@ -2,7 +2,9 @@ name: Publicar no GitHub Pages
 
 on:
   push:
-    branches: [main]
+    # O Pages só aceita publicar a partir da branch principal do repositório.
+    # As duas estão listadas para o site continuar publicando caso a principal mude.
+    branches: [main, claude/spiritual-spaces-directory-piracicaba-u66nt3]
   workflow_dispatch:
 
 permissions:
