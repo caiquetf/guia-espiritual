@@ -21,9 +21,10 @@ jobs:
 
       - name: Buscar e converter a planilha
         env:
-          # Configure a URL em Settings → Secrets and variables → Actions → Variables,
-          # com o nome PLANILHA_CSV_URL. Sem ela, a sincronização é apenas pulada.
-          PLANILHA_CSV_URL: ${{ vars.PLANILHA_CSV_URL }}
+          # Planilha de respostas do formulário, publicada na web como CSV.
+          # Para trocar sem mexer no código, crie a variável PLANILHA_CSV_URL em
+          # Settings → Secrets and variables → Actions → Variables: ela tem prioridade.
+          PLANILHA_CSV_URL: ${{ vars.PLANILHA_CSV_URL || 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ-upItrqf1EjRVhql0gBEl3BMZDtQ8eEb5kofeGjcMwrLxpkC-YwwXULNO8CavQSsJgOaMtHoTz-qW/pub?gid=1603923294&single=true&output=csv' }}
         run: |
           set +e
           node scripts/atualizar-dados.mjs
