@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Guia Espiritual — Piracicaba e Região</title>
+<meta name="description" content="Guia e diretório de espaços espirituais, terreiros e oraculistas de Piracicaba e região." />
+<script src="https://cdn.tailwindcss.com" onerror="document.documentElement.classList.add('no-tw')"></script>
+<script>
+  // O objeto `tailwind` só existe se o CDN carregou; sem internet, o fallback CSS abaixo assume.
+  if (window.tailwind) tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          sand:  { 50:'#faf7f2', 100:'#f2ece1', 200:'#e3d7c3', 300:'#cfbb9c', 400:'#b89a72', 500:'#a68256', 600:'#8d6a45', 700:'#71533a', 800:'#5c4433', 900:'#4c392c', 950:'#2a1e16' },
+          clay:  { 100:'#f7e9e3', 300:'#dfb3a0', 500:'#c07a5c', 700:'#8f5238', 900:'#5a3222' },
+          night: { 700:'#26211c', 800:'#1d1915', 900:'#151210', 950:'#0e0c0a' }
+        },
+        fontFamily: {
+          display: ['"Georgia"','"Times New Roman"','serif'],
+          sans: ['"Inter"','system-ui','-apple-system','"Segoe UI"','Roboto','sans-serif']
+        }
+      }
+    }
+  }
+</script>
+<style>
+  html { scroll-behavior: smooth; }
+  body { background:
+      radial-gradient(1200px 600px at 15% -10%, rgba(192,122,92,.16), transparent 60%),
+      radial-gradient(900px 500px at 90% 0%, rgba(166,130,86,.14), transparent 55%),
+      #0e0c0a;
+  }
+  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar-track{background:#151210}
+  ::-webkit-scrollbar-thumb{background:#4c392c;border-radius:8px}
+  ::-webkit-scrollbar-thumb:hover{background:#71533a}
+  .card-in{animation:fade .35s ease both}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .modal-in{animation:pop .2s ease both}
+  @keyframes pop{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+  .line-clamp-2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .line-clamp-3{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  [hidden]{display:none !important}
+
+  /* ── Fallback: aplicado somente quando o CDN do Tailwind não carrega (uso offline).
+        Não é idêntico ao layout completo, mas mantém o app legível e 100% utilizável. ── */
+  .no-tw body{color:#f2ece1;font-family:Inter,system-ui,sans-serif;margin:0}
+  .no-tw header{position:sticky;top:0;z-index:40;background:#0e0c0ae6;backdrop-filter:blur(12px);border-bottom:1px solid #4c392c}
+  .no-tw header>div,.no-tw main,.no-tw footer{max-width:80rem;margin:0 auto;padding:.75rem 1rem}
+  .no-tw h1,.no-tw h2,.no-tw h3{font-family:Georgia,serif;margin:0}
+  .no-tw h1{font-size:1.25rem}.no-tw h2{font-size:1.15rem}.no-tw h3{font-size:1rem}
+  .no-tw p{margin:.15rem 0}
+  .no-tw .flex{display:flex;gap:.5rem;align-items:center}
+  .no-tw .flex-wrap{flex-wrap:wrap}
+  .no-tw .flex-1{flex:1;min-width:0}
+  .no-tw #grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+  .no-tw #grid article{display:flex;flex-direction:column;background:#151210;border:1px solid #4c392c;border-radius:1rem;padding:1rem}
+  .no-tw #grid article>div:last-child{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.4rem;margin-top:auto;padding-top:.75rem}
+  .no-tw #grid article>div:last-child button{width:100%;min-width:0;padding:.5rem .25rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .no-tw input,.no-tw select,.no-tw textarea{box-sizing:border-box;padding:.6rem .75rem;border-radius:.6rem;background:#1d1915;color:#f2ece1;border:1px solid #5c4433;font:inherit}
+  .no-tw input,.no-tw textarea,.no-tw #formFields select{width:100%}
+  .no-tw #q{padding-left:2.2rem}
+  .no-tw #fCity{max-width:14rem}
+  .no-tw #grid article,.no-tw #grid article *{text-align:left}
+  .no-tw #formFields label{display:block;margin-bottom:.6rem}
+  .no-tw #formFields label>span{font-size:.75rem;color:#b89a72}
+  .no-tw button{cursor:pointer;font:inherit;font-size:.8rem;padding:.5rem .75rem;border-radius:.6rem;border:1px solid #5c4433;background:#26211c;color:#f2ece1}
+  .no-tw button:hover{background:#5c4433}
+  .no-tw button:disabled{opacity:.4;cursor:not-allowed}
+  .no-tw #tradChips,.no-tw #modChips{display:flex;flex-wrap:wrap;gap:.35rem;margin:.5rem 0}
+  .no-tw #modal,.no-tw #formModal{position:fixed;inset:0;z-index:50;background:#000000cc;overflow-y:auto;padding:1rem}
+  .no-tw #modal>div,.no-tw #formModal>form{max-width:42rem;margin:1rem auto;background:#151210;border:1px solid #5c4433;border-radius:1rem}
+  .no-tw #modalHead,.no-tw #modalBody,.no-tw #modalFoot,.no-tw #formFields{padding:1rem;display:block}
+  .no-tw #modalFoot{display:flex;flex-wrap:wrap;gap:.5rem}
+  .no-tw #modalBody>div{display:flex;gap:.6rem;padding:.5rem 0;border-top:1px solid #2a1e16}
+  .no-tw #toast{position:fixed;bottom:1.25rem;left:50%;transform:translateX(-50%);z-index:60}
+  .no-tw #toast>div{background:#26211c;border:1px solid #71533a;padding:.6rem 1rem;border-radius:.75rem;font-size:.85rem}
+  .no-tw #empty{text-align:center;padding:4rem 1rem}
+  .no-tw footer{text-align:center;font-size:.75rem;color:#a68256;padding-bottom:2.5rem}
+</style>
+</head>
+<body class="font-sans text-sand-100 min-h-screen antialiased">
+
+<!-- ══════════════ HEADER ══════════════ -->
+<header class="sticky top-0 z-40 backdrop-blur-xl bg-night-950/80 border-b border-sand-900/60">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-3">
+    <div class="w-11 h-11 shrink-0 rounded-xl bg-gradient-to-br from-clay-500 to-sand-700 grid place-items-center shadow-lg shadow-black/40 text-xl">🕯️</div>
+    <div class="min-w-0 flex-1">
+      <h1 class="font-display text-lg sm:text-xl leading-tight text-sand-50">Guia Espiritual</h1>
+      <p class="text-[11px] sm:text-xs text-sand-400 leading-tight truncate">Espaços, Terreiros e Oraculistas · Piracicaba e Região</p>
+    </div>
+    <div class="flex items-center gap-2">
+      <button id="btnImport" class="hidden sm:inline-flex items-center gap-2 text-sm px-3 py-2 rounded-lg bg-sand-800/70 hover:bg-sand-700 border border-sand-700/70 transition">
+        <span>📥</span><span class="hidden md:inline">Importar CSV</span>
+      </button>
+      <button id="btnAdd" class="inline-flex items-center gap-2 text-sm px-3 py-2 rounded-lg bg-clay-700 hover:bg-clay-500 transition font-medium">
+        <span>＋</span><span class="hidden md:inline">Novo cadastro</span>
+      </button>
+      <button id="btnMenu" class="sm:hidden w-10 h-10 grid place-items-center rounded-lg bg-sand-800/70 border border-sand-700/70">⋯</button>
+    </div>
+  </div>
+
+  <!-- menu mobile -->
+  <div id="mobileMenu" hidden class="sm:hidden border-t border-sand-900/60 px-4 py-3 space-y-2 bg-night-900/95">
+    <button data-act="import" class="w-full text-left text-sm px-3 py-2 rounded-lg bg-sand-800/70 border border-sand-700/70">📥 Importar CSV do Google Forms</button>
+    <button data-act="template" class="w-full text-left text-sm px-3 py-2 rounded-lg bg-sand-800/70 border border-sand-700/70">📄 Baixar modelo de planilha</button>
+    <button data-act="export" class="w-full text-left text-sm px-3 py-2 rounded-lg bg-sand-800/70 border border-sand-700/70">💾 Exportar cadastros (CSV)</button>
+  </div>
+
+  <!-- ══════════════ BUSCA + FILTROS ══════════════ -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 pb-3 space-y-3">
+
+    <div class="flex gap-2">
+      <div class="relative flex-1">
+        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-sand-400 pointer-events-none">🔎</span>
+        <input id="q" type="search" autocomplete="off"
+          placeholder="Buscar por nome, dirigente, bairro ou serviço…"
+          class="w-full pl-10 pr-9 py-2.5 rounded-xl bg-night-800/80 border border-sand-800 focus:border-clay-500 focus:ring-2 focus:ring-clay-700/40 outline-none text-sm placeholder:text-sand-500 transition" />
+        <button id="qClear" hidden class="absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-sand-800 hover:bg-sand-700 text-xs">✕</button>
+      </div>
+      <select id="fCity" class="px-3 py-2.5 rounded-xl bg-night-800/80 border border-sand-800 text-sm outline-none focus:border-clay-500 max-w-[46%]">
+        <option value="">Todas as cidades</option>
+      </select>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-1.5" id="tradChips"></div>
+
+    <div class="flex flex-wrap items-center gap-2 justify-between">
+      <div class="flex items-center gap-1.5" id="modChips"></div>
+      <div class="flex items-center gap-2">
+        <span id="count" class="text-xs text-sand-400"></span>
+        <button id="btnReset" class="text-xs px-2.5 py-1.5 rounded-lg border border-sand-800 hover:bg-sand-800/70 text-sand-300 transition">Limpar filtros</button>
+        <button id="btnView" title="Alternar visualização" class="text-xs px-2.5 py-1.5 rounded-lg border border-sand-800 hover:bg-sand-800/70 text-sand-300 transition">▦ Grade</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════════ CONTEÚDO ══════════════ -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+  <div id="grid" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
+
+  <div id="empty" hidden class="text-center py-20">
+    <div class="text-5xl mb-4 opacity-60">🌙</div>
+    <p class="font-display text-xl text-sand-200">Nenhum espaço encontrado</p>
+    <p class="text-sm text-sand-400 mt-1">Ajuste a busca ou limpe os filtros para ver todos os cadastros.</p>
+    <button onclick="resetFilters()" class="mt-5 px-4 py-2 rounded-lg bg-clay-700 hover:bg-clay-500 text-sm transition">Limpar filtros</button>
+  </div>
+</main>
+
+<footer class="max-w-7xl mx-auto px-4 sm:px-6 pb-10 pt-2 text-center text-xs text-sand-500 space-y-1">
+  <p>Guia e Diretório de Espaços Espirituais, Terreiros e Oraculistas — Piracicaba e Região.</p>
+  <p>Os dados ficam salvos apenas neste navegador. Sempre confirme horários e regras diretamente com o espaço.</p>
+</footer>
+
+<input id="fileInput" type="file" accept=".csv,text/csv" hidden />
+
+<!-- ══════════════ MODAL DETALHES ══════════════ -->
+<div id="modal" hidden class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm overflow-y-auto p-3 sm:p-6">
+  <div class="modal-in max-w-2xl mx-auto my-4 bg-night-900 border border-sand-800 rounded-2xl shadow-2xl overflow-hidden">
+    <div id="modalHead" class="p-5 border-b border-sand-800/80 flex items-start gap-3"></div>
+    <div id="modalBody" class="p-5 space-y-4 text-sm"></div>
+    <div id="modalFoot" class="p-4 border-t border-sand-800/80 flex flex-wrap gap-2 bg-night-950/50"></div>
+  </div>
+</div>
+
+<!-- ══════════════ MODAL FORMULÁRIO ══════════════ -->
+<div id="formModal" hidden class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm overflow-y-auto p-3 sm:p-6">
+  <form id="entryForm" class="modal-in max-w-2xl mx-auto my-4 bg-night-900 border border-sand-800 rounded-2xl shadow-2xl overflow-hidden">
+    <div class="p-5 border-b border-sand-800/80 flex items-center justify-between">
+      <h2 id="formTitle" class="font-display text-lg text-sand-50">Novo cadastro</h2>
+      <button type="button" onclick="closeForm()" class="w-8 h-8 rounded-lg bg-sand-800 hover:bg-sand-700">✕</button>
+    </div>
+    <div class="p-5 grid gap-3 sm:grid-cols-2" id="formFields"></div>
+    <div class="p-4 border-t border-sand-800/80 flex gap-2 justify-end bg-night-950/50">
+      <button type="button" id="formDelete" class="px-4 py-2 rounded-lg text-sm border border-red-900/70 text-red-300 hover:bg-red-950/50 transition">Excluir</button>
+      <button type="button" onclick="closeForm()" class="px-4 py-2 rounded-lg text-sm border border-sand-800 hover:bg-sand-800">Cancelar</button>
+      <button type="submit" class="px-4 py-2 rounded-lg text-sm bg-clay-700 hover:bg-clay-500 font-medium transition">Salvar</button>
+    </div>
+  </form>
+</div>
+
+<!-- ══════════════ TOAST ══════════════ -->
+<div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] pointer-events-none"></div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   1. MODELO DE DADOS  —  espelha as colunas do Google Forms
+   ═══════════════════════════════════════════════════════════════ */
+
+const FIELDS = [
+  { key:'timestamp', label:'Carimbo de data/hora',                        aliases:['carimbo de data/hora','carimbo','timestamp','data/hora'] },
+  { key:'email',     label:'Endereço de e-mail',                          aliases:['endereco de e-mail','e-mail','email','endereco de email'] },
+  { key:'nome',      label:'Nome do Espaço / Nome Profissional',          aliases:['nome do espaco','nome profissional','nome do espaco / nome profissional','nome'] },
+  { key:'dirigente', label:'Dirigente / Responsável / Nome de Terreiro',  aliases:['dirigente','responsavel','nome de terreiro','dirigente / responsavel / nome de terreiro'] },
+  { key:'tradicao',  label:'Tradição / Vertente Espiritual',              aliases:['tradicao','vertente','tradicao / vertente espiritual','vertente espiritual'] },
+  { key:'cidade',    label:'Município / Cidade da Região',                aliases:['municipio','cidade','municipio / cidade da regiao','cidade da regiao'] },
+  { key:'bairro',    label:'Bairro / Localização',                        aliases:['bairro','localizacao','bairro / localizacao'] },
+  { key:'endereco',  label:'Endereço Completo',                           aliases:['endereco completo','endereco','logradouro'] },
+  { key:'modalidade',label:'Modalidade de Atendimento',                   aliases:['modalidade','modalidade de atendimento','tipo de atendimento','atendimento'] },
+  { key:'telefone',  label:'Telefone / WhatsApp com DDD',                 aliases:['telefone','whatsapp','celular','telefone / whatsapp com ddd','contato'] },
+  { key:'redes',     label:'Redes Sociais / Instagram / Site',            aliases:['redes sociais','instagram','site','redes sociais / instagram / site','rede social'] },
+  { key:'horarios',  label:'Dias e Horários das Giras, Trabalhos ou Consultas', aliases:['dias e horarios','horarios','giras','dias e horarios das giras, trabalhos ou consultas','horario'] },
+  { key:'servicos',  label:'Serviços Prestados e Trabalhos oferecidos',   aliases:['servicos prestados','servicos','trabalhos oferecidos','servicos prestados e trabalhos oferecidos'] },
+  { key:'regras',    label:'Orientações ao Visitante / Regras do Espaço', aliases:['orientacoes ao visitante','regras','regras do espaco','orientacoes ao visitante / regras do espaco','observacoes'] }
+];
+
+const TRADITIONS = [
+  { name:'Umbanda',                icon:'🕊️', cls:'bg-sky-500/15 text-sky-300 border-sky-500/30' },
+  { name:'Candomblé',              icon:'🥁', cls:'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' },
+  { name:'Quimbanda',              icon:'🔥', cls:'bg-red-500/15 text-red-300 border-red-500/30' },
+  { name:'Cartomancia/Tarô',       icon:'🃏', cls:'bg-violet-500/15 text-violet-300 border-violet-500/30' },
+  { name:'Jogo de Búzios',         icon:'🐚', cls:'bg-amber-500/15 text-amber-300 border-amber-500/30' },
+  { name:'Holístico/Terapia',      icon:'🌿', cls:'bg-teal-500/15 text-teal-300 border-teal-500/30' },
+  { name:'Magia',                  icon:'🔮', cls:'bg-fuchsia-500/15 text-fuchsia-300 border-fuchsia-500/30' },
+  { name:'Espiritismo/Kardecismo', icon:'✨', cls:'bg-indigo-500/15 text-indigo-300 border-indigo-500/30' },
+  { name:'Outros',                 icon:'🌀', cls:'bg-sand-500/15 text-sand-300 border-sand-500/30' }
+];
+
+const MODALITIES = [
+  { name:'Presencial', icon:'📍' },
+  { name:'Online',     icon:'💻' },
+  { name:'Ambas',      icon:'🔁' }
+];
+
+/* ═══════════════════════════════════════════════════════════════
+   2. DADOS DE EXEMPLO (fictícios) — região de Piracicaba
+   ═══════════════════════════════════════════════════════════════ */
+
+const SAMPLE = [
+  { timestamp:'01/03/2026 19:42:11', email:'paijoaquimdangola@exemplo.com', nome:'Terreiro de Umbanda Pai Joaquim de Angola', dirigente:'Mãe Maria de Oxum', tradicao:'Umbanda', cidade:'Piracicaba', bairro:'Vila Rezende', endereco:'Rua das Palmeiras, 340 — Vila Rezende, Piracicaba/SP', modalidade:'Presencial', telefone:'(19) 99812-4477', redes:'@terreiropaijoaquim', horarios:'Giras abertas aos sábados às 19h30 · Consultas com marcação às quartas, 19h', servicos:'Giras abertas, Passes, Descarrego, Amaci, Consulta com entidade', regras:'Traje branco obrigatório. Chegar 20 min antes. Não é permitido o uso de bebida alcoólica antes da gira. Colaboração espontânea.' },
+  { timestamp:'01/03/2026 20:05:03', email:'cantinhodeluz@exemplo.com', nome:'Cantinho de Luz — Tarô e Orientação', dirigente:'Taróloga Selma Prado', tradicao:'Cartomancia/Tarô', cidade:'Piracicaba', bairro:'Centro', endereco:'Rua Governador Pedro de Toledo, 812, sala 4 — Centro, Piracicaba/SP', modalidade:'Ambas', telefone:'(19) 99745-2210', redes:'instagram.com/cantinhodeluz.pira', horarios:'Segunda a sexta, das 9h às 18h · Sábados até 13h', servicos:'Leitura de Cartas/Tarô, Baralho Cigano, Orientação, Abertura de Caminhos', regras:'Atendimento somente com agendamento prévio pelo WhatsApp. Consulta com valor fixo informado no agendamento. Online por vídeo chamada.' },
+  { timestamp:'02/03/2026 08:31:47', email:'ileaseomiroko@exemplo.com', nome:'Ilê Axé Omi Rokó', dirigente:'Babalorixá Carlos de Xangô', tradicao:'Candomblé', cidade:'Piracicaba', bairro:'Santa Terezinha', endereco:'Estrada do Piracicamirim, km 4 — Piracicaba/SP', modalidade:'Presencial', telefone:'(19) 98123-7788', redes:'@ileaxeomiroko', horarios:'Festas públicas conforme calendário do axé · Jogo de búzios às terças e quintas, 14h às 19h', servicos:'Jogo de Búzios, Obrigações, Ebós, Festas públicas de Orixá, Orientação espiritual', regras:'Traje branco e discreto nas festas. Mulheres de saia. Fotos não permitidas durante o toque. Jogo somente com agendamento.' },
+  { timestamp:'02/03/2026 11:14:20', email:'casadecaridadeirmaolaz@exemplo.com', nome:'Casa de Caridade Irmão Lázaro', dirigente:'Dirigente Antônio Ferraz', tradicao:'Espiritismo/Kardecismo', cidade:'Piracicaba', bairro:'Paulista', endereco:'Rua Ipiranga, 155 — Bairro Paulista, Piracicaba/SP', modalidade:'Presencial', telefone:'(19) 99630-1145', redes:'casairmaolazaro.exemplo.org', horarios:'Palestra pública às segundas, 20h · Passes às quartas, 19h30 · Evangelho no lar aos sábados, 16h', servicos:'Passes, Palestra pública, Evangelho no lar, Atendimento fraterno, Água fluidificada', regras:'Entrada gratuita, sem cobrança de qualquer valor. Traje livre e discreto. Não há consultas individuais mediúnicas.' },
+  { timestamp:'03/03/2026 09:02:55', email:'tendaogumbeiramar@exemplo.com', nome:'Tenda Espírita Ogum Beira-Mar', dirigente:'Pai Sebastião de Ogum', tradicao:'Umbanda', cidade:'Limeira', bairro:'Jardim Glória', endereco:'Rua Treze de Maio, 990 — Jardim Glória, Limeira/SP', modalidade:'Presencial', telefone:'(19) 99401-8832', redes:'@tendaogumbeiramar', horarios:'Giras de Caboclo na 1ª e 3ª sexta do mês, 20h · Gira de Preto Velho no último domingo, 16h', servicos:'Giras abertas, Passes, Descarrego, Consulta com Preto Velho e Caboclo, Amaci', regras:'Traje branco. Crianças acompanhadas dos responsáveis. Sem agendamento para gira aberta — chegar cedo, senhas a partir das 19h.' },
+  { timestamp:'03/03/2026 15:47:12', email:'buziosdemaeirene@exemplo.com', nome:'Búzios de Mãe Irene', dirigente:'Iyalorixá Irene de Yemanjá', tradicao:'Jogo de Búzios', cidade:'Rio Claro', bairro:'Jardim Claret', endereco:'', modalidade:'Ambas', telefone:'(19) 98877-3021', redes:'@maeirene.buzios', horarios:'Terças a sábados, 10h às 18h, com hora marcada', servicos:'Jogo de Búzios, Orientação espiritual, Indicação de banhos e ervas, Abertura de Caminhos', regras:'Endereço enviado após confirmação do agendamento (atendimento sigiloso e individual). Consulta com valor combinado antecipadamente. Online por chamada de vídeo.' },
+  { timestamp:'04/03/2026 10:19:38', email:'centroholisticoraizeviver@exemplo.com', nome:'Espaço Raiz e Viver — Terapias Integrativas', dirigente:'Terapeuta Renata Duarte', tradicao:'Holístico/Terapia', cidade:'Americana', bairro:'Jardim São Paulo', endereco:'Av. Brasil, 1420, sala 7 — Jardim São Paulo, Americana/SP', modalidade:'Ambas', telefone:'(19) 99155-6640', redes:'instagram.com/espacoraizeviver', horarios:'Segunda a sexta das 8h às 20h · Sábados das 9h às 14h', servicos:'Reiki, Barra de Access, Terapia com florais, Limpeza energética, Meditação guiada, Radiestesia', regras:'Somente com agendamento. Chegar 10 min antes. Sessões de 50 min. Pacotes com desconto. Atendimento online para florais e radiestesia.' },
+  { timestamp:'04/03/2026 18:26:04', email:'reinodasetelinhas@exemplo.com', nome:'Reino das Sete Linhas', dirigente:'Mãe Cleuza de Iansã', tradicao:'Quimbanda', cidade:"Santa Bárbara d'Oeste", bairro:'Vila Linópolis', endereco:'Rua dos Manacás, 77 — Vila Linópolis, Santa Bárbara d\'Oeste/SP', modalidade:'Presencial', telefone:'(19) 99372-5518', redes:'@reinodas7linhas', horarios:'Giras de Exu e Pombagira na 2ª sexta do mês, 21h · Consultas às segundas e quintas, 15h às 20h', servicos:'Giras de Esquerda, Consulta com Exu e Pombagira, Descarrego, Trabalhos de Abertura de Caminhos', regras:'Traje preto e vermelho ou roupa escura. Proibida a entrada de menores de 18 anos nas giras de esquerda. Consultas com agendamento e taxa de colaboração.' },
+  { timestamp:'05/03/2026 07:58:41', email:'atelieoraculo@exemplo.com', nome:'Ateliê do Oráculo', dirigente:'Oraculista Márcio Bueno', tradicao:'Cartomancia/Tarô', cidade:'Piracicaba', bairro:'Higienópolis', endereco:'', modalidade:'Online', telefone:'(19) 99288-4406', redes:'@ateliedooraculo · ateliedooraculo.exemplo.com', horarios:'Atendimento online de segunda a sábado, das 10h às 22h', servicos:'Leitura de Cartas/Tarô, Tarô terapêutico, Mapa astral, Orientação, Leitura por áudio no WhatsApp', regras:'Atendimento 100% online (vídeo ou áudio gravado). Pagamento antecipado via Pix. Não realiza previsões sobre saúde, gestação ou questões jurídicas.' },
+  { timestamp:'05/03/2026 14:33:19', email:'ilepaioxossi@exemplo.com', nome:'Ilê de Pai Oxóssi das Matas', dirigente:'Pai Jorge de Oxóssi', tradicao:'Umbanda', cidade:'São Pedro', bairro:'Zona Rural — Estrada da Serra', endereco:'Estrada Municipal da Serra, km 9, s/n — São Pedro/SP', modalidade:'Presencial', telefone:'(19) 99044-2277', redes:'@iledepaioxossi', horarios:'Gira de Caboclo aos domingos, 15h · Trabalhos de mata na lua cheia (avisado nas redes)', servicos:'Giras abertas, Passes, Banhos de ervas, Amaci, Batismo espiritual, Descarrego', regras:'Traje branco. Levar garrafa de água e repelente (espaço em área de mata). Estacionamento no local. Colaboração espontânea para manutenção da casa.' },
+  { timestamp:'06/03/2026 09:12:07', email:'casadeluzsaograte@exemplo.com', nome:'Casa de Luz São Jorge Guerreiro', dirigente:'Mãe Vânia de Ogum', tradicao:'Magia', cidade:'Capivari', bairro:'Centro', endereco:'Rua XV de Novembro, 233 — Centro, Capivari/SP', modalidade:'Ambas', telefone:'(19) 99508-7712', redes:'@casadeluzsaojorge', horarios:'Atendimentos de terça a sábado, 13h às 19h · Trabalhos de firmeza toda 1ª segunda do mês', servicos:'Trabalhos de Abertura de Caminhos, Descarrego, Banhos e defumações, Orientação, Confecção de guias e patuás', regras:'Somente com agendamento prévio. Materiais dos trabalhos por conta do consulente. Orçamento informado antes de qualquer trabalho — não há cobrança surpresa.' },
+  { timestamp:'06/03/2026 16:44:52', email:'grupofraternidadeluzserena@exemplo.com', nome:'Grupo Fraternidade Luz Serena', dirigente:'Coordenadora Helena Marques', tradicao:'Holístico/Terapia', cidade:'Rio Claro', bairro:'Cidade Nova', endereco:'Rua 6, nº 1188 — Cidade Nova, Rio Claro/SP', modalidade:'Presencial', telefone:'(19) 99719-3364', redes:'@luzserena.rc', horarios:'Roda de cura às quintas, 19h30 · Meditação coletiva aos sábados, 9h', servicos:'Reiki coletivo, Roda de cura, Meditação guiada, Grupo de estudos, Escalda-pés com ervas', regras:'Atividades gratuitas, contribuição opcional. Levar canga ou almofada para a meditação. Chegar com 15 min de antecedência — portão fecha no horário.' }
+];
+
+/* ═══════════════════════════════════════════════════════════════
+   3. ESTADO + PERSISTÊNCIA
+   ═══════════════════════════════════════════════════════════════ */
+
+const STORE_KEY = 'guia-espiritual-piracicaba-v1';
+let DATA = [];
+let state = { q:'', city:'', trads:new Set(), mods:new Set(), view:'grid' };
+
+function load(){
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (raw){ const p = JSON.parse(raw); if (Array.isArray(p) && p.length) return p.map(normalize); }
+  } catch(e){ console.warn('Falha ao ler os dados salvos:', e); }
+  return SAMPLE.map(normalize);
+}
+function save(){
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(DATA)); }
+  catch(e){ toast('Não foi possível salvar neste navegador.', 'error'); }
+}
+
+let nextId = 1;
+function normalize(r){
+  const o = { id: r.id || 'e' + (nextId++) };
+  FIELDS.forEach(f => o[f.key] = (r[f.key] ?? '').toString().trim());
+  o.tradicao   = matchTradition(o.tradicao);
+  o.modalidade = matchModality(o.modalidade);
+  return o;
+}
+
+function deaccent(s){ return (s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,''); }
+function norm(s){ return deaccent(s).toLowerCase().replace(/\s+/g,' ').trim(); }
+
+function matchTradition(v){
+  const n = norm(v);
+  if (!n) return 'Outros';
+  const exact = TRADITIONS.find(t => norm(t.name) === n);
+  if (exact) return exact.name;
+  if (/umbanda/.test(n)) return 'Umbanda';
+  if (/candombl|ile ax|axe/.test(n)) return 'Candomblé';
+  if (/quimbanda|esquerda|exu|pombagira/.test(n)) return 'Quimbanda';
+  if (/buzio|merindilogun/.test(n)) return 'Jogo de Búzios';
+  if (/taro|cartoman|carta|baralho|oracul/.test(n)) return 'Cartomancia/Tarô';
+  if (/holist|terapia|reiki|floral|cristal|yoga|integrativ/.test(n)) return 'Holístico/Terapia';
+  if (/magia|bruxaria|wicca|feiti/.test(n)) return 'Magia';
+  if (/espirit|kardec|doutrina|centro espirita/.test(n)) return 'Espiritismo/Kardecismo';
+  return 'Outros';
+}
+function matchModality(v){
+  const n = norm(v);
+  if (!n) return 'Presencial';
+  const online = /online|remoto|virtual|distancia|video/.test(n);
+  const pres   = /presencial|local|no espaco|sede/.test(n);
+  if (/ambas|ambos|os dois|hibrid|presencial e online|online e presencial/.test(n) || (online && pres)) return 'Ambas';
+  if (online) return 'Online';
+  return 'Presencial';
+}
+function tradMeta(name){ return TRADITIONS.find(t => t.name === name) || TRADITIONS[TRADITIONS.length-1]; }
+function modIcon(m){ return (MODALITIES.find(x=>x.name===m)||{icon:'📍'}).icon; }
+
+/* ═══════════════════════════════════════════════════════════════
+   4. CSV — parser e importação do Google Forms
+   ═══════════════════════════════════════════════════════════════ */
+
+function parseCSV(text){
+  text = text.replace(/^﻿/, '');
+  const delim = detectDelimiter(text);
+  const rows = []; let row = []; let cell = ''; let inQuotes = false;
+
+  for (let i = 0; i < text.length; i++){
+    const c = text[i];
+    if (inQuotes){
+      if (c === '"'){
+        if (text[i+1] === '"'){ cell += '"'; i++; }
+        else inQuotes = false;
+      } else cell += c;
+    } else {
+      if (c === '"') inQuotes = true;
+      else if (c === delim){ row.push(cell); cell = ''; }
+      else if (c === '\n'){ row.push(cell); rows.push(row); row = []; cell = ''; }
+      else if (c === '\r'){ /* ignora */ }
+      else cell += c;
+    }
+  }
+  if (cell.length || row.length){ row.push(cell); rows.push(row); }
+  return rows.filter(r => r.some(c => c.trim() !== ''));
+}
+
+function detectDelimiter(text){
+  const line = text.split(/\r?\n/)[0] || '';
+  const outside = line.replace(/"[^"]*"/g, '');
+  const commas = (outside.match(/,/g)||[]).length;
+  const semis  = (outside.match(/;/g)||[]).length;
+  const tabs   = (outside.match(/\t/g)||[]).length;
+  if (tabs > commas && tabs > semis) return '\t';
+  return semis > commas ? ';' : ',';
+}
+
+/** Mapeia cabeçalhos da planilha do Forms para as chaves internas. */
+function mapHeaders(headers){
+  const map = {};              // índice da coluna -> chave
+  const used = new Set();
+  headers.forEach((h, i) => {
+    const n = norm(h);
+    if (!n) return;
+    let best = null, bestScore = 0;
+    for (const f of FIELDS){
+      if (used.has(f.key)) continue;
+      let score = 0;
+      if (n === norm(f.label)) score = 100;
+      else {
+        for (const a of f.aliases){
+          const na = norm(a);
+          if (n === na) score = Math.max(score, 90);
+          else if (n.startsWith(na) || n.includes(na)) score = Math.max(score, 40 + na.length);
+        }
+      }
+      if (score > bestScore){ bestScore = score; best = f; }
+    }
+    if (best && bestScore >= 40){ map[i] = best.key; used.add(best.key); }
+  });
+  return map;
+}
+
+function importCSV(text, fileName){
+  const rows = parseCSV(text);
+  if (rows.length < 2){ toast('O arquivo não contém linhas de cadastro.', 'error'); return; }
+
+  const headers = rows[0];
+  const map = mapHeaders(headers);
+  const mapped = Object.keys(map).length;
+  if (!mapped){ toast('Não reconheci nenhuma coluna do formulário neste CSV.', 'error'); return; }
+
+  const records = [];
+  for (let r = 1; r < rows.length; r++){
+    const rec = {};
+    rows[r].forEach((v, i) => { if (map[i]) rec[map[i]] = v; });
+    if (!(rec.nome || rec.dirigente || rec.telefone)) continue;   // linha vazia
+    records.push(normalize(rec));
+  }
+  if (!records.length){ toast('Nenhum cadastro válido encontrado no arquivo.', 'error'); return; }
+
+  // Substitui os dados de exemplo na primeira importação; depois, mescla sem duplicar.
+  const isSampleOnly = DATA.length === SAMPLE.length && DATA.every((d,i) => d.nome === SAMPLE[i].nome);
+  if (isSampleOnly) DATA = [];
+
+  const seen = new Set(DATA.map(d => norm(d.nome) + '|' + onlyDigits(d.telefone)));
+  let added = 0, dup = 0;
+  records.forEach(rec => {
+    const k = norm(rec.nome) + '|' + onlyDigits(rec.telefone);
+    if (seen.has(k)){ dup++; return; }
+    seen.add(k); DATA.push(rec); added++;
+  });
+
+  save(); render();
+  const unmapped = FIELDS.length - mapped;
+  toast(`${added} cadastro(s) importado(s) de "${fileName}". ${mapped}/${FIELDS.length} colunas reconhecidas${dup ? ` · ${dup} duplicado(s) ignorado(s)` : ''}${unmapped ? '.' : '.'}`, 'ok');
+}
+
+function downloadCSV(filename, rows){
+  const esc = v => { const s = (v ?? '').toString(); return /[",;\n\r]/.test(s) ? '"' + s.replace(/"/g,'""') + '"' : s; };
+  const csv = '﻿' + rows.map(r => r.map(esc).join(',')).join('\r\n');
+  const url = URL.createObjectURL(new Blob([csv], { type:'text/csv;charset=utf-8;' }));
+  const a = Object.assign(document.createElement('a'), { href:url, download:filename });
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+const exportAll = () => {
+  downloadCSV('cadastros-guia-espiritual.csv',
+    [FIELDS.map(f=>f.label), ...DATA.map(d => FIELDS.map(f => d[f.key]))]);
+  toast('Cadastros exportados em CSV.', 'ok');
+};
+const downloadTemplate = () => {
+  downloadCSV('modelo-cadastro-espacos-espirituais.csv',
+    [FIELDS.map(f=>f.label), FIELDS.map(f => SAMPLE[0][f.key])]);
+  toast('Modelo de planilha baixado.', 'ok');
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   5. FILTROS
+   ═══════════════════════════════════════════════════════════════ */
+
+function cities(){
+  return [...new Set(DATA.map(d => d.cidade).filter(Boolean))]
+    .sort((a,b) => a.localeCompare(b,'pt-BR'));
+}
+
+function filtered(){
+  const q = norm(state.q);
+  const terms = q ? q.split(' ').filter(Boolean) : [];
+  return DATA.filter(d => {
+    if (state.city && d.cidade !== state.city) return false;
+    if (state.trads.size && !state.trads.has(d.tradicao)) return false;
+    if (state.mods.size){
+      // quem atende "Ambas" aparece tanto no filtro Presencial quanto no Online
+      const ok = d.modalidade === 'Ambas' || [...state.mods].some(m => d.modalidade === m);
+      if (!ok) return false;
+    }
+    if (terms.length){
+      const hay = norm([d.nome,d.dirigente,d.bairro,d.cidade,d.servicos,d.tradicao,d.horarios,d.regras,d.endereco,d.redes,d.telefone].join(' '));
+      if (!terms.every(t => hay.includes(t))) return false;
+    }
+    return true;
+  }).sort((a,b) => (a.cidade||'').localeCompare(b.cidade||'','pt-BR') || (a.nome||'').localeCompare(b.nome||'','pt-BR'));
+}
+
+function resetFilters(){
+  state = { ...state, q:'', city:'', trads:new Set(), mods:new Set() };
+  document.getElementById('q').value = '';
+  document.getElementById('fCity').value = '';
+  render();
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   6. UTILITÁRIOS DE CONTATO E MENSAGEM
+   ═══════════════════════════════════════════════════════════════ */
+
+const onlyDigits = s => (s||'').replace(/\D/g,'');
+
+function waNumber(phone){
+  let d = onlyDigits(phone);
+  if (!d) return '';
+  if (d.startsWith('0')) d = d.replace(/^0+/, '');
+  if (!d.startsWith('55')) d = '55' + d;
+  return d.length >= 12 ? d : '';
+}
+const waLink = (phone, msg) =>
+  `https://wa.me/${waNumber(phone)}${msg ? '?text=' + encodeURIComponent(msg) : ''}`;
+
+function linkify(v){
+  if (!v) return '';
+  const t = v.trim();
+  if (/^https?:\/\//i.test(t)) return t;
+  if (/^@/.test(t)) return 'https://instagram.com/' + t.slice(1).split(/[\s,·|]/)[0];
+  if (/^[\w.-]+\.[a-z]{2,}(\/|$)/i.test(t)) return 'https://' + t.split(/[\s,·|]/)[0];
+  return '';
+}
+const mapsLink = d => 'https://www.google.com/maps/search/?api=1&query=' +
+  encodeURIComponent(d.endereco || [d.bairro, d.cidade, 'SP'].filter(Boolean).join(', '));
+
+/** Texto formatado, pronto para colar no WhatsApp do cliente. */
+function fichaTexto(d){
+  const L = [];
+  L.push('📍 *Indicação de Espaço Espiritual em ' + (d.cidade || 'Piracicaba e Região') + ':*');
+  L.push('');
+  L.push('*Nome:* ' + (d.nome || '—'));
+  L.push('*Tradição:* ' + d.tradicao);
+  if (d.dirigente) L.push('*Responsável:* ' + d.dirigente);
+  const local = [d.bairro, d.cidade && d.cidade + '/SP'].filter(Boolean).join(' - ');
+  if (local) L.push('*Bairro:* ' + local);
+  if (d.endereco) L.push('*Endereço:* ' + d.endereco);
+  L.push('*Modalidade:* ' + d.modalidade);
+  if (d.horarios) L.push('*Atendimentos/Giras:* ' + d.horarios);
+  if (d.servicos) L.push('*Serviços:* ' + d.servicos);
+  if (d.regras)   L.push('*Regras/Observações:* ' + d.regras);
+  if (d.telefone) L.push('*Contato:* ' + d.telefone);
+  if (d.redes)    L.push('*Redes:* ' + d.redes);
+  L.push('');
+  L.push('_Confirme sempre os horários pelo contato acima antes de comparecer._ 🙏');
+  return L.join('\n');
+}
+
+async function copiar(text, okMsg){
+  try {
+    if (navigator.clipboard && window.isSecureContext) await navigator.clipboard.writeText(text);
+    else {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.cssText = 'position:fixed;top:-1000px;opacity:0';
+      document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); ta.remove();
+    }
+    toast(okMsg || 'Copiado para a área de transferência.', 'ok');
+  } catch(e){
+    toast('Não consegui copiar automaticamente — o texto foi aberto para cópia manual.', 'error');
+    window.prompt('Copie o texto abaixo (Ctrl/Cmd + C):', text);
+  }
+}
+
+const copiarFicha = id => { const d = byId(id); if (d) copiar(fichaTexto(d), 'Ficha copiada! É só colar no WhatsApp do cliente.'); };
+
+function enviarCliente(id){
+  const d = byId(id); if (!d) return;
+  window.open('https://wa.me/?text=' + encodeURIComponent(fichaTexto(d)), '_blank', 'noopener');
+}
+
+function abrirWhats(id){
+  const d = byId(id); if (!d) return;
+  const num = waNumber(d.telefone);
+  if (!num){ toast('Este cadastro não tem um telefone válido com DDD.', 'error'); return; }
+  const msg = `Olá! Encontrei o contato de *${d.nome}* no Guia de Espaços Espirituais de Piracicaba e Região. Gostaria de saber mais sobre os atendimentos. 🙏`;
+  window.open(waLink(d.telefone, msg), '_blank', 'noopener');
+}
+
+const byId = id => DATA.find(d => d.id === id);
+
+/* ═══════════════════════════════════════════════════════════════
+   7. RENDERIZAÇÃO
+   ═══════════════════════════════════════════════════════════════ */
+
+const esc = s => (s ?? '').toString()
+  .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+  .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+
+function render(){
+  renderCityOptions();
+  renderChips();
+
+  const list = filtered();
+  const grid = document.getElementById('grid');
+  const isList = state.view === 'list';
+
+  grid.className = isList ? 'grid gap-3' : 'grid gap-4 sm:grid-cols-2 lg:grid-cols-3';
+  grid.innerHTML = list.map(d => isList ? rowHTML(d) : cardHTML(d)).join('');
+
+  document.getElementById('empty').hidden = list.length > 0;
+  document.getElementById('count').textContent =
+    `${list.length} de ${DATA.length} ${DATA.length === 1 ? 'espaço' : 'espaços'}`;
+  document.getElementById('qClear').hidden = !state.q;
+  document.getElementById('btnView').textContent = isList ? '☰ Lista' : '▦ Grade';
+}
+
+function renderCityOptions(){
+  const sel = document.getElementById('fCity');
+  const cur = state.city;
+  sel.innerHTML = '<option value="">Todas as cidades</option>' +
+    cities().map(c => `<option value="${esc(c)}"${c===cur?' selected':''}>${esc(c)}</option>`).join('');
+  sel.value = cur;
+}
+
+function renderChips(){
+  const counts = {};
+  DATA.forEach(d => counts[d.tradicao] = (counts[d.tradicao]||0)+1);
+
+  document.getElementById('tradChips').innerHTML = TRADITIONS
+    .filter(t => counts[t.name] || state.trads.has(t.name))
+    .map(t => {
+      const on = state.trads.has(t.name);
+      return `<button onclick="toggleTrad('${esc(t.name)}')"
+        class="text-xs px-2.5 py-1.5 rounded-full border transition ${on ? t.cls + ' ring-1 ring-current font-semibold' : 'border-sand-800 text-sand-300 hover:bg-sand-800/60'}">
+        ${t.icon} ${esc(t.name)} <span class="opacity-60">${counts[t.name]||0}</span></button>`;
+    }).join('');
+
+  document.getElementById('modChips').innerHTML = MODALITIES.map(m => {
+    const on = state.mods.has(m.name);
+    return `<button onclick="toggleMod('${esc(m.name)}')"
+      class="text-xs px-2.5 py-1.5 rounded-lg border transition ${on ? 'bg-clay-700 border-clay-500 text-white font-semibold' : 'border-sand-800 text-sand-300 hover:bg-sand-800/60'}">
+      ${m.icon} ${esc(m.name)}</button>`;
+  }).join('');
+}
+
+function badge(d){
+  const t = tradMeta(d.tradicao);
+  return `<span class="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full border ${t.cls}">${t.icon} ${esc(d.tradicao)}</span>`;
+}
+
+function cardHTML(d){
+  const hasPhone = !!waNumber(d.telefone);
+  return `<article class="card-in group flex flex-col bg-night-900/70 border border-sand-900 hover:border-clay-700/70 rounded-2xl p-4 shadow-lg shadow-black/20 transition">
+    <div class="flex items-start justify-between gap-2 mb-2">
+      ${badge(d)}
+      <span class="text-[11px] text-sand-400 shrink-0">${modIcon(d.modalidade)} ${esc(d.modalidade)}</span>
+    </div>
+
+    <h3 class="font-display text-base leading-snug text-sand-50 line-clamp-2">${esc(d.nome) || '<span class="text-sand-500">Sem nome</span>'}</h3>
+    ${d.dirigente ? `<p class="text-xs text-clay-300 mt-1">👤 ${esc(d.dirigente)}</p>` : ''}
+    <p class="text-xs text-sand-400 mt-1">📍 ${esc([d.bairro, d.cidade].filter(Boolean).join(' · ')) || 'Local não informado'}</p>
+
+    ${d.horarios ? `<p class="text-xs text-sand-300/90 mt-2.5 line-clamp-2">🕐 ${esc(d.horarios)}</p>` : ''}
+    ${d.servicos ? `<p class="text-xs text-sand-400 mt-1.5 line-clamp-2">✨ ${esc(d.servicos)}</p>` : ''}
+
+    <div class="flex-1"></div>
+
+    <div class="grid grid-cols-3 gap-1.5 mt-4">
+      <button onclick="abrirWhats('${d.id}')" ${hasPhone?'':'disabled'} title="Chamar no WhatsApp"
+        class="flex items-center justify-center gap-1 text-xs py-2 rounded-lg font-medium transition ${hasPhone ? 'bg-emerald-600/90 hover:bg-emerald-500 text-white' : 'bg-sand-900 text-sand-600 cursor-not-allowed'}">
+        🟢 <span class="hidden sm:inline">WhatsApp</span></button>
+      <button onclick="copiarFicha('${d.id}')" title="Copiar ficha completa"
+        class="flex items-center justify-center gap-1 text-xs py-2 rounded-lg bg-sand-800 hover:bg-sand-700 transition">
+        📋 <span class="hidden sm:inline">Copiar</span></button>
+      <button onclick="openDetails('${d.id}')" title="Ver detalhes"
+        class="flex items-center justify-center gap-1 text-xs py-2 rounded-lg bg-sand-800 hover:bg-sand-700 transition">
+        🔍 <span class="hidden sm:inline">Detalhes</span></button>
+    </div>
+  </article>`;
+}
+
+function rowHTML(d){
+  const hasPhone = !!waNumber(d.telefone);
+  return `<article class="card-in flex flex-wrap items-center gap-3 bg-night-900/70 border border-sand-900 hover:border-clay-700/70 rounded-xl px-4 py-3 transition">
+    <div class="min-w-0 flex-1">
+      <div class="flex items-center gap-2 flex-wrap">
+        <h3 class="font-display text-sand-50 truncate">${esc(d.nome)}</h3>
+        ${badge(d)}
+      </div>
+      <p class="text-xs text-sand-400 mt-0.5 truncate">
+        ${d.dirigente ? '👤 ' + esc(d.dirigente) + ' · ' : ''}📍 ${esc([d.bairro,d.cidade].filter(Boolean).join(' · '))} · ${modIcon(d.modalidade)} ${esc(d.modalidade)}
+      </p>
+      ${d.horarios ? `<p class="text-xs text-sand-300/80 mt-0.5 truncate">🕐 ${esc(d.horarios)}</p>` : ''}
+    </div>
+    <div class="flex gap-1.5 shrink-0">
+      <button onclick="abrirWhats('${d.id}')" ${hasPhone?'':'disabled'} class="text-xs px-3 py-2 rounded-lg ${hasPhone?'bg-emerald-600/90 hover:bg-emerald-500 text-white':'bg-sand-900 text-sand-600 cursor-not-allowed'}">🟢</button>
+      <button onclick="copiarFicha('${d.id}')" class="text-xs px-3 py-2 rounded-lg bg-sand-800 hover:bg-sand-700">📋</button>
+      <button onclick="openDetails('${d.id}')" class="text-xs px-3 py-2 rounded-lg bg-sand-800 hover:bg-sand-700">🔍</button>
+    </div>
+  </article>`;
+}
+
+/* ── Modal de detalhes ─────────────────────────────────────── */
+
+function openDetails(id){
+  const d = byId(id); if (!d) return;
+  const t = tradMeta(d.tradicao);
+  const rede = linkify(d.redes);
+
+  document.getElementById('modalHead').innerHTML = `
+    <div class="w-12 h-12 shrink-0 rounded-xl grid place-items-center text-2xl border ${t.cls}">${t.icon}</div>
+    <div class="min-w-0 flex-1">
+      <h2 class="font-display text-xl leading-tight text-sand-50">${esc(d.nome)}</h2>
+      <p class="text-sm text-clay-300 mt-0.5">${esc(d.dirigente || '—')}</p>
+      <div class="flex flex-wrap gap-1.5 mt-2">
+        ${badge(d)}
+        <span class="text-[11px] px-2 py-0.5 rounded-full border border-sand-800 text-sand-300">${modIcon(d.modalidade)} ${esc(d.modalidade)}</span>
+      </div>
+    </div>
+    <button onclick="closeModal()" class="w-8 h-8 shrink-0 rounded-lg bg-sand-800 hover:bg-sand-700">✕</button>`;
+
+  const row = (icon, label, value, extra='') => value
+    ? `<div class="flex gap-3">
+         <span class="w-6 shrink-0 text-center">${icon}</span>
+         <div class="min-w-0 flex-1">
+           <p class="text-[11px] uppercase tracking-wide text-sand-500">${label}</p>
+           <p class="text-sand-100 whitespace-pre-line break-words">${esc(value)}</p>
+           ${extra}
+         </div>
+       </div>` : '';
+
+  document.getElementById('modalBody').innerHTML = [
+    row('📍','Localização', [d.bairro, d.cidade && d.cidade + '/SP'].filter(Boolean).join(' — ')),
+    row('🏠','Endereço completo', d.endereco,
+        `<a href="${mapsLink(d)}" target="_blank" rel="noopener" class="text-xs text-clay-300 hover:underline">Abrir no Google Maps ↗</a>`),
+    (!d.endereco ? `<div class="flex gap-3"><span class="w-6 text-center">🔒</span><div><p class="text-[11px] uppercase tracking-wide text-sand-500">Endereço</p><p class="text-sand-400">Não informado — atendimento online ou endereço sigiloso. Confirme pelo contato.</p></div></div>` : ''),
+    row('🕐','Dias e horários das giras, trabalhos ou consultas', d.horarios),
+    row('✨','Serviços prestados e trabalhos oferecidos', d.servicos),
+    row('📜','Orientações ao visitante / regras do espaço', d.regras),
+    row('📞','Telefone / WhatsApp', d.telefone),
+    row('🌐','Redes sociais / site', d.redes,
+        rede ? `<a href="${esc(rede)}" target="_blank" rel="noopener" class="text-xs text-clay-300 hover:underline">Abrir link ↗</a>` : ''),
+    row('✉️','E-mail de cadastro', d.email),
+    row('🗓️','Cadastro recebido em', d.timestamp)
+  ].filter(Boolean).join('<div class="border-t border-sand-900"></div>');
+
+  const hasPhone = !!waNumber(d.telefone);
+  document.getElementById('modalFoot').innerHTML = `
+    <button onclick="abrirWhats('${d.id}')" ${hasPhone?'':'disabled'}
+      class="flex-1 min-w-[140px] text-sm py-2.5 rounded-lg font-medium transition ${hasPhone?'bg-emerald-600/90 hover:bg-emerald-500 text-white':'bg-sand-900 text-sand-600 cursor-not-allowed'}">🟢 Chamar no WhatsApp</button>
+    <button onclick="copiarFicha('${d.id}')" class="flex-1 min-w-[140px] text-sm py-2.5 rounded-lg bg-sand-800 hover:bg-sand-700 transition">📋 Copiar ficha</button>
+    <button onclick="enviarCliente('${d.id}')" class="flex-1 min-w-[140px] text-sm py-2.5 rounded-lg bg-clay-700 hover:bg-clay-500 transition">📤 Enviar para cliente</button>
+    <button onclick="openForm('${d.id}')" class="text-sm px-3 py-2.5 rounded-lg border border-sand-800 hover:bg-sand-800 transition">✏️</button>`;
+
+  document.getElementById('modal').hidden = false;
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(){
+  document.getElementById('modal').hidden = true;
+  if (document.getElementById('formModal').hidden) document.body.style.overflow = '';
+}
+
+/* ── Modal de cadastro / edição ────────────────────────────── */
+
+let editingId = null;
+
+function openForm(id){
+  editingId = id || null;
+  const d = id ? byId(id) : null;
+  document.getElementById('formTitle').textContent = d ? 'Editar cadastro' : 'Novo cadastro';
+  document.getElementById('formDelete').hidden = !d;
+
+  const wide = new Set(['nome','endereco','horarios','servicos','regras','redes']);
+  document.getElementById('formFields').innerHTML = FIELDS
+    .filter(f => f.key !== 'timestamp')
+    .map(f => {
+      const v = esc(d ? d[f.key] : '');
+      const cls = 'w-full mt-1 px-3 py-2 rounded-lg bg-night-800 border border-sand-800 focus:border-clay-500 outline-none text-sm';
+      let input;
+      if (f.key === 'tradicao')
+        input = `<select name="tradicao" class="${cls}">${TRADITIONS.map(t=>`<option${d&&d.tradicao===t.name?' selected':''}>${esc(t.name)}</option>`).join('')}</select>`;
+      else if (f.key === 'modalidade')
+        input = `<select name="modalidade" class="${cls}">${MODALITIES.map(m=>`<option${d&&d.modalidade===m.name?' selected':''}>${esc(m.name)}</option>`).join('')}</select>`;
+      else if (['servicos','regras','horarios','endereco'].includes(f.key))
+        input = `<textarea name="${f.key}" rows="2" class="${cls} resize-y">${v}</textarea>`;
+      else
+        input = `<input name="${f.key}" value="${v}" class="${cls}" ${f.key==='nome'?'required':''} ${f.key==='email'?'type="email"':''} />`;
+      return `<label class="block ${wide.has(f.key) ? 'sm:col-span-2' : ''}">
+        <span class="text-xs text-sand-400">${esc(f.label)}</span>${input}</label>`;
+    }).join('');
+
+  document.getElementById('formModal').hidden = false;
+  document.body.style.overflow = 'hidden';
+}
+function closeForm(){
+  document.getElementById('formModal').hidden = true;
+  editingId = null;
+  if (document.getElementById('modal').hidden) document.body.style.overflow = '';
+}
+
+document.getElementById('entryForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const rec = {};
+  FIELDS.forEach(f => { if (f.key !== 'timestamp') rec[f.key] = (fd.get(f.key) || '').toString().trim(); });
+
+  if (editingId){
+    const i = DATA.findIndex(d => d.id === editingId);
+    if (i > -1){
+      const kept = { ...DATA[i], ...rec };
+      DATA[i] = normalize(kept);
+      DATA[i].id = editingId;
+    }
+    toast('Cadastro atualizado.', 'ok');
+  } else {
+    rec.timestamp = new Date().toLocaleString('pt-BR');
+    DATA.push(normalize(rec));
+    toast('Cadastro adicionado.', 'ok');
+  }
+  save(); closeForm(); closeModal(); render();
+});
+
+document.getElementById('formDelete').addEventListener('click', () => {
+  if (!editingId) return;
+  if (!confirm('Excluir este cadastro definitivamente?')) return;
+  DATA = DATA.filter(d => d.id !== editingId);
+  save(); closeForm(); closeModal(); render();
+  toast('Cadastro excluído.', 'ok');
+});
+
+/* ── Toast ─────────────────────────────────────────────────── */
+let toastTimer;
+function toast(msg, kind){
+  const box = document.getElementById('toast');
+  const color = kind === 'error' ? 'bg-red-900/95 border-red-700' :
+                kind === 'ok'    ? 'bg-emerald-900/95 border-emerald-700' :
+                                   'bg-night-800/95 border-sand-700';
+  box.innerHTML = `<div class="card-in ${color} border text-sm text-white px-4 py-2.5 rounded-xl shadow-2xl max-w-[92vw] text-center">${esc(msg)}</div>`;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => box.innerHTML = '', 4200);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   8. EVENTOS
+   ═══════════════════════════════════════════════════════════════ */
+
+function toggleTrad(name){ state.trads.has(name) ? state.trads.delete(name) : state.trads.add(name); render(); }
+function toggleMod(name){  state.mods.has(name)  ? state.mods.delete(name)  : state.mods.add(name);  render(); }
+
+let searchTimer;
+document.getElementById('q').addEventListener('input', e => {
+  clearTimeout(searchTimer);
+  const v = e.target.value;
+  searchTimer = setTimeout(() => { state.q = v; render(); }, 120);
+});
+document.getElementById('qClear').addEventListener('click', () => {
+  state.q = ''; document.getElementById('q').value = ''; render();
+});
+document.getElementById('fCity').addEventListener('change', e => { state.city = e.target.value; render(); });
+document.getElementById('btnReset').addEventListener('click', resetFilters);
+document.getElementById('btnView').addEventListener('click', () => {
+  state.view = state.view === 'grid' ? 'list' : 'grid'; render();
+});
+document.getElementById('btnAdd').addEventListener('click', () => openForm(null));
+document.getElementById('btnImport').addEventListener('click', () => document.getElementById('fileInput').click());
+
+document.getElementById('btnMenu').addEventListener('click', () => {
+  const m = document.getElementById('mobileMenu'); m.hidden = !m.hidden;
+});
+document.getElementById('mobileMenu').addEventListener('click', e => {
+  const act = e.target.closest('[data-act]')?.dataset.act;
+  if (!act) return;
+  document.getElementById('mobileMenu').hidden = true;
+  if (act === 'import')   document.getElementById('fileInput').click();
+  if (act === 'template') downloadTemplate();
+  if (act === 'export')   exportAll();
+});
+
+document.getElementById('fileInput').addEventListener('change', e => {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => importCSV(reader.result, file.name);
+  reader.onerror = () => toast('Não consegui ler o arquivo.', 'error');
+  reader.readAsText(file, 'UTF-8');
+  e.target.value = '';
+});
+
+// arrastar-e-soltar o CSV em qualquer lugar da página
+['dragover','drop'].forEach(ev => document.addEventListener(ev, e => {
+  e.preventDefault();
+  if (ev !== 'drop') return;
+  const file = [...(e.dataTransfer?.files||[])].find(f => /\.csv$/i.test(f.name));
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => importCSV(reader.result, file.name);
+  reader.readAsText(file, 'UTF-8');
+}));
+
+// fechar modais ao clicar fora / com ESC
+document.getElementById('modal').addEventListener('click', e => { if (e.target.id === 'modal') closeModal(); });
+document.getElementById('formModal').addEventListener('click', e => { if (e.target.id === 'formModal') closeForm(); });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape'){
+    if (!document.getElementById('formModal').hidden) closeForm();
+    else if (!document.getElementById('modal').hidden) closeModal();
+  }
+  if (e.key === '/' && !/input|textarea|select/i.test(document.activeElement.tagName)){
+    e.preventDefault(); document.getElementById('q').focus();
+  }
+});
+
+/* ═══════════════════════════════════════════════════════════════
+   9. INICIALIZAÇÃO
+   ═══════════════════════════════════════════════════════════════ */
+DATA = load();
+render();
+</script>
+</body>
+</html>
