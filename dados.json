@@ -1,5 +1,6 @@
 {
-  "geradoEm": "2026-07-31T07:12:34.395Z",
+  "geradoEm": "2026-07-31T14:35:23.447Z",
+  "formulario": "https://docs.google.com/forms/d/e/1FAIpQLSdha6CPyRtEe_2-ZSJM5NsMNOnXead1ZhU49ZoX3h0ZbIWifg/viewform?usp=header",
   "registros": [
     {
       "timestamp": "30/07/2026 16:09:49",
@@ -16,6 +17,7 @@
       "redes": "",
       "horarios": "as terças e quintas - das 17h às 00h",
       "servicos": "Cartomancia",
+      "verificado": "",
       "regras": "faço atendimentos urgentes caso o consulente necessite",
       "grupo": "Umbanda"
     },
@@ -34,6 +36,7 @@
       "redes": "",
       "horarios": "Com agendamento de segunda a sábado",
       "servicos": "Cartomancia",
+      "verificado": "",
       "regras": "",
       "grupo": "Cartomancia/Tarô"
     },
@@ -52,6 +55,7 @@
       "redes": "",
       "horarios": "Desenvolvimento 2z ao mês / atendimento com Oráculo com hora marcada",
       "servicos": "Consulta espiritual particular",
+      "verificado": "",
       "regras": "Tirar dúvidas e agendar consulta pelo WhatsApp",
       "grupo": "Quimbanda"
     },
@@ -70,6 +74,7 @@
       "redes": "",
       "horarios": "Quarta, quinta e sexta, mediante agendamento.",
       "servicos": "Consulta espiritual particular",
+      "verificado": "",
       "regras": "",
       "grupo": "Umbanda"
     },
@@ -88,6 +93,7 @@
       "redes": "",
       "horarios": "1x ao mês, domingo 7h30 da manhã: giras abertas e gratuitas",
       "servicos": "Desenvolvimento",
+      "verificado": "",
       "regras": "Favor confirmar presença na gira",
       "grupo": "Umbanda"
     },
@@ -106,6 +112,7 @@
       "redes": "",
       "horarios": "Atendimento com horário marcado",
       "servicos": "Cartomancia",
+      "verificado": "",
       "regras": "Instagram @isabellereato",
       "grupo": "Outros"
     },
@@ -124,6 +131,7 @@
       "redes": "",
       "horarios": "Seg a sab - 09hrs as 19hrs",
       "servicos": "Cartomancia",
+      "verificado": "",
       "regras": "Consultas apenas online.",
       "grupo": "Holístico/Terapia"
     },
@@ -142,6 +150,7 @@
       "redes": "",
       "horarios": "De segunda a sexta",
       "servicos": "Consulta espiritual particular",
+      "verificado": "",
       "regras": "Trabalhos oracular de dadomancia e cartomancia com atendimentos e trabalhos espirituais",
       "grupo": "Umbanda"
     },
@@ -160,6 +169,7 @@
       "redes": "",
       "horarios": "Os trabalhos acontecem aos sábados sendo 2 sim um não (giras gratuitas)",
       "servicos": "Aplicação de cone hindu,magias  limpezas espirituais.",
+      "verificado": "",
       "regras": "Proibido roupas curtas,e pessoas alcoolizadas",
       "grupo": "Umbanda"
     },
@@ -178,6 +188,7 @@
       "redes": "",
       "horarios": "Aos sábados, quinzenais, a partir das 19:30",
       "servicos": "Todos acima",
+      "verificado": "",
       "regras": "Não vir de roupa decotada, transparente, ou justa/curta. Mandar mensagem no WhatsApp do terreiro pedindo para guardar senha.",
       "grupo": "Umbanda"
     },
@@ -196,6 +207,7 @@
       "redes": "",
       "horarios": "Conforme agendamento",
       "servicos": "Cartomancia",
+      "verificado": "",
       "regras": "Agende pelo WhatsApp! Trabalhamos com cartomancia e trabalhos espirituais (financeiro, amoroso, mental, etc)",
       "grupo": "Umbanda"
     },
@@ -214,6 +226,7 @@
       "redes": "",
       "horarios": "Quintas feiras 19:30h",
       "servicos": "Todos os trabalhos mencionados acima",
+      "verificado": "",
       "regras": "",
       "grupo": "Candomblé"
     },
@@ -232,25 +245,27 @@
       "redes": "",
       "horarios": "9 as 21",
       "servicos": "Cartomancia",
+      "verificado": "",
       "regras": "",
       "grupo": "Magia"
     },
     {
-      "timestamp": "30/07/2026 21:32:21",
+      "timestamp": "31/07/2026 11:01:01",
       "email": "",
       "nome": "Terreiro de umbanda caboclo pena branca e mãe Iemanjá",
-      "dirigente": "Alda medina/ Gustavo Medina",
+      "dirigente": "Mãe Alda",
       "tradicao": "Umbanda",
-      "tempo": "3 anos",
+      "tempo": "2 anos e meio",
       "cidade": "Piracicaba",
       "bairro": "",
-      "endereco": "R José Soledade,295 VL resende",
+      "endereco": "Rua José Soledade, 293 - Vila Resende (casa 4 -fundo)",
       "modalidade": "Presencial",
       "telefone": "19996838661",
       "redes": "",
-      "horarios": "Segunda feira às 19:30",
-      "servicos": "Tarot, atendimento particular,passes",
-      "regras": "Cuidado com vestimenta e ir com muita fé nas entidades e orixás",
+      "horarios": "Segunda feiras às 19h30m",
+      "servicos": "Desenvolvimento, Cartomancia, consulta particular, benzimento",
+      "verificado": "",
+      "regras": "",
       "grupo": "Umbanda"
     },
     {
@@ -268,6 +283,7 @@
       "redes": "",
       "horarios": "Segunda sexta sábado",
       "servicos": "Todos",
+      "verificado": "",
       "regras": "Respeito e sigilo",
       "grupo": "Umbanda"
     },
@@ -286,6 +302,7 @@
       "redes": "",
       "horarios": "Trabalho são  todas as Sexta-feira   das 20 horas ate 22 horas",
       "servicos": "Consulta espiritual particular",
+      "verificado": "",
       "regras": "NÃO  USAR  Roupas  Curtas Nem cores Preto e Vermelha",
       "grupo": "Umbanda"
     }
