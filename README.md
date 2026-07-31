@@ -131,9 +131,15 @@ as palavras de quem respondeu, que só entra quem autoriza a divulgação no for
 o que o selo significa (e o que não significa), o que o guia não faz, e principalmente
 **como corrigir uma informação ou pedir para sair** — sem justificativa e sem burocracia.
 
-É linkada no rodapé do guia e no rodapé de cada página de espaço, e entra no
-`sitemap.xml`. A página é independente: tem o próprio `<style>` e não depende do
-`index.html`.
+É alcançada pelo botão **Sobre** no cabeçalho do guia, pelo rodapé de todas as páginas,
+e entra no `sitemap.xml`. A página é independente: tem o próprio `<style>` e não depende
+do `index.html`.
+
+A seção **Quem mantém** traz a marca da Nova Luz no Horizonte (`nova-luz.webp`), o
+endereço, o WhatsApp e botões de rota para o Google Maps e o Waze. Dois detalhes de
+manutenção: o logo fica sobre um painel claro porque o letreiro dele é grafite escuro e
+sumiria no fundo do site; e o endereço aparece em três lugares da página — o texto e os
+dois links de rota —, então mudar um exige mudar os três.
 
 ## Link do formulário de cadastro
 

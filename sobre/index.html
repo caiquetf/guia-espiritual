@@ -46,6 +46,9 @@
   .destaque p:last-child{ margin-bottom:0 }
   .rotulo{ display:block; font-size:11px; font-weight:600; letter-spacing:.12em;
            text-transform:uppercase; color:var(--baixo) }
+  .painel-marca{ background:var(--papel); border:1px solid #e0cdb4; border-radius:15px;
+                 padding:1.5rem; margin:1.2rem 0; text-align:center }
+  .painel-marca img{ width:min(230px,58%); height:auto; display:inline-block }
   .acoes{ display:flex; flex-wrap:wrap; gap:.6rem; margin:1.2rem 0 0 }
   .btn{ flex:1; min-width:13rem; text-align:center; text-decoration:none; padding:.78rem 1rem;
         border-radius:11px; border:1px solid var(--linha); color:var(--papel);
@@ -136,12 +139,29 @@
 
   <h2>Quem mantém</h2>
   <p id="quem-mantem">
-    O guia é mantido por <strong>A Nova Luz no Horizonte</strong>.
+    O guia é mantido pela <strong>Nova Luz no Horizonte</strong>.
   </p>
+
+  <!-- Painel claro de propósito: o letreiro do logo é grafite escuro e
+       desapareceria no fundo do site. -->
+  <div class="painel-marca">
+    <img src="../nova-luz.webp" width="560" height="539" alt="Nova Luz no Horizonte" />
+  </div>
+
   <div class="destaque">
-    <p><span class="rotulo">Endereço</span>Rua Dom Pedro I, 1208</p>
+    <p><span class="rotulo">Endereço</span><span id="endereco">Rua Dom Pedro I, 1208</span></p>
     <p><span class="rotulo">Telefone e WhatsApp</span>
       <a href="https://wa.me/5519994881755" rel="nofollow noopener">(19) 99488-1755</a></p>
+  </div>
+  <!-- O endereço aparece em três lugares nesta página: o texto acima e os dois
+       links de rota abaixo. Mudou um, mude os três. -->
+  <div class="acoes">
+    <a class="btn" rel="nofollow noopener" target="_blank"
+       href="https://www.google.com/maps/search/?api=1&amp;query=Rua%20Dom%20Pedro%20I%2C%201208">
+      Abrir no Google Maps</a>
+    <a class="btn" rel="nofollow noopener" target="_blank"
+       href="https://www.waze.com/ul?q=Rua%20Dom%20Pedro%20I%2C%201208&amp;navigate=yes">
+      Traçar rota no Waze</a>
   </div>
   <p>
     Manter o guia não dá vantagem nenhuma dentro dele: a ordem da lista segue a cidade e o
