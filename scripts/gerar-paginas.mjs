@@ -17,6 +17,15 @@ const PASTA = 'espaco';
 /* Mesmo canal configurado no index.html. Vazio: o aviso não aparece. */
 const CANAL_CORRECAO = 'https://wa.me/5519974118980';
 
+/* Mesmo código de contador configurado no index.html. Vazio: nenhuma página
+   gerada carrega script de terceiro. */
+const CONTADOR = '';
+
+/** Etiqueta a ser injetada nas páginas geradas, ou vazio se não há contador. */
+const marcacaoContador = /^[a-z0-9-]+$/i.test(CONTADOR)
+  ? `<script data-goatcounter="https://${CONTADOR}.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>\n`
+  : '';
+
 /* Mesmo prazo usado pelo app. */
 const MESES_PARA_AVISO = 12;
 const MESES = ['janeiro','fevereiro','março','abril','maio','junho',
@@ -138,7 +147,7 @@ function pagina(d){
 <meta name="twitter:card"       content="summary_large_image" />
 
 <script type="application/ld+json">${estruturado(d, url)}</script>
-
+${marcacaoContador}
 <style>
   :root{ --tinta:#150f0c; --alta:#1e1613; --linha:#3a2a21; --papel:#f3e7d6;
          --meio:#c4ac92; --baixo:#9f8771; --brasa:#c9713f; --folha:#6f8f5f; }
@@ -287,7 +296,7 @@ if (FORMULARIO){
 <title>Cadastrar meu espaço — Guia Espiritual</title>
 <meta http-equiv="refresh" content="0; url=${esc(FORMULARIO)}" />
 <link rel="canonical" href="${esc(FORMULARIO)}" />
-<style>
+${marcacaoContador}<style>
   body{ margin:0; display:flex; align-items:center; justify-content:center; min-height:100vh;
         background:#150f0c; color:#f3e7d6; text-align:center; padding:2rem;
         font:15px/1.6 Inter,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif }

@@ -180,6 +180,16 @@
 </main>
 
 <script>
+/* Mesmo código de contador do index.html. Vazio: nenhum script de terceiro. */
+const CONTADOR = '';
+if (CONTADOR && /^[a-z0-9-]+$/i.test(CONTADOR)){
+  const s = document.createElement('script');
+  s.async = true;
+  s.src = 'https://gc.zgo.at/count.js';
+  s.dataset.goatcounter = `https://${CONTADOR}.goatcounter.com/count`;
+  document.head.appendChild(s);
+}
+
 /* O link do formulário vem do dados.json, escrito pela sincronização a partir da
    variável FORMULARIO_URL do repositório. Sem link, a seção não mostra botão. */
 fetch('../dados.json', { cache:'no-store' })

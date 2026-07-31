@@ -613,6 +613,29 @@ const CANAL_CORRECAO = 'https://wa.me/5519974118980';
    envelhecido. Casa muda de endereço e de horário; o formulário é respondido
    uma vez só. */
 const MESES_PARA_AVISO = 12;
+
+/**
+ * Código do GoatCounter, para saber quantas pessoas chegaram ao guia.
+ *
+ * Vazio: nada é carregado e o site não faz nenhuma requisição a terceiros —
+ * é o padrão. Preenchido, sobe um script de ~3 KB que registra a página
+ * visitada, sem cookie, sem identificador e sem seguir ninguém entre visitas.
+ *
+ * As páginas de manutenção (avisos, revisar, verificar) ficam de fora de
+ * propósito: a sua própria visita não é público.
+ */
+const CONTADOR = '';
+
+function ligarContador(){
+  if (!CONTADOR || !/^[a-z0-9-]+$/i.test(CONTADOR)) return;
+  const s = document.createElement('script');
+  s.async = true;
+  s.src = 'https://gc.zgo.at/count.js';
+  s.dataset.goatcounter = `https://${CONTADOR}.goatcounter.com/count`;
+  document.head.appendChild(s);
+}
+ligarContador();
+
 let DATA = [];
 let baseGeradoEm = '';            // versão dos dados oficiais em uso
 let state = { q:'', city:'', trads:new Set(), mods:new Set(), view:'grid', ordem:'lugar', soConfirmados:false };

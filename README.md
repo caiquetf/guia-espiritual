@@ -214,6 +214,33 @@ preenchimento, e por isso um cadastro que só tem esses dois entra em "nada a co
 
 Como a `avisos/`, a página não é indexada (`noindex` e `Disallow` no robots.txt).
 
+## Contador de visitas
+
+Desligado por padrão: com `CONTADOR` vazio, **o site não faz nenhuma requisição a
+terceiros** — nem o guia, nem as páginas de espaço, nem a Sobre.
+
+Para ligar, crie uma conta gratuita no [GoatCounter](https://www.goatcounter.com) e
+escreva o código escolhido (o pedaço antes de `.goatcounter.com`) em `CONTADOR`, em
+dois lugares: no topo do script do `index.html` e no topo do `scripts/gerar-paginas.mjs`,
+que reimprime as páginas de espaço e o atalho `/cadastrar/`. A página `sobre/` tem a
+sua própria cópia da constante.
+
+O GoatCounter não usa cookie, não guarda IP e não segue ninguém entre visitas: ele
+conta a página aberta e esquece quem abriu. Por isso não exige aviso de cookies.
+
+As três páginas de manutenção — `avisos/`, `revisar/` e `verificar/` — ficam de fora
+de propósito: a sua própria visita não é público.
+
+### Saber se o cartaz funcionou
+
+O QR do cartaz que leva ao guia aponta para `/?de=cartaz`, e o de cadastro aponta para
+`/cadastrar/`, endereço que só existe para ele — o botão do site vai direto ao
+formulário. São esses dois caminhos que separam quem chegou pela parede da loja de quem
+chegou por link.
+
+Se o GoatCounter juntar `/?de=cartaz` com `/`, há uma opção nas configurações do site
+para preservar a parte depois do `?`.
+
 ## Observações
 
 - **Nada é deduzido.** O guia mostra apenas o que a pessoa preencheu no formulário:
