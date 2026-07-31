@@ -14,6 +14,9 @@ import { join } from 'node:path';
 const SITE = 'https://caiquetf.github.io/guia-espiritual';
 const PASTA = 'espaco';
 
+/* Mesmo canal configurado no index.html. Vazio: o aviso não aparece. */
+const CANAL_CORRECAO = '';
+
 const deaccent = s => (s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 const digitos  = s => (s || '').replace(/\D/g, '');
 
@@ -73,6 +76,17 @@ function estruturado(d, url){
   return JSON.stringify(o);
 }
 
+function linkCorrecao(d, url){
+  if (!CANAL_CORRECAO) return '';
+  const assunto = `Correção no guia: ${d.nome || d.dirigente}`;
+  const corpo = `Cadastro: ${d.nome || d.dirigente}\n${url}\n\nO que está errado:\n`;
+  if (CANAL_CORRECAO.startsWith('mailto:'))
+    return `${CANAL_CORRECAO}?subject=${encodeURIComponent(assunto)}&body=${encodeURIComponent(corpo)}`;
+  if (/^https:\/\/(wa\.me|api\.whatsapp)/.test(CANAL_CORRECAO))
+    return `${CANAL_CORRECAO}${CANAL_CORRECAO.includes('?') ? '&' : '?'}text=${encodeURIComponent(corpo)}`;
+  return CANAL_CORRECAO;
+}
+
 const linha = (rot, valor) => valor
   ? `      <div class="linha"><dt>${esc(rot)}</dt><dd>${esc(valor)}</dd></div>` : '';
 
@@ -127,6 +141,10 @@ function pagina(d){
   a.btn{ flex:1; min-width:12rem; text-align:center; text-decoration:none; padding:.75rem 1rem;
          border-radius:11px; border:1px solid var(--linha); color:var(--papel); background:#261c17; font-weight:600 }
   a.zap{ background:linear-gradient(170deg,var(--folha),#4f6b41); border-color:#4f6b41; color:#f2f7ee }
+  button.btn{ font:inherit; font-weight:600; cursor:pointer }
+  #aviso{ position:fixed; left:50%; bottom:1.2rem; transform:translateX(-50%); background:#241a16;
+          border:1px solid var(--linha); color:var(--papel); padding:.65rem 1.1rem; border-radius:12px;
+          font-size:13.5px; box-shadow:0 20px 40px -20px #000 }
   footer{ text-align:center; color:var(--baixo); font-size:13px }
   footer a{ color:var(--brasa) }
 </style>
@@ -141,6 +159,7 @@ function pagina(d){
 
   <div class="acoes">
     ${wa ? `<a class="btn zap" href="${wa}" rel="nofollow noopener">Chamar no WhatsApp</a>` : ''}
+    <button class="btn" type="button" id="compartilhar">Compartilhar</button>
     <a class="btn" href="../../?espaco=${esc(ap)}">Ver no guia completo</a>
   </div>
 
@@ -161,8 +180,30 @@ ${[
   <footer>
     <p>Cadastro do <a href="../../">Guia Espiritual — Piracicaba e Região</a>.<br>
     Confirme horários, regras e valores diretamente com o espaço antes de comparecer.</p>
+    ${linkCorrecao(d, url) ? `<p>Encontrou algo errado? <a href="${esc(linkCorrecao(d, url))}" rel="nofollow noopener">Avise a gente</a>.</p>` : ''}
   </footer>
 </main>
+
+<script>
+  // Bandeja do sistema no celular; onde não existe, copia o endereço.
+  document.getElementById('compartilhar').addEventListener('click', async () => {
+    const dados = { title: document.title, text: ${JSON.stringify(`${d.nome || d.dirigente} — no Guia Espiritual de Piracicaba e Região`)}, url: location.href };
+    try {
+      if (navigator.share){ await navigator.share(dados); return; }
+      await navigator.clipboard.writeText(location.href);
+      aviso('Link copiado.');
+    } catch (e){
+      if (e && e.name === 'AbortError') return;
+      aviso('Não consegui compartilhar. Copie o endereço da barra do navegador.');
+    }
+  });
+  function aviso(txt){
+    const el = document.createElement('div');
+    el.id = 'aviso'; el.textContent = txt;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 3200);
+  }
+</script>
 </body>
 </html>
 `;

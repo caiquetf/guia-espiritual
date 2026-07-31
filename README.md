@@ -68,7 +68,13 @@ mesclados e duplicatas (mesmo nome + mesmo telefone) são ignoradas.
 - **Cartões** em grade ou lista, com badge colorido por tradição.
 - **🟢 Chamar no WhatsApp** — abre `wa.me/55…` com mensagem inicial pronta.
 - **📋 Copiar ficha completa** — texto formatado para colar na conversa com o cliente.
-- **📤 Enviar para cliente** — abre o WhatsApp já com a ficha no corpo da mensagem.
+- **Compartilhar** — abre a bandeja do sistema no celular (WhatsApp, Instagram, o que a
+  pessoa quiser) e, onde ela não existe, cai no WhatsApp com a ficha pronta. Também nas
+  páginas de espaço.
+- **Aviso de informação errada** — link em cada ficha e em cada página de espaço, já com
+  o cadastro identificado no assunto. Aparece só quando `CANAL_CORRECAO` está preenchido,
+  no topo do script do `index.html` e do `scripts/gerar-paginas.mjs`; aceita `mailto:`,
+  `https://wa.me/55...` ou o link de um formulário.
 - **🔍 Ver detalhes** — modal com os 14 campos, link para o Google Maps e para as redes sociais.
 - **Ordenação** alternável entre por cidade e mais recentes, lendo o carimbo do formulário.
 - **Edição e exclusão** pelo modal de detalhes, valendo só no navegador de quem edita.

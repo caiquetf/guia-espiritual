@@ -550,6 +550,10 @@ const SAMPLE = [
 
 const STORE_KEY = 'guia-espiritual-piracicaba-v2';
 const DADOS_URL = 'dados.json';   // gerado a partir da planilha do Forms
+
+/* Para onde vão os avisos de informação errada. Vazio: o aviso não aparece.
+   Aceita 'mailto:...', 'https://wa.me/55...' ou o link de um formulário. */
+const CANAL_CORRECAO = '';
 let DATA = [];
 let baseGeradoEm = '';            // versão dos dados oficiais em uso
 let state = { q:'', city:'', trads:new Set(), mods:new Set(), view:'grid', ordem:'lugar' };
@@ -949,6 +953,26 @@ function copiarLink(id){
 
 const copiarFicha = id => { const d = byId(id); if (d) copiar(fichaTexto(d), 'Ficha copiada! É só colar no WhatsApp do cliente.'); };
 
+/**
+ * Abre a bandeja de compartilhamento do sistema — no celular, um toque leva
+ * ao WhatsApp, Instagram ou onde a pessoa quiser. Onde não existe (a maioria
+ * dos navegadores de computador), cai no WhatsApp com a ficha pronta.
+ */
+async function compartilhar(id){
+  const d = byId(id); if (!d) return;
+  if (navigator.share){
+    try {
+      // A ficha já carrega o link no fim; passar `url` junto duplicaria.
+      await navigator.share({ title: d.nome || 'Guia Espiritual', text: fichaTexto(d) });
+      return;
+    } catch (e){
+      if (e && e.name === 'AbortError') return;      // a pessoa fechou a bandeja
+      console.warn('Compartilhamento não concluído:', e);
+    }
+  }
+  enviarCliente(id);
+}
+
 function enviarCliente(id){
   const d = byId(id); if (!d) return;
   window.open('https://wa.me/?text=' + encodeURIComponent(fichaTexto(d)), '_blank', 'noopener');
@@ -982,6 +1006,18 @@ function apelido(d){
   return [base || 'espaco', fim].filter(Boolean).join('-');
 }
 const porApelido = ap => DATA.find(d => apelido(d) === ap);
+
+/** Link de correção já com o espaço identificado, para você saber de quem se trata. */
+function linkCorrecao(d){
+  if (!CANAL_CORRECAO) return '';
+  const assunto = `Correção no guia: ${d.nome || d.dirigente}`;
+  const corpo = `Cadastro: ${d.nome || d.dirigente}\n${linkEspaco(d) || ''}\n\nO que está errado:\n`;
+  if (CANAL_CORRECAO.startsWith('mailto:'))
+    return `${CANAL_CORRECAO}?subject=${encodeURIComponent(assunto)}&body=${encodeURIComponent(corpo)}`;
+  if (/^https:\/\/(wa\.me|api\.whatsapp)/.test(CANAL_CORRECAO))
+    return `${CANAL_CORRECAO}${CANAL_CORRECAO.includes('?') ? '&' : '?'}text=${encodeURIComponent(corpo)}`;
+  return CANAL_CORRECAO;
+}
 
 /** Endereço público do espaço — a página própria dele, que é a que o buscador
     indexa e a que o WhatsApp usa para montar a prévia. Vazio fora da internet. */
@@ -1152,14 +1188,18 @@ function openDetails(id){
         rede ? `<a href="${esc(rede)}" target="_blank" rel="noopener" class="elo">Abrir link →</a>` : ''),
     row('i-carta','E-mail de cadastro', d.email),
     row('i-calendario','Cadastro recebido em', d.timestamp)
-  ].filter(Boolean).join('');
+  ].filter(Boolean).join('') + (linkCorrecao(d)
+    ? `<p style="margin:1.1rem 0 0; padding-top:.9rem; border-top:1px solid var(--linha); font-size:12.5px; color:var(--papel-baixo)">
+         Encontrou algo errado neste cadastro?
+         <a class="elo" style="margin:0" href="${esc(linkCorrecao(d))}" target="_blank" rel="noopener">Avise a gente</a>.
+       </p>` : '');
 
   const hasPhone = !!waNumber(d.telefone);
   document.getElementById('modalFoot').innerHTML = `
     <button onclick="abrirWhats('${d.id}')" ${hasPhone?'':'disabled'} class="btn ${hasPhone?'btn-folha cheio':''}" style="flex:1; min-width:11rem">
       ${ic('i-zap')} Chamar no WhatsApp</button>
+    <button onclick="compartilhar('${d.id}')" class="btn btn-brasa" style="flex:1; min-width:10rem">${ic('i-enviar')} Compartilhar</button>
     <button onclick="copiarFicha('${d.id}')" class="btn" style="flex:1; min-width:9rem">${ic('i-copiar')} Copiar ficha</button>
-    <button onclick="enviarCliente('${d.id}')" class="btn btn-brasa" style="flex:1; min-width:10rem">${ic('i-enviar')} Enviar ao cliente</button>
     <div class="w-full flex gap-2" style="padding-top:.7rem; margin-top:.15rem; border-top:1px solid var(--linha)">
       <button onclick="copiarLink('${d.id}')" class="btn" style="flex:1">${ic('i-globo')} Copiar link</button>
       <button onclick="openForm('${d.id}')" class="btn" style="flex:1">${ic('i-lapis')} Editar</button>
