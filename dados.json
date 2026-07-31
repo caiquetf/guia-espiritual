@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-30T23:17:52.465Z",
+  "geradoEm": "2026-07-31T03:47:56.728Z",
   "registros": [
     {
       "timestamp": "30/07/2026 16:09:49",
@@ -197,6 +197,42 @@
       "horarios": "Conforme agendamento",
       "servicos": "Cartomancia",
       "regras": "Agende pelo WhatsApp! Trabalhamos com cartomancia e trabalhos espirituais (financeiro, amoroso, mental, etc)",
+      "grupo": "Umbanda"
+    },
+    {
+      "timestamp": "31/07/2026 00:19:07",
+      "email": "",
+      "nome": "Morgana Tarot",
+      "dirigente": "Maria Fernanda Machado Marques",
+      "tradicao": "Bruxaria",
+      "tempo": "10 an",
+      "cidade": "Piracicaba",
+      "bairro": "",
+      "endereco": "Atendimentos somente online",
+      "modalidade": "Online",
+      "telefone": "19 99591-7536",
+      "redes": "",
+      "horarios": "9 as 21",
+      "servicos": "Cartomancia",
+      "regras": "",
+      "grupo": "Magia"
+    },
+    {
+      "timestamp": "30/07/2026 21:32:21",
+      "email": "",
+      "nome": "Terreiro de umbanda caboclo pena branca e mãe Iemanjá",
+      "dirigente": "Alda medina/ Gustavo Medina",
+      "tradicao": "Umbanda",
+      "tempo": "3 anos",
+      "cidade": "Piracicaba",
+      "bairro": "",
+      "endereco": "R José Soledade,295 VL resende",
+      "modalidade": "Presencial",
+      "telefone": "19996838661",
+      "redes": "",
+      "horarios": "Segunda feira às 19:30",
+      "servicos": "Tarot, atendimento particular,passes",
+      "regras": "Cuidado com vestimenta e ir com muita fé nas entidades e orixás",
       "grupo": "Umbanda"
     },
     {
