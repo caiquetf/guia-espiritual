@@ -99,10 +99,10 @@ O menu **⋯** (celular) traz também **Baixar modelo de planilha** e **Exportar
   no **`localStorage` do navegador** e sobrevivem até a próxima atualização oficial,
   quando são substituídas pela versão nova. Use **Exportar CSV** para guardar uma cópia.
 - Os cadastros que vêm pré-carregados são **fictícios**, apenas para demonstração.
-- A **arte de fundo** é um desenho vetorial embutido no próprio CSS: nenhuma imagem
-  externa, nada para carregar. Para usar uma foto própria, salve o arquivo na raiz do
-  repositório e troque a linha `--arte-fundo` no topo do `<style>` por
-  `--arte-fundo: url('fundo.jpg');`.
+- A **arte de fundo** é a foto `fundo.webp` (94 KB), abafada por uma camada escura.
+  Duas variáveis no topo do `<style>` controlam isso: `--arte-fundo` aponta para o
+  arquivo e `--escurecer` define o quanto ele some — `0` mostra a foto crua, `1`
+  deixa preto. Está em `.84`.
 - O CSS já vem **embutido no arquivo**: nenhuma requisição externa, carrega na hora e
   funciona offline. Ele é gerado pelo Tailwind a partir das classes realmente usadas.
 
