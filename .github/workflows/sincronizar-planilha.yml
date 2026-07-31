@@ -30,6 +30,9 @@ jobs:
           # no mesmo lugar; enquanto ela não existir, o botão "Cadastrar meu
           # espaço" simplesmente não é desenhado em nenhuma página.
           FORMULARIO_URL: ${{ vars.FORMULARIO_URL }}
+          # Apps Script publicado dentro da planilha, que o painel verificar/
+          # chama para acender o selo. Veja scripts/verificar.gs.
+          VERIFICAR_URL: ${{ vars.VERIFICAR_URL }}
         run: |
           set +e
           node scripts/atualizar-dados.mjs

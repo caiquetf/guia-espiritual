@@ -121,7 +121,27 @@ Também valem `x`, `ok` e `1`; qualquer outra coisa, inclusive `não`, não marc
 
 O selo significa **o responsável confirmou os dados** — não "nós enviamos uma mensagem".
 Por isso ele não é aceso pela ferramenta de avisos: o fluxo é avisar, esperar a resposta
-e só então escrever `sim` na planilha.
+e só então marcar.
+
+### Marcar com um clique
+
+Digitar na planilha funciona, mas é lento. `verificar/` lista os cadastros com um botão
+cada: o clique abre uma janelinha para um Apps Script publicado **dentro da própria
+planilha**, que escreve na coluna e se fecha.
+
+Quem garante que só você marca é o Google, não o site: o script é publicado com
+**"Quem tem acesso: somente eu"**, então qualquer outra pessoa que clique cai na tela de
+login e não grava nada. Não existe token nem senha guardada em página pública — a URL
+que o painel abre não carrega segredo nenhum, só o nome e o telefone do cadastro.
+
+A instalação está comentada no topo de `scripts/verificar.gs`, e o próprio painel mostra
+o passo a passo enquanto a variável `VERIFICAR_URL` não existir. Resumindo: colar o
+arquivo em **Extensões → Apps Script**, implantar como App da Web com acesso "somente
+eu", e criar a variável `VERIFICAR_URL` com a URL `/exec` gerada.
+
+O painel não finge que o selo já saiu: o cadastro clicado fica marcado como *aguardando
+a sincronização* até a planilha voltar confirmando. Se a planilha contradisser o clique,
+o clique é esquecido — a planilha é a verdade.
 
 ## Página "Sobre"
 

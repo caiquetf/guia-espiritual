@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Verificar cadastros — Guia Espiritual</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" type="image/png" href="../favicon.png" />
+<meta name="theme-color" content="#150f0c" />
+<style>
+  :root{ --tinta:#150f0c; --alta:#1e1613; --topo:#261c17; --linha:#3a2a21; --linha-viva:#5a4032;
+         --papel:#f3e7d6; --meio:#c4ac92; --baixo:#9f8771; --brasa:#c9713f; --folha:#6f8f5f; --ouro:#d6a545; }
+  *{ box-sizing:border-box }
+  body{ margin:0; padding:1.6rem 1rem 4rem; background:var(--tinta); color:var(--papel);
+        font:15px/1.55 Inter,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+        background-image:radial-gradient(50rem 26rem at 50% -8%, rgba(201,113,63,.12), transparent 62%); }
+  main{ max-width:46rem; margin:0 auto }
+  h1{ font:600 22px/1.25 'Iowan Old Style',Palatino,Georgia,serif; margin:0 0 .25rem }
+  h2{ font:600 16px/1.3 'Iowan Old Style',Palatino,Georgia,serif; margin:1.6rem 0 .5rem }
+  .rubrica{ font-size:11px; font-weight:600; letter-spacing:.13em; text-transform:uppercase; color:var(--baixo) }
+  .det{ color:var(--meio); font-size:13px; margin:.25rem 0 0 }
+  .placar{ display:flex; gap:.5rem; flex-wrap:wrap; margin:1.3rem 0 1.1rem }
+  .pilula{ padding:.4rem .8rem; border:1px solid var(--linha); border-radius:999px;
+           font-size:12.5px; color:var(--meio) }
+  .pilula b{ color:var(--papel) }
+  .cartao{ display:flex; align-items:center; gap:.9rem; background:var(--alta);
+           border:1px solid var(--linha); border-radius:13px; padding:.8rem .9rem; margin-bottom:.6rem }
+  .cartao.selado{ border-color:#41563a; background:rgba(111,143,95,.07) }
+  .cartao.enviado{ border-color:var(--ouro) }
+  .corpo{ min-width:0; flex:1 }
+  .nome{ font:600 15.5px/1.3 'Iowan Old Style',Palatino,Georgia,serif; margin:0;
+         overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
+  .marca{ flex:none; width:2.6rem; height:2.6rem; display:grid; place-items:center;
+          border-radius:50%; border:1px solid var(--linha); color:var(--baixo); font-size:17px }
+  .cartao.selado .marca{ border-color:#41563a; color:#a9c79a; background:rgba(111,143,95,.12) }
+  .cartao.enviado .marca{ border-color:rgba(214,165,69,.5); color:var(--ouro) }
+  button{ font:inherit; font-size:13px; font-weight:600; cursor:pointer; padding:.55rem .9rem;
+          border-radius:10px; border:1px solid var(--linha); background:var(--topo); color:var(--papel) }
+  button:hover{ background:#31241d; border-color:var(--linha-viva) }
+  button.confirmar{ background:linear-gradient(170deg,var(--folha),#4f6b41); border-color:#4f6b41; color:#f2f7ee }
+  button.sutil{ background:transparent; color:var(--baixo) }
+  .aviso-caixa{ background:var(--alta); border:1px solid var(--linha); border-radius:13px;
+                padding:1.05rem 1.2rem; margin:1.2rem 0 }
+  .aviso-caixa p{ margin:0 0 .7rem } .aviso-caixa p:last-child{ margin-bottom:0 }
+  .aviso-caixa ol{ margin:0 0 .7rem; padding-left:1.2rem } .aviso-caixa li{ margin-bottom:.45rem }
+  code{ background:var(--topo); border:1px solid var(--linha); border-radius:6px;
+        padding:.1rem .35rem; font-size:12.5px }
+  a{ color:var(--brasa) }
+  .nota{ color:var(--baixo); font-size:12.5px; border-top:1px solid var(--linha);
+         padding-top:1rem; margin-top:2rem }
+  #toast{ position:fixed; left:50%; bottom:1.2rem; transform:translateX(-50%); background:#241a16;
+          border:1px solid var(--linha-viva); padding:.65rem 1.1rem; border-radius:12px; font-size:13.5px }
+</style>
+</head>
+<body>
+<main>
+  <p class="rubrica">Ferramenta de quem mantém o guia</p>
+  <h1>Verificar cadastros</h1>
+  <p class="det" style="max-width:38rem">
+    Um clique acende o selo de confirmado. O selo quer dizer uma coisa só:
+    <b>o responsável confirmou que os dados estão certos</b> — não é nota nem
+    recomendação. Só marque depois de ele responder.
+  </p>
+
+  <div class="placar" id="placar"></div>
+  <div id="instrucoes"></div>
+  <div id="lista"></div>
+
+  <p class="nota">
+    A gravação acontece na planilha, não aqui. O selo aparece no site na
+    sincronização seguinte — até uma hora, ou na hora se você rodar
+    <b>Actions → Sincronizar planilha do formulário → Run workflow</b>.
+    <br><a href="../">Voltar ao guia</a> · <a href="../avisos/">Avisar quem foi cadastrado</a>
+    · <a href="../revisar/">Revisar cadastros</a>
+  </p>
+</main>
+
+<script>
+const CHAVE = 'guia-espiritual-verificando';   // cliques feitos e ainda não sincronizados
+
+const digitos = s => (s||'').replace(/\D/g,'');
+const esc = s => (s ?? '').toString()
+  .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+const ehVerificado = v => /^(sim|s|x|ok|1|true|verdadeiro|confirmado|verificado)$/i.test((v||'').trim());
+
+/** Mesma chave usada pelo resto do site, para os cliques casarem com os cadastros. */
+function apelido(d){
+  const base = (d.nome || d.dirigente || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,48);
+  return [base || 'espaco', digitos(d.telefone).slice(-4)].filter(Boolean).join('-');
+}
+
+const pendentes = () => { try { return JSON.parse(localStorage.getItem(CHAVE)) || {}; } catch { return {}; } };
+function anotar(ap, valor){
+  const m = pendentes();
+  if (valor === null) delete m[ap]; else m[ap] = valor;
+  localStorage.setItem(CHAVE, JSON.stringify(m));
+}
+
+let DADOS = [], API = '';
+
+/**
+ * Estado de cada cadastro. `planilha` é a verdade; `pendente` é o clique que
+ * ainda não voltou pela sincronização. Assim que a planilha confirma, o clique
+ * é esquecido — senão a tela mentiria para sempre depois de um erro.
+ */
+function estado(d){
+  const naPlanilha = ehVerificado(d.verificado);
+  const p = pendentes()[apelido(d)];
+  if (p === undefined) return naPlanilha ? 'selado' : 'aberto';
+  if ((p === 'sim') === naPlanilha){ anotar(apelido(d), null); return naPlanilha ? 'selado' : 'aberto'; }
+  return 'enviado';
+}
+
+function desenhar(){
+  const est = DADOS.map(estado);
+  const selados = est.filter(e => e === 'selado').length;
+  const enviados = est.filter(e => e === 'enviado').length;
+
+  document.getElementById('placar').innerHTML =
+    `<span class="pilula"><b>${selados}</b> com selo</span>
+     <span class="pilula"><b>${DADOS.length - selados - enviados}</b> sem selo</span>
+     ${enviados ? `<span class="pilula"><b>${enviados}</b> aguardando a sincronização</span>` : ''}`;
+
+  document.getElementById('lista').innerHTML = DADOS.map((d, i) => {
+    const e = est[i], ap = apelido(d);
+    const onde = [d.bairro, d.cidade].filter(Boolean).join(' · ');
+    const marca = e === 'selado' ? '✓' : e === 'enviado' ? '⏳' : '·';
+    const acao = !API
+      ? ''
+      : e === 'selado'
+        ? `<button class="sutil" data-ap="${ap}" data-valor="nao">Tirar selo</button>`
+        : e === 'enviado'
+          ? `<button class="sutil" data-ap="${ap}" data-desfazer>Desmarcar aqui</button>`
+          : `<button class="confirmar" data-ap="${ap}" data-valor="sim">Confirmar</button>`;
+    return `<div class="cartao ${e === 'selado' ? 'selado' : e === 'enviado' ? 'enviado' : ''}">
+      <span class="marca">${marca}</span>
+      <div class="corpo">
+        <p class="nome">${esc(d.nome || d.dirigente || 'Sem nome')}</p>
+        <p class="det">${[onde, d.telefone].filter(Boolean).map(esc).join(' · ') || '—'}${
+          e === 'enviado' ? ' · <span style="color:var(--ouro)">enviado, aguardando a planilha</span>' : ''}</p>
+      </div>
+      ${acao}
+    </div>`;
+  }).join('');
+}
+
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-ap]');
+  if (!b) return;
+  const d = DADOS.find(x => apelido(x) === b.dataset.ap);
+  if (!d) return;
+  if (b.hasAttribute('data-desfazer')){ anotar(b.dataset.ap, null); desenhar(); return; }
+  marcar(d, b.dataset.valor);
+});
+
+/**
+ * Abre o Apps Script numa janelinha. Não dá para ler a resposta por fetch: o
+ * script exige a sessão do Google, e uma requisição de outra origem não a leva.
+ * A janela leva — e é ela que garante que só a dona da planilha grave.
+ */
+function marcar(d, valor){
+  const url = API + (API.includes('?') ? '&' : '?')
+    + 'nome=' + encodeURIComponent(d.nome || d.dirigente || '')
+    + '&tel=' + encodeURIComponent(digitos(d.telefone))
+    + '&valor=' + encodeURIComponent(valor);
+  const janela = window.open(url, 'guia-verificar', 'width=440,height=320');
+  if (!janela){ toast('O navegador bloqueou a janela. Libere os pop-ups deste site.'); return; }
+  anotar(apelido(d), valor);
+  desenhar();
+}
+
+// A janelinha avisa quando termina. Só serve para dar o retorno na tela —
+// a verdade continua vindo da planilha na sincronização seguinte.
+window.addEventListener('message', ev => {
+  const m = ev.data;
+  if (!m || m.guia !== 'verificar') return;
+  toast(m.estado === 'ok'
+    ? 'Gravado na planilha. O selo aparece no site na próxima sincronização.'
+    : 'A planilha recusou a gravação — veja a mensagem na janelinha.');
+});
+
+function toast(txt){
+  const el = document.createElement('div');
+  el.id = 'toast'; el.textContent = txt;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 4200);
+}
+
+function instalar(){
+  document.getElementById('instrucoes').innerHTML = `
+    <div class="aviso-caixa">
+      <p><b>Falta ligar o painel à planilha.</b> Enquanto isso, dá para ver quem tem
+      selo, mas não para acender nenhum com um clique.</p>
+      <ol>
+        <li>Na planilha de respostas: <b>Extensões → Apps Script</b>. Apague o que
+          estiver lá e cole o conteúdo de <code>scripts/verificar.gs</code>.</li>
+        <li><b>Implantar → Nova implantação → App da Web</b>, com
+          <b>Executar como: eu</b> e <b>Quem tem acesso: somente eu</b>. Copie a URL
+          que termina em <code>/exec</code>.</li>
+        <li>No repositório: <b>Settings → Secrets and variables → Actions →
+          Variables</b>, crie <code>VERIFICAR_URL</code> com essa URL.</li>
+      </ol>
+      <p class="det">"Somente eu" é o que torna o painel seu: quem não estiver logado
+      na sua conta Google cai na tela de login e não grava nada.</p>
+    </div>`;
+}
+
+fetch('../dados.json', { cache:'no-store' })
+  .then(r => r.ok ? r.json() : Promise.reject(r.status))
+  .then(j => {
+    DADOS = j.registros || [];
+    API = /^https?:\/\//i.test((j.apiVerificar || '').trim()) ? j.apiVerificar.trim() : '';
+    if (!API) instalar();
+    desenhar();
+  })
+  .catch(() => {
+    document.getElementById('lista').innerHTML =
+      '<p class="det">Não consegui carregar os cadastros. Abra esta página pelo site publicado.</p>';
+  });
+</script>
+</body>
+</html>
