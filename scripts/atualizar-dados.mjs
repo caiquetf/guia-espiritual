@@ -27,6 +27,7 @@ const FIELDS = [
   { key:'redes',     label:'Redes Sociais / Instagram / Site',            aliases:['redes sociais','instagram','site','redes sociais / instagram / site','rede social'] },
   { key:'horarios',  label:'Dias e Horários das Giras, Trabalhos ou Consultas', aliases:['quais dias e horarios acontecem os trabalhos','dias e horarios','horarios','giras','dias e horarios das giras, trabalhos ou consultas','horario'] },
   { key:'servicos',  label:'Serviços Prestados e Trabalhos oferecidos',   aliases:['quais tipos de atendimentos realizados','tipos de atendimentos','tipos de atendimento','atendimentos realizados','servicos prestados','servicos','trabalhos oferecidos','servicos prestados e trabalhos oferecidos'] },
+  { key:'verificado',label:'Verificado',                                  aliases:['verificado','confirmado','verificacao','confirmacao','conferido'] },
   { key:'regras',    label:'Orientações ao Visitante / Regras do Espaço', aliases:['orientacoes para visitantes','orientacoes ao visitante','orientacoes','regras','regras do espaco','orientacoes ao visitante / regras do espaco','observacoes'] }
 ];
 
@@ -263,6 +264,7 @@ for (let r = 1; r < linhas.length; r++){
   rec.tradicao   = corrigirGrafia(rec.tradicao);
   rec.cidade     = corrigirCidade(rec.cidade);
   rec.grupo      = grupoTradicao(rec.tradicao);
+  rec.verificado = /^(sim|s|x|ok|1|true|verdadeiro|confirmado|verificado)$/i.test(rec.verificado) ? 'sim' : '';
   rec.modalidade = matchModality(rec.modalidade);
   registros.push(rec);
 }

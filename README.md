@@ -111,6 +111,16 @@ mesclados e duplicatas (mesmo nome + mesmo telefone) são ignoradas.
 *Contato:* (19) 99812-4477
 ```
 
+## Selo de confirmado
+
+Para um cadastro exibir o selo, acrescente uma coluna chamada **Verificado** na planilha
+de respostas (à direita das que o Forms cria) e escreva `sim` na linha correspondente.
+Também valem `x`, `ok` e `1`; qualquer outra coisa, inclusive `não`, não marca nada.
+
+O selo significa **o responsável confirmou os dados** — não "nós enviamos uma mensagem".
+Por isso ele não é aceso pela ferramenta de avisos: o fluxo é avisar, esperar a resposta
+e só então escrever `sim` na planilha.
+
 ## Avisar quem foi cadastrado
 
 Como qualquer pessoa pode cadastrar qualquer espaço, `avisos/` lista os cadastros e

@@ -90,6 +90,8 @@ function mensagem(d){
        + `é só responder esta mensagem que eu corrijo ou removo.`;
 }
 
+const ehVerificado = v => /^(sim|s|x|ok|1|true|verdadeiro|confirmado|verificado)$/i.test((v||'').trim());
+
 const lidos = () => { try { return JSON.parse(localStorage.getItem(CHAVE)) || {}; } catch { return {}; } };
 function marcar(ap, valor){
   const m = lidos();
@@ -128,6 +130,7 @@ function desenhar(){
       <div class="topo-cartao">
         <p class="nome">${esc(d.nome || d.dirigente)}</p>
         <span class="selo ${feito ? 'ok' : ''}">${feito ? 'avisado' : 'a avisar'}</span>
+        ${ehVerificado(d.verificado) ? '<span class="selo ok">✓ confirmado na planilha</span>' : ''}
       </div>
       <p class="det">${[local, d.telefone, data && 'cadastrado em ' + data].filter(Boolean).map(esc).join(' · ')}</p>
       ${num ? `<div class="acoes">

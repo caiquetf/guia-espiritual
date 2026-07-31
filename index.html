@@ -293,6 +293,9 @@
   }
   .tarja-antigo .ic{ margin-top:.15rem; flex:none }
 
+  .verificado{ display:inline-flex; vertical-align:-.12em; margin-left:.34em; color:var(--folha-viva) }
+  .verificado .ic{ width:.82em; height:.82em; stroke-width:1.7 }
+
   .cortar-2{ display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
   [hidden]{ display:none !important; }
   ::selection{ background:rgba(201,113,63,.35); color:#fff; }
@@ -389,6 +392,10 @@
     <symbol id="i-lista" viewBox="0 0 24 24">
       <path d="M8.4 6.4h12M8.4 12h12M8.4 17.6h12"/>
       <circle cx="4.2" cy="6.4" r="1.2"/><circle cx="4.2" cy="12" r="1.2"/><circle cx="4.2" cy="17.6" r="1.2"/>
+    </symbol>
+    <symbol id="i-selo" viewBox="0 0 24 24">
+      <path d="M12 2.8l2.3 1.7 2.8-.3 1 2.7 2.4 1.5-.9 2.7.9 2.7-2.4 1.5-1 2.7-2.8-.3L12 21.2l-2.3-1.7-2.8.3-1-2.7L3.5 15.6l.9-2.7-.9-2.7 2.4-1.5 1-2.7 2.8.3Z"/>
+      <path d="M8.9 12.1l2.1 2.1 4.1-4.3"/>
     </symbol>
     <symbol id="i-lua" viewBox="0 0 24 24">
       <path d="M20 14.4A8.6 8.6 0 0 1 9.6 4 8.6 8.6 0 1 0 20 14.4Z"/>
@@ -511,6 +518,7 @@ const FIELDS = [
   { key:'redes',     label:'Redes Sociais / Instagram / Site',            aliases:['redes sociais','instagram','site','redes sociais / instagram / site','rede social'] },
   { key:'horarios',  label:'Dias e Horários das Giras, Trabalhos ou Consultas', aliases:['dias e horarios','horarios','giras','dias e horarios das giras, trabalhos ou consultas','horario'] },
   { key:'servicos',  label:'Serviços Prestados e Trabalhos oferecidos',   aliases:['servicos prestados','servicos','trabalhos oferecidos','servicos prestados e trabalhos oferecidos'] },
+  { key:'verificado',label:'Verificado',                                  aliases:['verificado','confirmado','verificacao','confirmacao','conferido'] },
   { key:'regras',    label:'Orientações ao Visitante / Regras do Espaço', aliases:['orientacoes ao visitante','regras','regras do espaco','orientacoes ao visitante / regras do espaco','observacoes'] }
 ];
 
@@ -652,6 +660,7 @@ function normalize(r){
   o.tradicao   = corrigirGrafia(o.tradicao);
   o.cidade     = corrigirCidade(o.cidade);
   o.grupo      = r.grupo || grupoTradicao(o.tradicao);
+  o.verificado = ehVerificado(o.verificado) ? 'sim' : '';
   o.modalidade = matchModality(o.modalidade);
   return o;
 }
@@ -740,6 +749,11 @@ function grupoTradicao(v){
   if (/espiritismo|kardec|doutrina espirita|centro espirita/.test(n)) return 'Espiritismo/Kardecismo';
   return 'Outros';
 }
+/** Aceita as formas que uma pessoa escreveria numa planilha: sim, x, ok, 1… */
+function ehVerificado(v){
+  return /^(sim|s|x|ok|1|true|verdadeiro|confirmado|verificado)$/i.test((v||'').trim());
+}
+
 function matchModality(v){
   const n = norm(v);
   if (!n) return '';
@@ -1136,7 +1150,8 @@ function cardHTML(d){
       ${d.modalidade ? `<span class="rubrica flex items-center gap-1 shrink-0">${modIcone(d.modalidade)}${esc(d.modalidade)}</span>` : ''}
     </div>
 
-    <h3 class="serifa cortar-2">${esc(d.nome) || '<span style="color:var(--papel-baixo)">Sem nome</span>'}</h3>
+    <h3 class="serifa cortar-2">${esc(d.nome) || '<span style="color:var(--papel-baixo)">Sem nome</span>'}${
+      d.verificado ? `<span class="verificado" title="Dados confirmados pelo responsável">${ic('i-selo')}</span>` : ''}</h3>
 
     ${d.dirigente ? `<p class="meta dirigente">${ic('i-pessoa')}<span>${esc(d.dirigente)}</span></p>` : ''}
     ${local ? `<p class="meta">${ic('i-pino')}<span>${esc(local)}</span></p>` : ''}
@@ -1189,7 +1204,9 @@ function openDetails(id){
   document.getElementById('modalHead').innerHTML = `
     <div class="min-w-0 flex-1">
       ${badge(d)}
-      <h2 class="serifa" style="margin:.5rem 0 0; font-size:23px; line-height:1.22; color:#fbf3e7">${esc(d.nome)}</h2>
+      <h2 class="serifa" style="margin:.5rem 0 0; font-size:23px; line-height:1.22; color:#fbf3e7">${esc(d.nome)}${
+        d.verificado ? `<span class="verificado" title="Dados confirmados pelo responsável">${ic('i-selo')}</span>` : ''}</h2>
+      ${d.verificado ? `<p class="rubrica" style="color:var(--folha-viva); margin-top:.35rem">Confirmado pelo responsável</p>` : ''}
       ${d.dirigente ? `<p style="margin:.3rem 0 0; color:#cbae94; font-size:14px">${esc(d.dirigente)}</p>` : ''}
       <div class="ornamento" style="margin:.85rem 0 .1rem; max-width:11rem"><i></i></div>
       ${d.modalidade ? `<p class="rubrica flex items-center gap-1.5" style="margin-top:.55rem">${modIcone(d.modalidade)}${esc(d.modalidade)}</p>` : ''}

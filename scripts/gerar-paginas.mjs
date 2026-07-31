@@ -22,6 +22,10 @@ const MESES_PARA_AVISO = 12;
 const MESES = ['janeiro','fevereiro','março','abril','maio','junho',
                'julho','agosto','setembro','outubro','novembro','dezembro'];
 
+/** Nunca confie que o dado chegou normalizado: marcar como confirmado quem
+    escreveu "não" seria o pior erro possível aqui. */
+const ehVerificado = v => /^(sim|s|x|ok|1|true|verdadeiro|confirmado|verificado)$/i.test((v||'').trim());
+
 /** Ressalva quando o cadastro é antigo. Vazio enquanto for recente. */
 function avisoAntigo(d){
   const m = /(\d{1,2})\/(\d{1,2})\/(\d{4})/.exec(d.timestamp || '');
@@ -157,6 +161,11 @@ function pagina(d){
   a.btn{ flex:1; min-width:12rem; text-align:center; text-decoration:none; padding:.75rem 1rem;
          border-radius:11px; border:1px solid var(--linha); color:var(--papel); background:#261c17; font-weight:600 }
   a.zap{ background:linear-gradient(170deg,var(--folha),#4f6b41); border-color:#4f6b41; color:#f2f7ee }
+  .verificado{ display:inline-flex; vertical-align:-.1em; margin-left:.35em }
+  .verificado svg{ width:.8em; height:.8em; fill:none; stroke:var(--folha); stroke-width:1.7;
+                   stroke-linecap:round; stroke-linejoin:round }
+  .confirmado{ text-align:center; font-size:11px; font-weight:600; letter-spacing:.12em;
+               text-transform:uppercase; color:var(--folha); margin:.45rem 0 0 }
   .antigo{ margin:0 0 1.4rem; padding:.75rem .95rem; font-size:13.5px; color:#e8c777;
            background:rgba(214,165,69,.08); border:1px solid rgba(214,165,69,.28); border-radius:11px }
   button.btn{ font:inherit; font-weight:600; cursor:pointer }
@@ -172,7 +181,8 @@ function pagina(d){
   <a href="../../"><img class="marca" src="../../marca.webp" width="256" height="256" alt="Guia Espiritual" /></a>
 
   ${d.tradicao ? `<p class="vertente">${esc(d.tradicao)}</p>` : ''}
-  <h1>${esc(d.nome || d.dirigente)}</h1>
+  <h1>${esc(d.nome || d.dirigente)}${ehVerificado(d.verificado) ? `<span class="verificado" title="Dados confirmados pelo responsável"><svg viewBox="0 0 24 24"><path d="M12 2.8l2.3 1.7 2.8-.3 1 2.7 2.4 1.5-.9 2.7.9 2.7-2.4 1.5-1 2.7-2.8-.3L12 21.2l-2.3-1.7-2.8.3-1-2.7L3.5 15.6l.9-2.7-.9-2.7 2.4-1.5 1-2.7 2.8.3Z"/><path d="M8.9 12.1l2.1 2.1 4.1-4.3"/></svg></span>` : ''}</h1>
+  ${ehVerificado(d.verificado) ? '<p class="confirmado">Confirmado pelo responsável</p>' : ''}
   ${d.dirigente && d.nome ? `<p class="dirigente">${esc(d.dirigente)}</p>` : '<div style="height:1rem"></div>'}
 
   <div class="acoes">
