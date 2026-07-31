@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-31T16:55:59.444Z",
+  "geradoEm": "2026-07-31T20:36:38.743Z",
   "formulario": "https://docs.google.com/forms/d/e/1FAIpQLSdha6CPyRtEe_2-ZSJM5NsMNOnXead1ZhU49ZoX3h0ZbIWifg/viewform?usp=header",
   "apiVerificar": "https://script.google.com/macros/s/AKfycbwL7x0AjzjgGesE7Sz4wuUtb2SM-dRy8hEBQzFWp_pspLZTYeYCBOqFuTLn88KyXgND/exec",
   "registros": [
@@ -18,7 +18,7 @@
       "redes": "",
       "horarios": "as terças e quintas - das 17h às 00h",
       "servicos": "Cartomancia",
-      "verificado": "",
+      "verificado": "sim",
       "regras": "faço atendimentos urgentes caso o consulente necessite",
       "grupo": "Umbanda"
     },
@@ -37,7 +37,7 @@
       "redes": "",
       "horarios": "Com agendamento de segunda a sábado",
       "servicos": "Cartomancia",
-      "verificado": "",
+      "verificado": "sim",
       "regras": "",
       "grupo": "Cartomancia/Tarô"
     },
@@ -56,7 +56,7 @@
       "redes": "",
       "horarios": "Desenvolvimento 2z ao mês / atendimento com Oráculo com hora marcada",
       "servicos": "Consulta espiritual particular",
-      "verificado": "",
+      "verificado": "sim",
       "regras": "Tirar dúvidas e agendar consulta pelo WhatsApp",
       "grupo": "Quimbanda"
     },
@@ -75,7 +75,7 @@
       "redes": "",
       "horarios": "Quarta, quinta e sexta, mediante agendamento.",
       "servicos": "Consulta espiritual particular",
-      "verificado": "",
+      "verificado": "sim",
       "regras": "",
       "grupo": "Umbanda"
     },
@@ -94,7 +94,7 @@
       "redes": "",
       "horarios": "1x ao mês, domingo 7h30 da manhã: giras abertas e gratuitas",
       "servicos": "Desenvolvimento",
-      "verificado": "",
+      "verificado": "sim",
       "regras": "Favor confirmar presença na gira",
       "grupo": "Umbanda"
     },
@@ -113,7 +113,7 @@
       "redes": "",
       "horarios": "Todos os dias das 9 as 00",
       "servicos": "Cartomancia",
-      "verificado": "",
+      "verificado": "sim",
       "regras": "",
       "grupo": "Quimbanda"
     },
@@ -132,7 +132,7 @@
       "redes": "",
       "horarios": "Quintas feiras 19:30h",
       "servicos": "Todos os trabalhos mencionados acima",
-      "verificado": "",
+      "verificado": "sim",
       "regras": "",
       "grupo": "Candomblé"
     },
@@ -151,7 +151,7 @@
       "redes": "",
       "horarios": "Atendimento com horário marcado",
       "servicos": "Cartomancia",
-      "verificado": "",
+      "verificado": "sim",
       "regras": "Instagram @isabellereato",
       "grupo": "Outros"
     },
@@ -170,7 +170,7 @@
       "redes": "",
       "horarios": "Seg a sab - 09hrs as 19hrs",
       "servicos": "Cartomancia",
-      "verificado": "",
+      "verificado": "sim",
       "regras": "Consultas apenas online.",
       "grupo": "Holístico/Terapia"
     },
@@ -189,7 +189,7 @@
       "redes": "",
       "horarios": "De segunda a sexta",
       "servicos": "Consulta espiritual particular",
-      "verificado": "",
+      "verificado": "sim",
       "regras": "Trabalhos oracular de dadomancia e cartomancia com atendimentos e trabalhos espirituais",
       "grupo": "Umbanda"
     },
@@ -208,9 +208,28 @@
       "redes": "",
       "horarios": "9 as 21",
       "servicos": "Cartomancia",
-      "verificado": "",
+      "verificado": "sim",
       "regras": "",
       "grupo": "Magia"
+    },
+    {
+      "timestamp": "31/07/2026 16:48:14",
+      "email": "",
+      "nome": "Roda Cigana - Oráculo Cigano",
+      "dirigente": "Kainan",
+      "tradicao": "Umbanda",
+      "tempo": "3 anos",
+      "cidade": "Piracicaba",
+      "bairro": "",
+      "endereco": "Rua Atílio delamuta",
+      "modalidade": "Online",
+      "telefone": "19983627671",
+      "redes": "",
+      "horarios": "Aos finais de semana, horário marcado",
+      "servicos": "Cartomancia",
+      "verificado": "",
+      "regras": "Consulta oracular por meio de baralho cigano, com fotos + explicação ou ligação via vídeo por whatsapp, também com orientações de auto cuidado, proteçãoz banhos, patuás e afins",
+      "grupo": "Umbanda"
     },
     {
       "timestamp": "31/07/2026 12:30:02",
@@ -227,7 +246,7 @@
       "redes": "",
       "horarios": "Trabalho de segunda a sexta das 07 as 19 horas",
       "servicos": "Consulta espiritual particular",
-      "verificado": "",
+      "verificado": "sim",
       "regras": "Atendo consulta individual ou casal, para maiores informações ligar no watsapp",
       "grupo": "Umbanda"
     },
@@ -246,7 +265,7 @@
       "redes": "",
       "horarios": "Trabalho são  todas as Sexta-feira   das 20 horas ate 22 horas",
       "servicos": "Consulta espiritual particular",
-      "verificado": "",
+      "verificado": "sim",
       "regras": "NÃO  USAR  Roupas  Curtas Nem cores Preto e Vermelha",
       "grupo": "Umbanda"
     },
@@ -265,7 +284,7 @@
       "redes": "",
       "horarios": "Os trabalhos acontecem aos sábados sendo 2 sim um não (giras gratuitas)",
       "servicos": "Aplicação de cone hindu,magias  limpezas espirituais.",
-      "verificado": "",
+      "verificado": "sim",
       "regras": "Proibido roupas curtas,e pessoas alcoolizadas",
       "grupo": "Umbanda"
     },
@@ -284,7 +303,7 @@
       "redes": "",
       "horarios": "Aos sábados, quinzenais, a partir das 19:30",
       "servicos": "Todos acima",
-      "verificado": "",
+      "verificado": "sim",
       "regras": "Não vir de roupa decotada, transparente, ou justa/curta. Mandar mensagem no WhatsApp do terreiro pedindo para guardar senha.",
       "grupo": "Umbanda"
     },
@@ -303,7 +322,7 @@
       "redes": "",
       "horarios": "Segunda feiras às 19h30m",
       "servicos": "Desenvolvimento, Cartomancia, consulta particular, benzimento",
-      "verificado": "",
+      "verificado": "sim",
       "regras": "",
       "grupo": "Umbanda"
     },
@@ -322,7 +341,7 @@
       "redes": "",
       "horarios": "Segunda sexta sábado",
       "servicos": "Todos",
-      "verificado": "",
+      "verificado": "sim",
       "regras": "Respeito e sigilo",
       "grupo": "Umbanda"
     },
@@ -341,7 +360,7 @@
       "redes": "",
       "horarios": "Conforme agendamento",
       "servicos": "Cartomancia",
-      "verificado": "",
+      "verificado": "sim",
       "regras": "Agende pelo WhatsApp! Trabalhamos com cartomancia e trabalhos espirituais (financeiro, amoroso, mental, etc)",
       "grupo": "Umbanda"
     }
