@@ -71,10 +71,12 @@ mesclados e duplicatas (mesmo nome + mesmo telefone) são ignoradas.
 - **Compartilhar** — abre a bandeja do sistema no celular (WhatsApp, Instagram, o que a
   pessoa quiser) e, onde ela não existe, cai no WhatsApp com a ficha pronta. Também nas
   páginas de espaço.
-- **Aviso de informação errada** — link em cada ficha e em cada página de espaço, já com
-  o cadastro identificado no assunto. Aparece só quando `CANAL_CORRECAO` está preenchido,
-  no topo do script do `index.html` e do `scripts/gerar-paginas.mjs`; aceita `mailto:`,
-  `https://wa.me/55...` ou o link de um formulário.
+- **Canal de contato** — "Informação errada, ou quer sair do guia?" em cada ficha e em
+  cada página de espaço, abrindo o WhatsApp com o nome do cadastro e o endereço dele já
+  na mensagem. Serve para corrigir dados e, principalmente, para quem está listado pedir
+  a remoção. Definido em `CANAL_CORRECAO`, no topo do script do `index.html` e do
+  `scripts/gerar-paginas.mjs` — aceita `https://wa.me/55...`, `mailto:` ou um formulário,
+  e some da tela se ficar vazio.
 - **🔍 Ver detalhes** — modal com os 14 campos, link para o Google Maps e para as redes sociais.
 - **Ordenação** alternável entre por cidade e mais recentes, lendo o carimbo do formulário.
 - **Edição e exclusão** pelo modal de detalhes, valendo só no navegador de quem edita.

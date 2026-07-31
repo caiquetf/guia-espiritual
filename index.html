@@ -553,7 +553,7 @@ const DADOS_URL = 'dados.json';   // gerado a partir da planilha do Forms
 
 /* Para onde vão os avisos de informação errada. Vazio: o aviso não aparece.
    Aceita 'mailto:...', 'https://wa.me/55...' ou o link de um formulário. */
-const CANAL_CORRECAO = '';
+const CANAL_CORRECAO = 'https://wa.me/5519974118980';
 let DATA = [];
 let baseGeradoEm = '';            // versão dos dados oficiais em uso
 let state = { q:'', city:'', trads:new Set(), mods:new Set(), view:'grid', ordem:'lugar' };
@@ -1007,11 +1007,12 @@ function apelido(d){
 }
 const porApelido = ap => DATA.find(d => apelido(d) === ap);
 
-/** Link de correção já com o espaço identificado, para você saber de quem se trata. */
+/** Link de contato já com o espaço identificado, para saber de quem se trata. */
 function linkCorrecao(d){
   if (!CANAL_CORRECAO) return '';
-  const assunto = `Correção no guia: ${d.nome || d.dirigente}`;
-  const corpo = `Cadastro: ${d.nome || d.dirigente}\n${linkEspaco(d) || ''}\n\nO que está errado:\n`;
+  const nome = d.nome || d.dirigente;
+  const assunto = `Guia Espiritual — ${nome}`;
+  const corpo = `Olá! É sobre este cadastro do Guia Espiritual:\n\n${nome}\n${linkEspaco(d) || ''}\n\n`;
   if (CANAL_CORRECAO.startsWith('mailto:'))
     return `${CANAL_CORRECAO}?subject=${encodeURIComponent(assunto)}&body=${encodeURIComponent(corpo)}`;
   if (/^https:\/\/(wa\.me|api\.whatsapp)/.test(CANAL_CORRECAO))
@@ -1190,8 +1191,8 @@ function openDetails(id){
     row('i-calendario','Cadastro recebido em', d.timestamp)
   ].filter(Boolean).join('') + (linkCorrecao(d)
     ? `<p style="margin:1.1rem 0 0; padding-top:.9rem; border-top:1px solid var(--linha); font-size:12.5px; color:var(--papel-baixo)">
-         Encontrou algo errado neste cadastro?
-         <a class="elo" style="margin:0" href="${esc(linkCorrecao(d))}" target="_blank" rel="noopener">Avise a gente</a>.
+         Informação errada, ou quer sair do guia?
+         <a class="elo" style="margin:0" href="${esc(linkCorrecao(d))}" target="_blank" rel="noopener">Fale com a gente</a>.
        </p>` : '');
 
   const hasPhone = !!waNumber(d.telefone);

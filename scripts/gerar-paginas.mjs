@@ -15,7 +15,7 @@ const SITE = 'https://caiquetf.github.io/guia-espiritual';
 const PASTA = 'espaco';
 
 /* Mesmo canal configurado no index.html. Vazio: o aviso não aparece. */
-const CANAL_CORRECAO = '';
+const CANAL_CORRECAO = 'https://wa.me/5519974118980';
 
 const deaccent = s => (s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 const digitos  = s => (s || '').replace(/\D/g, '');
@@ -78,8 +78,9 @@ function estruturado(d, url){
 
 function linkCorrecao(d, url){
   if (!CANAL_CORRECAO) return '';
-  const assunto = `Correção no guia: ${d.nome || d.dirigente}`;
-  const corpo = `Cadastro: ${d.nome || d.dirigente}\n${url}\n\nO que está errado:\n`;
+  const nome = d.nome || d.dirigente;
+  const assunto = `Guia Espiritual — ${nome}`;
+  const corpo = `Olá! É sobre este cadastro do Guia Espiritual:\n\n${nome}\n${url}\n\n`;
   if (CANAL_CORRECAO.startsWith('mailto:'))
     return `${CANAL_CORRECAO}?subject=${encodeURIComponent(assunto)}&body=${encodeURIComponent(corpo)}`;
   if (/^https:\/\/(wa\.me|api\.whatsapp)/.test(CANAL_CORRECAO))
@@ -180,7 +181,7 @@ ${[
   <footer>
     <p>Cadastro do <a href="../../">Guia Espiritual — Piracicaba e Região</a>.<br>
     Confirme horários, regras e valores diretamente com o espaço antes de comparecer.</p>
-    ${linkCorrecao(d, url) ? `<p>Encontrou algo errado? <a href="${esc(linkCorrecao(d, url))}" rel="nofollow noopener">Avise a gente</a>.</p>` : ''}
+    ${linkCorrecao(d, url) ? `<p>Informação errada, ou quer sair do guia? <a href="${esc(linkCorrecao(d, url))}" rel="nofollow noopener">Fale com a gente</a>.</p>` : ''}
   </footer>
 </main>
 
