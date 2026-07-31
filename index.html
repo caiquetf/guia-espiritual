@@ -5,6 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Guia Espiritual — Piracicaba e Região</title>
 <meta name="description" content="Guia e diretório de espaços espirituais, terreiros e oraculistas de Piracicaba e região." />
+<link rel="canonical" href="https://caiquetf.github.io/guia-espiritual/" />
+
+<!-- Prévia ao compartilhar em WhatsApp, Instagram, Facebook e afins -->
+<meta property="og:type"        content="website" />
+<meta property="og:site_name"   content="Guia Espiritual" />
+<meta property="og:locale"      content="pt_BR" />
+<meta property="og:url"         content="https://caiquetf.github.io/guia-espiritual/" />
+<meta property="og:title"       content="Guia Espiritual — Piracicaba e Região" />
+<meta property="og:description" content="Encontre terreiros, casas de axé, oraculistas e terapeutas de Piracicaba e região. Busca por cidade, vertente e forma de atendimento." />
+<meta property="og:image"       content="https://caiquetf.github.io/guia-espiritual/social.jpg" />
+<meta property="og:image:width"  content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt"   content="Guia Espiritual — Piracicaba e Região" />
+<meta name="twitter:card"       content="summary_large_image" />
+
 <link rel="icon" type="image/png" href="favicon.png" />
 <link rel="apple-touch-icon" href="favicon.png" />
 <meta name="theme-color" content="#150f0c" />
@@ -595,6 +610,16 @@ async function carregarDados(){
     marcarAtualizacao(null, true);
   }
   render();
+  abrirEspacoDoEndereco();
+}
+
+/** Se o endereço aponta para um espaço, abre a ficha dele de cara. */
+function abrirEspacoDoEndereco(){
+  const ap = new URLSearchParams(location.search).get('espaco');
+  if (!ap) return;
+  const d = porApelido(ap);
+  if (d) openDetails(d.id);
+  else toast('Não encontrei esse espaço — ele pode ter saído do guia.', 'error');
 }
 
 function marcarAtualizacao(iso, exemplo){
@@ -918,6 +943,8 @@ function fichaTexto(d){
   if (d.regras)   L.push('*Regras/Observações:* ' + d.regras);
   if (d.telefone) L.push('*Contato:* ' + d.telefone);
   if (d.redes)    L.push('*Redes:* ' + d.redes);
+  const link = linkEspaco(d);
+  if (link){ L.push(''); L.push('Ficha completa: ' + link); }
   L.push('');
   L.push('_Confirme sempre os horários pelo contato acima antes de comparecer._ 🙏');
   return L.join('\n');
@@ -940,6 +967,13 @@ async function copiar(text, okMsg){
   }
 }
 
+function copiarLink(id){
+  const d = byId(id); if (!d) return;
+  const link = linkEspaco(d);
+  if (!link){ toast('O link só existe com o guia publicado na internet.', 'error'); return; }
+  copiar(link, 'Link deste espaço copiado.');
+}
+
 const copiarFicha = id => { const d = byId(id); if (d) copiar(fichaTexto(d), 'Ficha copiada! É só colar no WhatsApp do cliente.'); };
 
 function enviarCliente(id){
@@ -956,6 +990,30 @@ function abrirWhats(id){
 }
 
 const byId = id => DATA.find(d => d.id === id);
+
+/* ── Link direto para um espaço ──────────────────────────────
+   Cada cadastro ganha um apelido estável, montado a partir do nome e dos
+   últimos dígitos do telefone, para o endereço não mudar a cada sincronismo. */
+function apelido(d){
+  const base = deaccent(d.nome || d.dirigente || '')
+    .toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,48);
+  const fim = onlyDigits(d.telefone).slice(-4);
+  return [base || 'espaco', fim].filter(Boolean).join('-');
+}
+const porApelido = ap => DATA.find(d => apelido(d) === ap);
+
+/** Endereço público do espaço. Vazio quando o arquivo é aberto do disco. */
+function linkEspaco(d){
+  if (!/^https?:$/.test(location.protocol)) return '';
+  return location.origin + location.pathname + '?espaco=' + encodeURIComponent(apelido(d));
+}
+
+/** Mantém a barra de endereço acompanhando o que está aberto. */
+function marcarEndereco(d){
+  if (!/^https?:$/.test(location.protocol)) return;
+  const url = d ? '?espaco=' + encodeURIComponent(apelido(d)) : location.pathname;
+  history.replaceState(null, '', url);
+}
 
 /* ═══════════════════════════════════════════════════════════════
    7. RENDERIZAÇÃO
@@ -1118,12 +1176,14 @@ function openDetails(id){
     <button onclick="copiarFicha('${d.id}')" class="btn" style="flex:1; min-width:9rem">${ic('i-copiar')} Copiar ficha</button>
     <button onclick="enviarCliente('${d.id}')" class="btn btn-brasa" style="flex:1; min-width:10rem">${ic('i-enviar')} Enviar ao cliente</button>
     <div class="w-full flex gap-2" style="padding-top:.7rem; margin-top:.15rem; border-top:1px solid var(--linha)">
+      <button onclick="copiarLink('${d.id}')" class="btn" style="flex:1">${ic('i-globo')} Copiar link</button>
       <button onclick="openForm('${d.id}')" class="btn" style="flex:1">${ic('i-lapis')} Editar</button>
       <button onclick="excluirCadastro('${d.id}')" class="btn btn-perigo" style="flex:1">${ic('i-lixo')} Excluir</button>
     </div>`;
 
   document.getElementById('modal').hidden = false;
   document.body.style.overflow = 'hidden';
+  marcarEndereco(d);
 }
 /** Exclusão vale só neste navegador — a fonte dos cadastros é a planilha. */
 function excluirCadastro(id){
@@ -1136,6 +1196,7 @@ function excluirCadastro(id){
 
 function closeModal(){
   document.getElementById('modal').hidden = true;
+  marcarEndereco(null);
   if (document.getElementById('formModal').hidden) document.body.style.overflow = '';
 }
 

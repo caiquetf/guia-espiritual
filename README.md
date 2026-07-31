@@ -72,6 +72,11 @@ O menu **⋯** (celular) traz também **Baixar modelo de planilha** e **Exportar
 - **📤 Enviar para cliente** — abre o WhatsApp já com a ficha no corpo da mensagem.
 - **🔍 Ver detalhes** — modal com os 14 campos, link para o Google Maps e para as redes sociais.
 - **Cadastro manual** (＋ Novo cadastro), edição e exclusão.
+- **Link direto por espaço** — abrir uma ficha grava `?espaco=` no endereço, e o botão
+  **Copiar link** entrega esse endereço pronto. Quem abrir o link cai direto na ficha.
+  A ficha do WhatsApp já sai com ele no rodapé.
+- **Prévia ao compartilhar** — o link mostra logo, título e descrição no WhatsApp e nas
+  redes, a partir de `social.jpg` e das tags Open Graph.
 - Atalhos: `/` foca a busca, `Esc` fecha os modais.
 
 ### Exemplo da ficha gerada
