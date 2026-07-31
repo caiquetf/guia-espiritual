@@ -983,10 +983,12 @@ function apelido(d){
 }
 const porApelido = ap => DATA.find(d => apelido(d) === ap);
 
-/** Endereço público do espaço. Vazio quando o arquivo é aberto do disco. */
+/** Endereço público do espaço — a página própria dele, que é a que o buscador
+    indexa e a que o WhatsApp usa para montar a prévia. Vazio fora da internet. */
 function linkEspaco(d){
   if (!/^https?:$/.test(location.protocol)) return '';
-  return location.origin + location.pathname + '?espaco=' + encodeURIComponent(apelido(d));
+  const raiz = location.pathname.replace(/\/?(index\.html)?$/, '');
+  return location.origin + raiz + '/espaco/' + encodeURIComponent(apelido(d)) + '/';
 }
 
 /** Mantém a barra de endereço acompanhando o que está aberto. */

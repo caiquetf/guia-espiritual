@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://caiquetf.github.io/guia-espiritual/sitemap.xml

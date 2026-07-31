@@ -78,6 +78,10 @@ mesclados e duplicatas (mesmo nome + mesmo telefone) são ignoradas.
   A ficha do WhatsApp já sai com ele no rodapé.
 - **Prévia ao compartilhar** — o link mostra logo, título e descrição no WhatsApp e nas
   redes, a partir de `social.jpg` e das tags Open Graph.
+- **Uma página por espaço** em `espaco/<apelido>/`, com título, descrição e dados
+  estruturados próprios, mais `sitemap.xml` e `robots.txt`. É o que permite ao buscador
+  indexar cada casa e ao WhatsApp montar a prévia daquele espaço, não a do site inteiro.
+  Geradas por `scripts/gerar-paginas.mjs`, no mesmo workflow que sincroniza a planilha.
 - Atalhos: `/` foca a busca, `Esc` fecha os modais.
 
 ### Exemplo da ficha gerada

@@ -35,16 +35,17 @@ jobs:
             echo "::notice::PLANILHA_CSV_URL ainda não foi configurada — nada a sincronizar."
             exit 0
           fi
-          exit $code
+          if [ $code -ne 0 ]; then exit $code; fi
+          node scripts/gerar-paginas.mjs
 
       - name: Publicar as mudanças
         id: commit
         run: |
-          if [ -n "$(git status --porcelain dados.json)" ]; then
+          if [ -n "$(git status --porcelain dados.json espaco sitemap.xml robots.txt)" ]; then
             git config user.name  "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add dados.json
-            git commit -m "Atualiza cadastros a partir da planilha do formulário"
+            git add dados.json espaco sitemap.xml robots.txt
+            git commit -m "Atualiza cadastros e páginas a partir da planilha"
             git push
             echo "mudou=true" >> "$GITHUB_OUTPUT"
           else
