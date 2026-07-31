@@ -94,6 +94,8 @@ mesclados e duplicatas (mesmo nome + mesmo telefone) são ignoradas.
   estruturados próprios, mais `sitemap.xml` e `robots.txt`. É o que permite ao buscador
   indexar cada casa e ao WhatsApp montar a prévia daquele espaço, não a do site inteiro.
   Geradas por `scripts/gerar-paginas.mjs`, no mesmo workflow que sincroniza a planilha.
+- **Compartilhar o guia** — botão no cabeçalho, com a mesma bandeja do sistema.
+- **Filtro de confirmados** — aparece só quando existe pelo menos um cadastro com selo.
 - Atalhos: `/` foca a busca, `Esc` fecha os modais.
 
 ### Exemplo da ficha gerada
