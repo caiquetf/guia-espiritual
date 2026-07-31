@@ -262,6 +262,7 @@ ${urls.map(u => `  <url><loc>${u}</loc><lastmod>${data}</lastmod><changefreq>mon
 </urlset>
 `, 'utf8');
 
-writeFileSync('robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`, 'utf8');
+writeFileSync('robots.txt',
+  `User-agent: *\nAllow: /\nDisallow: /avisos/\n\nSitemap: ${SITE}/sitemap.xml\n`, 'utf8');
 
 console.log(`${urls.length} página(s) de espaço, sitemap.xml e robots.txt gerados.`);

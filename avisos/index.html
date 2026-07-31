@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Avisar cadastrados — Guia Espiritual</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" type="image/png" href="../favicon.png" />
+<meta name="theme-color" content="#150f0c" />
+<style>
+  :root{ --tinta:#150f0c; --alta:#1e1613; --topo:#261c17; --linha:#3a2a21; --linha-viva:#5a4032;
+         --papel:#f3e7d6; --meio:#c4ac92; --baixo:#9f8771; --brasa:#c9713f; --folha:#6f8f5f; --ouro:#d6a545; }
+  *{ box-sizing:border-box }
+  body{ margin:0; padding:1.6rem 1rem 4rem; background:var(--tinta); color:var(--papel);
+        font:15px/1.55 Inter,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+        background-image:radial-gradient(50rem 26rem at 50% -8%, rgba(201,113,63,.12), transparent 62%); }
+  main{ max-width:46rem; margin:0 auto }
+  h1{ font:600 22px/1.25 'Iowan Old Style',Palatino,Georgia,serif; margin:0 0 .25rem }
+  .rubrica{ font-size:11px; font-weight:600; letter-spacing:.13em; text-transform:uppercase; color:var(--baixo) }
+  .resumo{ display:flex; gap:.5rem; flex-wrap:wrap; margin:1.2rem 0 1.4rem }
+  .pilula{ padding:.4rem .8rem; border:1px solid var(--linha); border-radius:999px; font-size:12.5px; color:var(--meio) }
+  .pilula b{ color:var(--papel) }
+  .cartao{ background:var(--alta); border:1px solid var(--linha); border-radius:13px;
+           padding:.95rem 1.05rem; margin-bottom:.7rem }
+  .cartao.feito{ opacity:.55 }
+  .topo-cartao{ display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap }
+  .nome{ font:600 16px/1.3 'Iowan Old Style',Palatino,Georgia,serif; margin:0 }
+  .det{ color:var(--meio); font-size:13px; margin:.25rem 0 0 }
+  .acoes{ display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.8rem }
+  button{ font:inherit; font-size:13px; font-weight:600; cursor:pointer; padding:.5rem .85rem;
+          border-radius:10px; border:1px solid var(--linha); background:var(--topo); color:var(--papel) }
+  button:hover{ background:#31241d; border-color:var(--linha-viva) }
+  button.zap{ background:linear-gradient(170deg,var(--folha),#4f6b41); border-color:#4f6b41; color:#f2f7ee }
+  button.sutil{ background:transparent; color:var(--baixo) }
+  .selo{ font-size:10.5px; font-weight:600; letter-spacing:.09em; text-transform:uppercase; color:var(--ouro) }
+  .selo.ok{ color:var(--folha) }
+  .semfone{ color:#e79a8c; font-size:12.5px; margin:.5rem 0 0 }
+  .nota{ color:var(--baixo); font-size:12.5px; border-top:1px solid var(--linha); padding-top:1rem; margin-top:2rem }
+  .nota a{ color:var(--brasa) }
+  #aviso{ position:fixed; left:50%; bottom:1.2rem; transform:translateX(-50%); background:#241a16;
+          border:1px solid var(--linha-viva); padding:.65rem 1.1rem; border-radius:12px; font-size:13.5px }
+</style>
+</head>
+<body>
+<main>
+  <p class="rubrica">Ferramenta de quem mantém o guia</p>
+  <h1>Avisar quem foi cadastrado</h1>
+  <p class="det" style="max-width:38rem">
+    Qualquer pessoa pode cadastrar qualquer espaço. Avisar o número informado é como
+    o responsável descobre que está no guia e pode pedir correção ou remoção.
+  </p>
+
+  <div class="resumo" id="resumo"></div>
+  <div id="lista"></div>
+
+  <p class="nota">
+    O que já foi avisado fica marcado <b>neste navegador</b> — em outro aparelho a lista
+    aparece zerada. Nada é enviado sozinho: cada mensagem sai da sua mão.
+    <br><a href="../">Voltar ao guia</a>
+  </p>
+</main>
+
+<script>
+const SITE = location.origin + location.pathname.replace(/\/avisos\/?$/, '');
+const CHAVE = 'guia-espiritual-avisados';
+
+const deaccent = s => (s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+const digitos  = s => (s||'').replace(/\D/g,'');
+
+function apelido(d){
+  const base = deaccent(d.nome || d.dirigente || '')
+    .toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,48);
+  return [base || 'espaco', digitos(d.telefone).slice(-4)].filter(Boolean).join('-');
+}
+
+/** Número no formato que o wa.me exige: país + DDD + assinante. */
+function numeroWhats(tel){
+  let n = digitos(tel).replace(/^0+/,'');
+  if (!n) return '';
+  if (!n.startsWith('55')) n = '55' + n;
+  return n.length >= 12 ? n : '';
+}
+
+function mensagem(d){
+  const nome = d.nome || d.dirigente;
+  return `Olá! O espaço *${nome}* foi cadastrado no Guia Espiritual — Piracicaba e Região, `
+       + `um guia gratuito de terreiros, casas de axé, oraculistas e terapeutas da região.\n\n`
+       + `A página dele é esta:\n${SITE}/espaco/${apelido(d)}/\n\n`
+       + `Se alguma informação estiver errada, ou se preferir não aparecer no guia, `
+       + `é só responder esta mensagem que eu corrijo ou removo.`;
+}
+
+const lidos = () => { try { return JSON.parse(localStorage.getItem(CHAVE)) || {}; } catch { return {}; } };
+function marcar(ap, valor){
+  const m = lidos();
+  if (valor) m[ap] = new Date().toISOString(); else delete m[ap];
+  localStorage.setItem(CHAVE, JSON.stringify(m));
+  desenhar();
+}
+
+function quando(d){
+  const m = /(\d{1,2})\/(\d{1,2})\/(\d{4})(?:[ ,]+(\d{1,2}):(\d{2}))?/.exec(d.timestamp || '');
+  if (!m) return 0;
+  return new Date(+m[3], +m[2]-1, +m[1], +(m[4]||0), +(m[5]||0)).getTime() || 0;
+}
+
+const esc = s => (s ?? '').toString()
+  .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+let DADOS = [];
+
+function desenhar(){
+  const marcados = lidos();
+  const ordenados = [...DADOS].sort((a,b) => quando(b) - quando(a));
+  const pendentes = ordenados.filter(d => !marcados[apelido(d)] && numeroWhats(d.telefone));
+  const semFone   = ordenados.filter(d => !numeroWhats(d.telefone));
+
+  document.getElementById('resumo').innerHTML = `
+    <span class="pilula"><b>${pendentes.length}</b> a avisar</span>
+    <span class="pilula"><b>${ordenados.length - pendentes.length - semFone.length}</b> já avisados</span>
+    ${semFone.length ? `<span class="pilula"><b>${semFone.length}</b> sem telefone válido</span>` : ''}`;
+
+  document.getElementById('lista').innerHTML = ordenados.map(d => {
+    const ap = apelido(d), num = numeroWhats(d.telefone), feito = !!marcados[ap];
+    const local = [d.bairro, d.cidade].filter(Boolean).join(' · ');
+    const data = quando(d) ? new Date(quando(d)).toLocaleDateString('pt-BR') : '';
+    return `<div class="cartao ${feito ? 'feito' : ''}">
+      <div class="topo-cartao">
+        <p class="nome">${esc(d.nome || d.dirigente)}</p>
+        <span class="selo ${feito ? 'ok' : ''}">${feito ? 'avisado' : 'a avisar'}</span>
+      </div>
+      <p class="det">${[local, d.telefone, data && 'cadastrado em ' + data].filter(Boolean).map(esc).join(' · ')}</p>
+      ${num ? `<div class="acoes">
+          ${feito
+            ? `<button class="sutil" onclick="marcar('${ap}', false)">Desmarcar</button>`
+            : `<button class="zap" onclick="avisar('${ap}')">Avisar no WhatsApp</button>
+               <button onclick="copiar('${ap}')">Copiar mensagem</button>
+               <button class="sutil" onclick="marcar('${ap}', true)">Já avisei</button>`}
+        </div>`
+        : `<p class="semfone">Sem telefone válido com DDD — não dá para avisar por WhatsApp.</p>`}
+    </div>`;
+  }).join('');
+}
+
+const acha = ap => DADOS.find(d => apelido(d) === ap);
+
+function avisar(ap){
+  const d = acha(ap); if (!d) return;
+  window.open(`https://wa.me/${numeroWhats(d.telefone)}?text=${encodeURIComponent(mensagem(d))}`, '_blank', 'noopener');
+  marcar(ap, true);
+}
+
+async function copiar(ap){
+  const d = acha(ap); if (!d) return;
+  try { await navigator.clipboard.writeText(mensagem(d)); nota('Mensagem copiada.'); }
+  catch { window.prompt('Copie a mensagem:', mensagem(d)); }
+}
+
+function nota(txt){
+  const el = document.createElement('div');
+  el.id = 'aviso'; el.textContent = txt;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 2800);
+}
+
+fetch('../dados.json', { cache:'no-store' })
+  .then(r => r.ok ? r.json() : Promise.reject(r.status))
+  .then(j => { DADOS = j.registros || []; desenhar(); })
+  .catch(() => {
+    document.getElementById('lista').innerHTML =
+      '<p class="semfone">Não consegui carregar os cadastros. Abra esta página pelo site publicado.</p>';
+  });
+</script>
+</body>
+</html>

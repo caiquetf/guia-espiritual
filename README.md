@@ -111,6 +111,17 @@ mesclados e duplicatas (mesmo nome + mesmo telefone) são ignoradas.
 *Contato:* (19) 99812-4477
 ```
 
+## Avisar quem foi cadastrado
+
+Como qualquer pessoa pode cadastrar qualquer espaço, `avisos/` lista os cadastros e
+oferece, para cada um, um botão que abre o WhatsApp do número informado com uma
+mensagem pronta: o nome do espaço, o link da página dele e o convite a pedir correção
+ou remoção. É assim que o responsável descobre que está no guia.
+
+Nada sai sozinho — cada mensagem parte de um toque seu. O que já foi avisado fica
+marcado no `localStorage` daquele navegador, então em outro aparelho a lista aparece
+zerada. A página não é indexada (`noindex` e `Disallow` no robots.txt).
+
 ## Observações
 
 - **Nada é deduzido.** O guia mostra apenas o que a pessoa preencheu no formulário:
