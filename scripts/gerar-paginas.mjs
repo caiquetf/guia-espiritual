@@ -211,6 +211,7 @@ ${[
     <p>Cadastro do <a href="../../">Guia Espiritual — Piracicaba e Região</a>.<br>
     Confirme horários, regras e valores diretamente com o espaço antes de comparecer.</p>
     ${linkCorrecao(d, url) ? `<p>Informação errada, ou quer sair do guia? <a href="${esc(linkCorrecao(d, url))}" rel="nofollow noopener">Fale com a gente</a>.</p>` : ''}
+    <p><a href="../../sobre/">Sobre o guia</a></p>
   </footer>
 </main>
 
@@ -268,6 +269,7 @@ writeFileSync('sitemap.xml',
 `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>${SITE}/</loc><lastmod>${data}</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>
+  <url><loc>${SITE}/sobre/</loc><lastmod>${data}</lastmod><changefreq>yearly</changefreq><priority>0.5</priority></url>
 ${urls.map(u => `  <url><loc>${u}</loc><lastmod>${data}</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>`).join('\n')}
 </urlset>
 `, 'utf8');

@@ -123,6 +123,22 @@ O selo significa **o responsável confirmou os dados** — não "nós enviamos u
 Por isso ele não é aceso pela ferramenta de avisos: o fluxo é avisar, esperar a resposta
 e só então escrever `sim` na planilha.
 
+## Página "Sobre"
+
+`sobre/` responde as perguntas que alguém listado — ou pensando em se cadastrar — faz
+antes de confiar no guia: que é gratuito e sem posição paga, que a vertente aparece com
+as palavras de quem respondeu, que só entra quem autoriza a divulgação no formulário,
+o que o selo significa (e o que não significa), o que o guia não faz, e principalmente
+**como corrigir uma informação ou pedir para sair** — sem justificativa e sem burocracia.
+
+É linkada no rodapé do guia e no rodapé de cada página de espaço, e entra no
+`sitemap.xml`. A página é independente: tem o próprio `<style>` e não depende do
+`index.html`.
+
+Uma constante no fim do arquivo, `LINK_FORMULARIO`, controla o botão **Cadastrar meu
+espaço**: enquanto estiver vazia o botão não aparece. Cole ali o link público do
+formulário do Google para abrir essa porta de entrada.
+
 ## Avisar quem foi cadastrado
 
 Como qualquer pessoa pode cadastrar qualquer espaço, `avisos/` lista os cadastros e
