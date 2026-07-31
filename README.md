@@ -103,6 +103,10 @@ O menu **⋯** (celular) traz também **Baixar modelo de planilha** e **Exportar
   Duas variáveis no topo do `<style>` controlam isso: `--arte-fundo` aponta para o
   arquivo e `--escurecer` define o quanto ele some — `0` mostra a foto crua, `1`
   deixa preto. Está em `.84`.
+- A **identidade** vem de três arquivos gerados a partir do logo: `marca.webp` (o
+  emblema do cabeçalho, recortado no círculo interno porque o medalhão inteiro vira
+  borrão em tamanho pequeno), `logo.webp` (o conjunto completo, no rodapé) e
+  `favicon.png` (ícone da aba). Todos com fundo transparente.
 - O CSS já vem **embutido no arquivo**: nenhuma requisição externa, carrega na hora e
   funciona offline. Ele é gerado pelo Tailwind a partir das classes realmente usadas.
 
