@@ -30,9 +30,13 @@ jobs:
           # no mesmo lugar; enquanto ela não existir, o botão "Cadastrar meu
           # espaço" simplesmente não é desenhado em nenhuma página.
           FORMULARIO_URL: ${{ vars.FORMULARIO_URL }}
-          # Apps Script publicado dentro da planilha, que o painel verificar/
-          # chama para acender o selo. Veja scripts/verificar.gs.
-          VERIFICAR_URL: ${{ vars.VERIFICAR_URL }}
+          # Apps Script que o painel verificar/ chama para acender o selo.
+          # Veja scripts/verificar.gs. Não é segredo: a implantação está como
+          # "quem tem acesso: somente eu", então quem abrir a URL sem estar
+          # logado na conta dona da planilha recebe a tela de login. Se um dia
+          # a implantação virar "qualquer pessoa", aí sim a URL vira uma chave
+          # de escrita e precisa sair daqui.
+          VERIFICAR_URL: ${{ vars.VERIFICAR_URL || 'https://script.google.com/macros/s/AKfycbwL7x0AjzjgGesE7Sz4wuUtb2SM-dRy8hEBQzFWp_pspLZTYeYCBOqFuTLn88KyXgND/exec' }}
         run: |
           set +e
           node scripts/atualizar-dados.mjs
