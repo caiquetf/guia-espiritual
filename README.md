@@ -216,14 +216,13 @@ Como a `avisos/`, a página não é indexada (`noindex` e `Disallow` no robots.t
 
 ## Contador de visitas
 
-Desligado por padrão: com `CONTADOR` vazio, **o site não faz nenhuma requisição a
-terceiros** — nem o guia, nem as páginas de espaço, nem a Sobre.
+Ligado, apontando para **caiquetf.goatcounter.com**. Os números ficam em
+<https://caiquetf.goatcounter.com>.
 
-Para ligar, crie uma conta gratuita no [GoatCounter](https://www.goatcounter.com) e
-escreva o código escolhido (o pedaço antes de `.goatcounter.com`) em `CONTADOR`, em
-dois lugares: no topo do script do `index.html` e no topo do `scripts/gerar-paginas.mjs`,
-que reimprime as páginas de espaço e o atalho `/cadastrar/`. A página `sobre/` tem a
-sua própria cópia da constante.
+A constante `CONTADOR` guarda o nome da conta e vive em três lugares: no topo do script
+do `index.html`, no topo do `scripts/gerar-paginas.mjs` — que reimprime as páginas de
+espaço e o atalho `/cadastrar/` — e dentro do `sobre/index.html`. **Esvaziar as três
+desliga tudo**, e aí o site volta a não fazer nenhuma requisição a terceiros.
 
 O GoatCounter não usa cookie, não guarda IP e não segue ninguém entre visitas: ele
 conta a página aberta e esquece quem abriu. Por isso não exige aviso de cookies.

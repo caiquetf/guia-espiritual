@@ -19,7 +19,7 @@ const CANAL_CORRECAO = 'https://wa.me/5519974118980';
 
 /* Mesmo código de contador configurado no index.html. Vazio: nenhuma página
    gerada carrega script de terceiro. */
-const CONTADOR = '';
+const CONTADOR = 'caiquetf';
 
 /** Etiqueta a ser injetada nas páginas geradas, ou vazio se não há contador. */
 const marcacaoContador = /^[a-z0-9-]+$/i.test(CONTADOR)
