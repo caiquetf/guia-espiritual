@@ -267,6 +267,45 @@ for (const d of registros){
   urls.push(`${SITE}/${PASTA}/${ap}/`);
 }
 
+/**
+ * Atalho /cadastrar/ para o formulário.
+ *
+ * Existe por causa do QR Code: a URL do Google Forms tem 90 e poucos caracteres,
+ * o que engorda o desenho a ponto de exigir um cartaz grande para o celular ler.
+ * Este endereço cabe num QR pequeno, é curto o bastante para ser digitado à mão,
+ * e sobrevive à troca do link do formulário.
+ */
+if (FORMULARIO){
+  mkdirSync('cadastrar', { recursive: true });
+  writeFileSync(join('cadastrar', 'index.html'),
+`<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex" />
+<title>Cadastrar meu espaço — Guia Espiritual</title>
+<meta http-equiv="refresh" content="0; url=${esc(FORMULARIO)}" />
+<link rel="canonical" href="${esc(FORMULARIO)}" />
+<style>
+  body{ margin:0; display:flex; align-items:center; justify-content:center; min-height:100vh;
+        background:#150f0c; color:#f3e7d6; text-align:center; padding:2rem;
+        font:15px/1.6 Inter,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif }
+  a{ color:#e08a53 }
+</style>
+</head>
+<body>
+  <div>
+    <p>Abrindo o formulário de cadastro…</p>
+    <p><a href="${esc(FORMULARIO)}">Se não abrir sozinho, toque aqui.</a></p>
+  </div>
+</body>
+</html>
+`, 'utf8');
+} else {
+  rmSync('cadastrar', { recursive: true, force: true });
+}
+
 const data = (geradoEm || new Date().toISOString()).slice(0, 10);
 writeFileSync('sitemap.xml',
 `<?xml version="1.0" encoding="UTF-8"?>
