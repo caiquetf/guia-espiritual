@@ -33,8 +33,9 @@ node scripts/atualizar-dados.mjs "https://docs.google.com/.../pub?output=csv"
 
 ## Importar um CSV manualmente
 
-1. No Google Forms, abra a planilha de respostas → **Arquivo → Fazer download → CSV**.
-2. No app, clique em **📥 Importar CSV** (ou arraste o arquivo para qualquer lugar da página).
+Com a sincronização ligada isso raramente é necessário, então não há botão para o
+recurso — mas ele continua ali: **arraste um arquivo `.csv` para qualquer lugar da
+página** e ele é importado.
 
 As colunas são reconhecidas automaticamente pelo texto do cabeçalho — mesmo com variações de acento,
 maiúsculas ou pequenas diferenças de redação. Também são aceitos separadores `,`, `;` e tabulação.
@@ -98,6 +99,10 @@ O menu **⋯** (celular) traz também **Baixar modelo de planilha** e **Exportar
   no **`localStorage` do navegador** e sobrevivem até a próxima atualização oficial,
   quando são substituídas pela versão nova. Use **Exportar CSV** para guardar uma cópia.
 - Os cadastros que vêm pré-carregados são **fictícios**, apenas para demonstração.
+- A **arte de fundo** é um desenho vetorial embutido no próprio CSS: nenhuma imagem
+  externa, nada para carregar. Para usar uma foto própria, salve o arquivo na raiz do
+  repositório e troque a linha `--arte-fundo` no topo do `<style>` por
+  `--arte-fundo: url('fundo.jpg');`.
 - O CSS já vem **embutido no arquivo**: nenhuma requisição externa, carrega na hora e
   funciona offline. Ele é gerado pelo Tailwind a partir das classes realmente usadas.
 
