@@ -461,6 +461,20 @@
     <p style="color:var(--papel-meio); font-size:14px; margin:0">Ajuste a busca ou limpe os filtros para ver todos os cadastros.</p>
     <button onclick="resetFilters()" class="btn btn-brasa" style="margin-top:1.4rem">Limpar filtros</button>
   </div>
+
+  <!-- Convite ao cadastro. Só aparece quando há link de formulário configurado. -->
+  <section id="convite" hidden class="text-center"
+           style="margin-top:2.6rem; padding:1.9rem 1.2rem; border:1px solid var(--linha);
+                  border-radius:var(--raio); background:rgba(30,22,19,.72)">
+    <div class="ornamento" style="max-width:11rem; margin:0 auto 1.1rem"><i></i></div>
+    <p class="serifa" style="font-size:19px; margin:0 0 .4rem; color:#fbf3e7">Seu espaço ainda não está aqui?</p>
+    <p style="color:var(--papel-meio); font-size:14px; margin:0 auto; max-width:34rem">
+      Terreiros, casas de axé, oraculistas e terapeutas de Piracicaba e região entram
+      de graça. Você escolhe o que aparece — e pode pedir para sair quando quiser.
+    </p>
+    <a id="linkCadastro" class="btn btn-brasa" target="_blank" rel="noopener"
+       style="margin-top:1.3rem; display:inline-flex">Cadastrar meu espaço</a>
+  </section>
 </main>
 
 <footer class="max-w-7xl mx-auto px-4 sm:px-6 pb-10 pt-2 text-center space-y-1.5" style="color:var(--papel-baixo); font-size:12px">
@@ -473,6 +487,9 @@
   <p style="padding-top:.35rem">
     <a href="sobre/" style="color:var(--brasa-viva)">Sobre o guia</a> — como um espaço entra,
     como corrigir uma informação e como pedir para sair.
+    <span id="cadastroRodape" hidden> ·
+      <a href="#" target="_blank" rel="noopener" style="color:var(--brasa-viva)">Cadastrar meu espaço</a>
+    </span>
   </p>
 </footer>
 
@@ -630,6 +647,7 @@ async function carregarDados(){
       save();
     }
     marcarAtualizacao(oficial.geradoEm);
+    mostrarCadastro(oficial.formulario);
   } else if (local && local.registros.length){
     baseGeradoEm = local.baseGeradoEm || '';
     DATA = local.registros.map(normalize);
@@ -639,6 +657,26 @@ async function carregarDados(){
   }
   render();
   abrirEspacoDoEndereco();
+}
+
+/**
+ * Acende o convite ao cadastro. O link vem de `formulario`, no dados.json, que
+ * por sua vez vem da variável FORMULARIO_URL do repositório — um lugar só para
+ * configurar. Sem link, nada é desenhado: melhor ausência do que botão morto.
+ *
+ * Confere o esquema antes de usar: o valor vira href, e um `javascript:` vindo
+ * de configuração executaria na página de quem clica.
+ */
+function mostrarCadastro(url){
+  const link = (url || '').trim();
+  if (!/^https?:\/\//i.test(link)) return;
+
+  const secao = document.getElementById('convite');
+  const botao = document.getElementById('linkCadastro');
+  if (secao && botao){ botao.href = link; secao.hidden = false; }
+
+  const rodape = document.getElementById('cadastroRodape');
+  if (rodape){ rodape.querySelector('a').href = link; rodape.hidden = false; }
 }
 
 /** Se o endereço aponta para um espaço, abre a ficha dele de cara. */

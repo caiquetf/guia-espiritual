@@ -26,6 +26,10 @@ jobs:
           # Para trocar sem mexer no código, crie a variável PLANILHA_CSV_URL em
           # Settings → Secrets and variables → Actions → Variables: ela tem prioridade.
           PLANILHA_CSV_URL: ${{ vars.PLANILHA_CSV_URL || 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ-upItrqf1EjRVhql0gBEl3BMZDtQ8eEb5kofeGjcMwrLxpkC-YwwXULNO8CavQSsJgOaMtHoTz-qW/pub?gid=1603923294&single=true&output=csv' }}
+          # Link público do formulário de cadastro. Crie a variável FORMULARIO_URL
+          # no mesmo lugar; enquanto ela não existir, o botão "Cadastrar meu
+          # espaço" simplesmente não é desenhado em nenhuma página.
+          FORMULARIO_URL: ${{ vars.FORMULARIO_URL }}
         run: |
           set +e
           node scripts/atualizar-dados.mjs

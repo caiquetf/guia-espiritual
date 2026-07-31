@@ -149,13 +149,22 @@
 </main>
 
 <script>
-/* Link público do formulário de cadastro. Vazio: a seção não mostra botão. */
-const LINK_FORMULARIO = '';
-
-if (LINK_FORMULARIO){
-  document.getElementById('caixa-cadastro').innerHTML =
-    `<div class="acoes"><a class="btn brasa" href="${LINK_FORMULARIO}" target="_blank" rel="noopener">Cadastrar meu espaço</a></div>`;
-}
+/* O link do formulário vem do dados.json, escrito pela sincronização a partir da
+   variável FORMULARIO_URL do repositório. Sem link, a seção não mostra botão. */
+fetch('../dados.json', { cache:'no-store' })
+  .then(r => r.ok ? r.json() : null)
+  .then(j => {
+    const link = (j && j.formulario || '').trim();
+    // Só http(s): o valor vira href, e um `javascript:` executaria aqui.
+    if (!/^https?:\/\//i.test(link)) return;
+    const a = document.createElement('a');
+    a.className = 'btn brasa'; a.href = link; a.target = '_blank'; a.rel = 'noopener';
+    a.textContent = 'Cadastrar meu espaço';
+    const caixa = document.createElement('div');
+    caixa.className = 'acoes'; caixa.appendChild(a);
+    document.getElementById('caixa-cadastro').appendChild(caixa);
+  })
+  .catch(() => { /* sem rede ou aberto do arquivo: a página segue completa sem o botão */ });
 </script>
 </body>
 </html>

@@ -211,7 +211,7 @@ ${[
     <p>Cadastro do <a href="../../">Guia Espiritual — Piracicaba e Região</a>.<br>
     Confirme horários, regras e valores diretamente com o espaço antes de comparecer.</p>
     ${linkCorrecao(d, url) ? `<p>Informação errada, ou quer sair do guia? <a href="${esc(linkCorrecao(d, url))}" rel="nofollow noopener">Fale com a gente</a>.</p>` : ''}
-    <p><a href="../../sobre/">Sobre o guia</a></p>
+    <p><a href="../../sobre/">Sobre o guia</a>${FORMULARIO ? ` · <a href="${esc(FORMULARIO)}" target="_blank" rel="noopener">Cadastrar meu espaço</a>` : ''}</p>
   </footer>
 </main>
 
@@ -246,7 +246,10 @@ if (!existsSync('dados.json')){
   console.log('Sem dados.json — nada a gerar.');
   process.exit(0);
 }
-const { registros = [], geradoEm } = JSON.parse(readFileSync('dados.json', 'utf8'));
+const { registros = [], geradoEm, formulario = '' } = JSON.parse(readFileSync('dados.json', 'utf8'));
+
+// Só http(s): o valor vem de configuração e é escrito direto num href.
+const FORMULARIO = /^https?:\/\//i.test(formulario.trim()) ? formulario.trim() : '';
 
 // Recria a pasta do zero para que espaços removidos da planilha sumam do site.
 rmSync(PASTA, { recursive: true, force: true });

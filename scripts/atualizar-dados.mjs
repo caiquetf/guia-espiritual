@@ -11,6 +11,24 @@ import { writeFileSync, readFileSync, existsSync } from 'node:fs';
 const URL_CSV = process.argv[2] || process.env.PLANILHA_CSV_URL || '';
 const SAIDA = 'dados.json';
 
+/**
+ * Link público do formulário de cadastro, vindo da variável FORMULARIO_URL do
+ * repositório. Fica junto dos dados para haver um lugar só a configurar: o site,
+ * a página Sobre e as páginas de espaço leem daqui.
+ *
+ * Só aceita http(s). O valor vai parar num href, e um `javascript:` ali seria
+ * um buraco aberto na configuração.
+ */
+function linkFormulario(){
+  const v = (process.env.FORMULARIO_URL || '').trim();
+  if (!v) return '';
+  if (!/^https?:\/\//i.test(v)){
+    console.log(`Aviso: FORMULARIO_URL não parece um endereço http(s) — ignorada: ${v.slice(0, 60)}`);
+    return '';
+  }
+  return v;
+}
+
 /* ── As mesmas 14 colunas do formulário reconhecidas pelo app ── */
 const FIELDS = [
   { key:'timestamp', label:'Carimbo de data/hora',                        aliases:['carimbo de data/hora','carimbo','timestamp','data/hora'] },
@@ -298,5 +316,10 @@ if (existsSync(SAIDA)){
   } catch { /* arquivo anterior ilegível, segue com a data nova */ }
 }
 
-writeFileSync(SAIDA, JSON.stringify({ geradoEm, registros: finais }, null, 2) + '\n', 'utf8');
+const formulario = linkFormulario();
+console.log(formulario
+  ? 'Link de cadastro publicado no site.'
+  : 'Sem FORMULARIO_URL — o botão "Cadastrar meu espaço" não aparece.');
+
+writeFileSync(SAIDA, JSON.stringify({ geradoEm, formulario, registros: finais }, null, 2) + '\n', 'utf8');
 console.log(`${finais.length} cadastro(s) gravado(s) em ${SAIDA}. Colunas reconhecidas: ${reconhecidas}/${FIELDS.length}.`);

@@ -135,9 +135,22 @@ o que o selo significa (e o que não significa), o que o guia não faz, e princi
 `sitemap.xml`. A página é independente: tem o próprio `<style>` e não depende do
 `index.html`.
 
-Uma constante no fim do arquivo, `LINK_FORMULARIO`, controla o botão **Cadastrar meu
-espaço**: enquanto estiver vazia o botão não aparece. Cole ali o link público do
-formulário do Google para abrir essa porta de entrada.
+## Link do formulário de cadastro
+
+Sem ele o guia só pode ser lido: não há como alguém se cadastrar pelo site.
+
+Para ligar, crie a variável `FORMULARIO_URL` no mesmo lugar da `PLANILHA_CSV_URL`
+(**Settings → Secrets and variables → Actions → Variables**), com o link público do
+formulário — o que sai em **Enviar → 🔗** no Google Forms, terminando em `/viewform`.
+Não use o endereço da barra do navegador enquanto você edita o formulário: aquele
+termina em `/edit` e só abre para quem tem permissão de edição.
+
+Na sincronização seguinte o link é gravado em `dados.json` e passa a aparecer em três
+lugares: o convite ao fim da lista do guia, o rodapé de todas as páginas, e a seção
+"Como um espaço entra" da página Sobre.
+
+Enquanto a variável não existir, nada disso é desenhado — é melhor não ter botão do que
+ter um botão que não leva a lugar nenhum. Só endereços `http`/`https` são aceitos.
 
 ## Avisar quem foi cadastrado
 
