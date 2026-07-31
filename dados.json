@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-31T03:47:56.728Z",
+  "geradoEm": "2026-07-31T07:12:34.395Z",
   "registros": [
     {
       "timestamp": "30/07/2026 16:09:49",
@@ -200,6 +200,24 @@
       "grupo": "Umbanda"
     },
     {
+      "timestamp": "31/07/2026 01:42:03",
+      "email": "",
+      "nome": "Ile ase Omo Funfun Onã",
+      "dirigente": "Baba Luís",
+      "tradicao": "Candomblé",
+      "tempo": "05 anos",
+      "cidade": "Piracicaba",
+      "bairro": "",
+      "endereco": "Aristedes  Balbino 61, Gran Park",
+      "modalidade": "Ambas",
+      "telefone": "11913430206",
+      "redes": "",
+      "horarios": "Quintas feiras 19:30h",
+      "servicos": "Todos os trabalhos mencionados acima",
+      "regras": "",
+      "grupo": "Candomblé"
+    },
+    {
       "timestamp": "31/07/2026 00:19:07",
       "email": "",
       "nome": "Morgana Tarot",
@@ -233,6 +251,24 @@
       "horarios": "Segunda feira às 19:30",
       "servicos": "Tarot, atendimento particular,passes",
       "regras": "Cuidado com vestimenta e ir com muita fé nas entidades e orixás",
+      "grupo": "Umbanda"
+    },
+    {
+      "timestamp": "31/07/2026 02:24:15",
+      "email": "",
+      "nome": "Terreiro de umbanda caminhos de oxoguiã",
+      "dirigente": "Dih Ferreira",
+      "tradicao": "Umbanda",
+      "tempo": "2 anos",
+      "cidade": "Piracicaba",
+      "bairro": "",
+      "endereco": "Rua silva jardim 568",
+      "modalidade": "Ambas",
+      "telefone": "19994063003",
+      "redes": "",
+      "horarios": "Segunda sexta sábado",
+      "servicos": "Todos",
+      "regras": "Respeito e sigilo",
       "grupo": "Umbanda"
     },
     {
