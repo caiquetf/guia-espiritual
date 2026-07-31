@@ -169,6 +169,24 @@ Nada sai sozinho — cada mensagem parte de um toque seu. O que já foi avisado 
 marcado no `localStorage` daquele navegador, então em outro aparelho a lista aparece
 zerada. A página não é indexada (`noindex` e `Disallow` no robots.txt).
 
+## Revisar cadastros
+
+`revisar/` mostra o que falta em cada cadastro e, junto, **o que a falta custa**: sem
+cidade o espaço some do filtro de cidade, sem modalidade some dos filtros Presencial e
+Online, sem telefone com DDD o cartão fica sem o botão verde. O placar no topo conta
+quantos estão em cada situação e filtra a lista; "Copiar os nomes desta lista" entrega
+o recorte pronto para levar até a planilha.
+
+Nada se corrige por ali — a correção é feita na planilha de respostas, e o site
+acompanha na sincronização seguinte.
+
+Duas regras merecem nota. Endereço só é cobrado de quem **declarou** atender
+presencialmente: para quem atende só online, o campo em branco é a resposta certa. E
+"cadastro antigo" e "ainda sem selo" contam como avisos leves — não são erro de
+preenchimento, e por isso um cadastro que só tem esses dois entra em "nada a corrigir".
+
+Como a `avisos/`, a página não é indexada (`noindex` e `Disallow` no robots.txt).
+
 ## Observações
 
 - **Nada é deduzido.** O guia mostra apenas o que a pessoa preencheu no formulário:

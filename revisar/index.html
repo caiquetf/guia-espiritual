@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Revisar cadastros — Guia Espiritual</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" type="image/png" href="../favicon.png" />
+<meta name="theme-color" content="#150f0c" />
+<style>
+  :root{ --tinta:#150f0c; --alta:#1e1613; --topo:#261c17; --linha:#3a2a21; --linha-viva:#5a4032;
+         --papel:#f3e7d6; --meio:#c4ac92; --baixo:#9f8771; --brasa:#c9713f; --folha:#6f8f5f; --ouro:#d6a545; }
+  *{ box-sizing:border-box }
+  body{ margin:0; padding:1.6rem 1rem 4rem; background:var(--tinta); color:var(--papel);
+        font:15px/1.55 Inter,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+        background-image:radial-gradient(50rem 26rem at 50% -8%, rgba(201,113,63,.12), transparent 62%); }
+  main{ max-width:46rem; margin:0 auto }
+  h1{ font:600 22px/1.25 'Iowan Old Style',Palatino,Georgia,serif; margin:0 0 .25rem }
+  .rubrica{ font-size:11px; font-weight:600; letter-spacing:.13em; text-transform:uppercase; color:var(--baixo) }
+  .det{ color:var(--meio); font-size:13px; margin:.25rem 0 0 }
+  .placar{ display:flex; gap:.5rem; flex-wrap:wrap; margin:1.3rem 0 .6rem }
+  .chip{ font:inherit; font-size:12.5px; cursor:pointer; padding:.42rem .85rem; border-radius:999px;
+         border:1px solid var(--linha); background:var(--topo); color:var(--meio) }
+  .chip:hover{ border-color:var(--linha-viva); color:var(--papel) }
+  .chip[aria-pressed="true"]{ background:linear-gradient(170deg,var(--brasa),#a4562c);
+                              border-color:#a4562c; color:#fff7ef }
+  .chip b{ color:inherit; margin-left:.15rem }
+  .chip.limpo[aria-pressed="true"]{ background:linear-gradient(170deg,var(--folha),#4f6b41); border-color:#4f6b41 }
+  .barra{ display:flex; gap:.5rem; flex-wrap:wrap; align-items:center; margin:.9rem 0 1.3rem }
+  button.acao{ font:inherit; font-size:13px; font-weight:600; cursor:pointer; padding:.5rem .85rem;
+               border-radius:10px; border:1px solid var(--linha); background:var(--topo); color:var(--papel) }
+  button.acao:hover{ background:#31241d; border-color:var(--linha-viva) }
+  .cartao{ background:var(--alta); border:1px solid var(--linha); border-radius:13px;
+           padding:.95rem 1.05rem; margin-bottom:.7rem }
+  .cartao.ok{ border-color:#33452c }
+  .nome{ font:600 16px/1.3 'Iowan Old Style',Palatino,Georgia,serif; margin:0 }
+  .faltas{ display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.7rem }
+  .falta{ font-size:12px; padding:.3rem .6rem; border-radius:8px;
+          background:rgba(201,113,63,.1); border:1px solid rgba(201,113,63,.32); color:#eaa87e }
+  .falta.leve{ background:rgba(214,165,69,.08); border-color:rgba(214,165,69,.28); color:#e8c777 }
+  .falta.boa{ background:rgba(111,143,95,.1); border-color:#41563a; color:#a9c79a }
+  .porque{ color:var(--baixo); font-size:12.5px; margin:.65rem 0 0 }
+  .nota{ color:var(--baixo); font-size:12.5px; border-top:1px solid var(--linha); padding-top:1rem; margin-top:2rem }
+  .nota a{ color:var(--brasa) }
+  #aviso{ position:fixed; left:50%; bottom:1.2rem; transform:translateX(-50%); background:#241a16;
+          border:1px solid var(--linha-viva); padding:.65rem 1.1rem; border-radius:12px; font-size:13.5px }
+</style>
+</head>
+<body>
+<main>
+  <p class="rubrica">Ferramenta de quem mantém o guia</p>
+  <h1>Revisar cadastros</h1>
+  <p class="det" style="max-width:38rem">
+    O que falta em cada cadastro e o que a falta causa no site. Nada se corrige por aqui:
+    a correção é feita na planilha de respostas, e na sincronização seguinte o site
+    acompanha.
+  </p>
+
+  <div class="placar" id="placar"></div>
+  <div class="barra" id="barra"></div>
+  <div id="lista"></div>
+
+  <p class="nota">
+    Campo em branco nunca é preenchido por dedução — por isso ele custa alguma coisa:
+    some do cartão e tira o cadastro do filtro correspondente. Esta página só mostra
+    esse custo.
+    <br><a href="../">Voltar ao guia</a> · <a href="../avisos/">Avisar quem foi cadastrado</a>
+  </p>
+</main>
+
+<script>
+const MESES_PARA_AVISO = 12;   // mesmo prazo usado pelo app e pelas páginas de espaço
+
+const digitos = s => (s||'').replace(/\D/g,'');
+const esc = s => (s ?? '').toString()
+  .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+/** Mesma régua do app: sem país + DDD + assinante não dá para abrir o wa.me. */
+function temWhats(tel){
+  let n = digitos(tel).replace(/^0+/,'');
+  if (!n) return false;
+  if (!n.startsWith('55')) n = '55' + n;
+  return n.length >= 12;
+}
+
+function meses(d){
+  const m = /(\d{1,2})\/(\d{1,2})\/(\d{4})/.exec(d.timestamp || '');
+  if (!m) return null;
+  const t = new Date(+m[3], +m[2]-1, +m[1]).getTime();
+  return t ? (Date.now() - t) / (1000*60*60*24*30.44) : null;
+}
+
+const ehVerificado = v => /^(sim|s|x|ok|1|true|verdadeiro|confirmado|verificado)$/i.test((v||'').trim());
+
+/**
+ * Cada regra diz o que falta e, principalmente, o que a falta custa. Sem a segunda
+ * parte a lista viraria uma cobrança de formulário completo — e há campos que
+ * legitimamente ficam em branco.
+ */
+const REGRAS = [
+  { id:'cidade', peso:3, rotulo:'sem cidade',
+    porque:'não aparece quando alguém filtra por cidade',
+    falta: d => !d.cidade },
+  { id:'modalidade', peso:3, rotulo:'sem modalidade',
+    porque:'não aparece nos filtros Presencial, Online e Ambas',
+    falta: d => !d.modalidade },
+  { id:'whats', peso:3, rotulo:'sem WhatsApp utilizável',
+    porque:'o cartão fica sem o botão verde, e não dá para avisar o responsável',
+    falta: d => !temWhats(d.telefone) },
+  { id:'vertente', peso:2, rotulo:'sem vertente',
+    porque:'fica de fora dos chips de tradição',
+    falta: d => !d.tradicao },
+  { id:'horarios', peso:2, rotulo:'sem dias e horários',
+    porque:'quem procura não sabe quando pode ir',
+    falta: d => !d.horarios },
+  // Só cobra endereço de quem declarou atender presencialmente. Para quem atende
+  // só online, o campo em branco é a resposta certa.
+  { id:'onde', peso:2, rotulo:'sem endereço nem bairro',
+    porque:'atende presencialmente, mas não há como saber onde',
+    falta: d => /Presencial|Ambas/i.test(d.modalidade) && !d.endereco && !d.bairro },
+  { id:'servicos', peso:1, rotulo:'sem serviços',
+    porque:'não é encontrado por busca de serviço',
+    falta: d => !d.servicos },
+  { id:'antigo', peso:1, leve:true, rotulo:'cadastro antigo',
+    porque:'passou de ' + MESES_PARA_AVISO + ' meses e o site já exibe o aviso de confirmar antes de ir',
+    falta: d => { const m = meses(d); return m !== null && m >= MESES_PARA_AVISO; } },
+  { id:'confirmar', peso:1, leve:true, rotulo:'ainda sem selo',
+    porque:'o responsável ainda não confirmou os dados na planilha',
+    falta: d => !ehVerificado(d.verificado) }
+];
+
+let DADOS = [];
+let filtro = '';   // id de regra, 'completos', ou '' para tudo
+
+const problemas = d => REGRAS.filter(r => r.falta(d));
+const gravidade = d => problemas(d).reduce((s, r) => s + r.peso, 0);
+
+function desenhar(){
+  const contagem = {};
+  REGRAS.forEach(r => contagem[r.id] = DADOS.filter(r.falta).length);
+  const completos = DADOS.filter(d => problemas(d).every(r => r.leve));
+
+  document.getElementById('placar').innerHTML =
+    `<button class="chip limpo" data-f="completos" aria-pressed="${filtro==='completos'}">
+       nada a corrigir <b>${completos.length}</b></button>` +
+    REGRAS.filter(r => contagem[r.id]).map(r =>
+      `<button class="chip" data-f="${r.id}" aria-pressed="${filtro===r.id}">
+         ${r.rotulo} <b>${contagem[r.id]}</b></button>`).join('');
+
+  document.getElementById('barra').innerHTML = filtro
+    ? `<button class="acao" data-limpar>Ver todos os ${DADOS.length}</button>
+       <button class="acao" data-copiar>Copiar os nomes desta lista</button>`
+    : `<span class="det">${DADOS.length} cadastros, do que mais precisa de atenção para o que já está pronto.</span>`;
+
+  const vistos = selecionados();
+  document.getElementById('lista').innerHTML = vistos.map(d => {
+    const ps = problemas(d);
+    const limpo = ps.every(r => r.leve);
+    const onde = [d.bairro, d.cidade].filter(Boolean).join(' · ');
+    return `<div class="cartao ${limpo ? 'ok' : ''}">
+      <p class="nome">${esc(d.nome || d.dirigente || 'Sem nome')}</p>
+      <p class="det">${[onde, d.tradicao, d.telefone].filter(Boolean).map(esc).join(' · ') || '—'}</p>
+      <div class="faltas">
+        ${ps.length
+          ? ps.map(r => `<span class="falta ${r.leve ? 'leve' : ''}">${r.rotulo}</span>`).join('')
+          : '<span class="falta boa">completo</span>'}
+      </div>
+      ${ps.length ? `<p class="porque">${ps.map(r => esc(r.porque)).join(' · ')}</p>` : ''}
+    </div>`;
+  }).join('') || '<p class="det">Nenhum cadastro nesta lista.</p>';
+}
+
+function selecionados(){
+  const ordem = (a,b) => gravidade(b) - gravidade(a) ||
+    (a.nome||'').localeCompare(b.nome||'','pt-BR');
+  if (filtro === 'completos') return DADOS.filter(d => problemas(d).every(r => r.leve)).sort(ordem);
+  const r = REGRAS.find(x => x.id === filtro);
+  return (r ? DADOS.filter(r.falta) : [...DADOS]).sort(ordem);
+}
+
+document.addEventListener('click', e => {
+  const chip = e.target.closest('[data-f]');
+  if (chip){ filtro = filtro === chip.dataset.f ? '' : chip.dataset.f; desenhar(); return; }
+  if (e.target.closest('[data-limpar]')){ filtro = ''; desenhar(); return; }
+  if (e.target.closest('[data-copiar]')) copiar();
+});
+
+async function copiar(){
+  const texto = selecionados().map(d => d.nome || d.dirigente).join('\n');
+  if (!texto) return;
+  try { await navigator.clipboard.writeText(texto); nota('Nomes copiados.'); }
+  catch { window.prompt('Copie os nomes:', texto); }
+}
+
+function nota(txt){
+  const el = document.createElement('div');
+  el.id = 'aviso'; el.textContent = txt;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 2800);
+}
+
+fetch('../dados.json', { cache:'no-store' })
+  .then(r => r.ok ? r.json() : Promise.reject(r.status))
+  .then(j => { DADOS = j.registros || []; desenhar(); })
+  .catch(() => {
+    document.getElementById('lista').innerHTML =
+      '<p class="det">Não consegui carregar os cadastros. Abra esta página pelo site publicado.</p>';
+  });
+</script>
+</body>
+</html>
