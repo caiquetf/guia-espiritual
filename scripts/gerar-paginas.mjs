@@ -17,6 +17,21 @@ const PASTA = 'espaco';
 /* Mesmo canal configurado no index.html. Vazio: o aviso não aparece. */
 const CANAL_CORRECAO = 'https://wa.me/5519974118980';
 
+/* Mesmo prazo usado pelo app. */
+const MESES_PARA_AVISO = 12;
+const MESES = ['janeiro','fevereiro','março','abril','maio','junho',
+               'julho','agosto','setembro','outubro','novembro','dezembro'];
+
+/** Ressalva quando o cadastro é antigo. Vazio enquanto for recente. */
+function avisoAntigo(d){
+  const m = /(\d{1,2})\/(\d{1,2})\/(\d{4})/.exec(d.timestamp || '');
+  if (!m) return '';
+  const [,dia,mes,ano] = m;
+  const t = new Date(+ano, +mes-1, +dia).getTime();
+  if (!t || (Date.now() - t) / (1000*60*60*24*30.44) < MESES_PARA_AVISO) return '';
+  return `Informação de ${MESES[+mes-1]} de ${ano}`;
+}
+
 const deaccent = s => (s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 const digitos  = s => (s || '').replace(/\D/g, '');
 
@@ -142,6 +157,8 @@ function pagina(d){
   a.btn{ flex:1; min-width:12rem; text-align:center; text-decoration:none; padding:.75rem 1rem;
          border-radius:11px; border:1px solid var(--linha); color:var(--papel); background:#261c17; font-weight:600 }
   a.zap{ background:linear-gradient(170deg,var(--folha),#4f6b41); border-color:#4f6b41; color:#f2f7ee }
+  .antigo{ margin:0 0 1.4rem; padding:.75rem .95rem; font-size:13.5px; color:#e8c777;
+           background:rgba(214,165,69,.08); border:1px solid rgba(214,165,69,.28); border-radius:11px }
   button.btn{ font:inherit; font-weight:600; cursor:pointer }
   #aviso{ position:fixed; left:50%; bottom:1.2rem; transform:translateX(-50%); background:#241a16;
           border:1px solid var(--linha); color:var(--papel); padding:.65rem 1.1rem; border-radius:12px;
@@ -163,6 +180,8 @@ function pagina(d){
     <button class="btn" type="button" id="compartilhar">Compartilhar</button>
     <a class="btn" href="../../?espaco=${esc(ap)}">Ver no guia completo</a>
   </div>
+
+  ${avisoAntigo(d) ? `<p class="antigo">${esc(avisoAntigo(d))}. Confirme horários e endereço com o espaço antes de comparecer.</p>` : ''}
 
   <dl>
 ${[

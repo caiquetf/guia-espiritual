@@ -282,6 +282,17 @@
     .topo .rubrica{ font-size:9px; letter-spacing:.1em; }
   }
 
+  .meta.antigo{ color:var(--ouro); opacity:.85 }
+  .meta.antigo .ic{ color:var(--ouro) }
+  .tarja-antigo{
+    display:flex; gap:.6rem; align-items:flex-start;
+    margin:.9rem 0 .2rem; padding:.7rem .85rem;
+    font-size:13px; color:#e8c777;
+    background:rgba(214,165,69,.08);
+    border:1px solid rgba(214,165,69,.28); border-radius:11px;
+  }
+  .tarja-antigo .ic{ margin-top:.15rem; flex:none }
+
   .cortar-2{ display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
   [hidden]{ display:none !important; }
   ::selection{ background:rgba(201,113,63,.35); color:#fff; }
@@ -554,6 +565,11 @@ const DADOS_URL = 'dados.json';   // gerado a partir da planilha do Forms
 /* Para onde vão os avisos de informação errada. Vazio: o aviso não aparece.
    Aceita 'mailto:...', 'https://wa.me/55...' ou o link de um formulário. */
 const CANAL_CORRECAO = 'https://wa.me/5519974118980';
+
+/* A partir de quantos meses um cadastro passa a exibir aviso de que pode ter
+   envelhecido. Casa muda de endereço e de horário; o formulário é respondido
+   uma vez só. */
+const MESES_PARA_AVISO = 12;
 let DATA = [];
 let baseGeradoEm = '';            // versão dos dados oficiais em uso
 let state = { q:'', city:'', trads:new Set(), mods:new Set(), view:'grid', ordem:'lugar' };
@@ -988,6 +1004,19 @@ function abrirWhats(id){
 
 const byId = id => DATA.find(d => d.id === id);
 
+const MESES = ['janeiro','fevereiro','março','abril','maio','junho',
+               'julho','agosto','setembro','outubro','novembro','dezembro'];
+
+/** Texto de ressalva quando o cadastro é antigo. Vazio enquanto for recente. */
+function avisoAntigo(d){
+  const t = quando(d);
+  if (!t) return '';
+  const data = new Date(t);
+  const meses = (Date.now() - t) / (1000 * 60 * 60 * 24 * 30.44);
+  if (meses < MESES_PARA_AVISO) return '';
+  return `Informação de ${MESES[data.getMonth()]} de ${data.getFullYear()}`;
+}
+
 /** Converte o carimbo do formulário (dd/mm/aaaa hh:mm:ss) em algo comparável. */
 function quando(d){
   const m = /(\d{1,2})\/(\d{1,2})\/(\d{4})(?:[ ,]+(\d{1,2}):(\d{2})(?::(\d{2}))?)?/.exec(d.timestamp || '');
@@ -1113,6 +1142,7 @@ function cardHTML(d){
     ${local ? `<p class="meta">${ic('i-pino')}<span>${esc(local)}</span></p>` : ''}
     ${d.horarios ? `<p class="meta">${ic('i-relogio')}<span class="cortar-2">${esc(d.horarios)}</span></p>` : ''}
     ${d.servicos ? `<p class="meta">${ic('i-faisca')}<span class="cortar-2">${esc(d.servicos)}</span></p>` : ''}
+    ${avisoAntigo(d) ? `<p class="meta antigo">${ic('i-calendario')}<span>${esc(avisoAntigo(d))} · confirme antes de ir</span></p>` : ''}
 
     <div class="flex-1"></div>
 
@@ -1166,6 +1196,7 @@ function openDetails(id){
     </div>
     <button onclick="closeModal()" class="btn" style="padding:.45rem" aria-label="Fechar">${ic('i-fechar')}</button>`;
 
+  const antigo = avisoAntigo(d);
   const row = (icone, label, value, extra='') => value
     ? `<div class="linha-info">
          ${ic(icone,'ic-lg')}
@@ -1176,7 +1207,8 @@ function openDetails(id){
          </div>
        </div>` : '';
 
-  document.getElementById('modalBody').innerHTML = [
+  document.getElementById('modalBody').innerHTML = (antigo
+    ? `<p class="tarja-antigo">${ic('i-calendario')}<span>${esc(antigo)}. Confirme horários e endereço com o espaço antes de comparecer.</span></p>` : '') + [
     row('i-pino','Localização', [d.bairro, d.cidade && d.cidade + '/SP'].filter(Boolean).join(' — ')),
     row('i-casa','Endereço completo', d.endereco,
         `<a href="${mapsLink(d)}" target="_blank" rel="noopener" class="elo">Abrir no Google Maps →</a>`),

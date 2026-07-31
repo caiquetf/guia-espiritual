@@ -79,6 +79,10 @@ mesclados e duplicatas (mesmo nome + mesmo telefone) são ignoradas.
   e some da tela se ficar vazio.
 - **🔍 Ver detalhes** — modal com os 14 campos, link para o Google Maps e para as redes sociais.
 - **Ordenação** alternável entre por cidade e mais recentes, lendo o carimbo do formulário.
+- **Aviso de cadastro antigo** — passados `MESES_PARA_AVISO` (12) desde a resposta, o
+  cartão, a ficha e a página do espaço passam a exibir "Informação de <mês> de <ano> —
+  confirme antes de ir". Casa muda de endereço e de horário, e o formulário é respondido
+  uma vez só.
 - **Edição e exclusão** pelo modal de detalhes, valendo só no navegador de quem edita.
 - **Instalável**: com o manifesto, o guia ganha ícone na tela inicial e abre sem barra de navegador.
 - **Link direto por espaço** — abrir uma ficha grava `?espaco=` no endereço, e o botão
