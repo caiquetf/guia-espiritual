@@ -35,7 +35,8 @@ node scripts/atualizar-dados.mjs "https://docs.google.com/.../pub?output=csv"
 
 Com a sincronização ligada isso raramente é necessário, então não há botão para o
 recurso — mas ele continua ali: **arraste um arquivo `.csv` para qualquer lugar da
-página** e ele é importado.
+página** e ele é importado. Exportar e baixar modelo foram removidos junto com o menu
+**⋯**; a planilha de respostas já cumpre esse papel.
 
 As colunas são reconhecidas automaticamente pelo texto do cabeçalho — mesmo com variações de acento,
 maiúsculas ou pequenas diferenças de redação. Também são aceitos separadores `,`, `;` e tabulação.
@@ -60,8 +61,6 @@ maiúsculas ou pequenas diferenças de redação. Também são aceitos separador
 Na primeira importação os dados de exemplo são substituídos. Nas seguintes, os registros são
 mesclados e duplicatas (mesmo nome + mesmo telefone) são ignoradas.
 
-O menu **⋯** (celular) traz também **Baixar modelo de planilha** e **Exportar cadastros (CSV)**.
-
 ## Funcionalidades
 
 - **Busca global** por nome, dirigente, bairro, cidade, serviços, horários e regras (vários termos, sem acento).
@@ -71,7 +70,9 @@ O menu **⋯** (celular) traz também **Baixar modelo de planilha** e **Exportar
 - **📋 Copiar ficha completa** — texto formatado para colar na conversa com o cliente.
 - **📤 Enviar para cliente** — abre o WhatsApp já com a ficha no corpo da mensagem.
 - **🔍 Ver detalhes** — modal com os 14 campos, link para o Google Maps e para as redes sociais.
-- **Cadastro manual** (＋ Novo cadastro), edição e exclusão.
+- **Ordenação** alternável entre por cidade e mais recentes, lendo o carimbo do formulário.
+- **Edição e exclusão** pelo modal de detalhes, valendo só no navegador de quem edita.
+- **Instalável**: com o manifesto, o guia ganha ícone na tela inicial e abre sem barra de navegador.
 - **Link direto por espaço** — abrir uma ficha grava `?espaco=` no endereço, e o botão
   **Copiar link** entrega esse endereço pronto. Quem abrir o link cai direto na ficha.
   A ficha do WhatsApp já sai com ele no rodapé.
