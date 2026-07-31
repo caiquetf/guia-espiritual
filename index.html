@@ -146,7 +146,7 @@
   .btn{
     display:inline-flex; align-items:center; justify-content:center; gap:.4rem;
     padding:.5rem .8rem; font:inherit; font-size:13px; font-weight:500;
-    color:var(--papel); cursor:pointer;
+    color:var(--papel); cursor:pointer; text-decoration:none; white-space:nowrap;
     background:var(--tinta-topo);
     border:1px solid var(--linha);
     border-radius:10px;
@@ -403,6 +403,9 @@
     <symbol id="i-lua" viewBox="0 0 24 24">
       <path d="M20 14.4A8.6 8.6 0 0 1 9.6 4 8.6 8.6 0 1 0 20 14.4Z"/>
     </symbol>
+    <symbol id="i-info" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="9.1"/><path d="M12 10.9v5.6"/><path d="M12 7.7v.1"/>
+    </symbol>
   </defs>
 </svg>
 
@@ -415,9 +418,14 @@
       <h1 class="serifa" style="margin:0; font-size:19px; line-height:1.15; color:#fbf3e7">Guia Espiritual</h1>
       <p class="rubrica truncate" style="margin-top:.18rem">Espaços · Terreiros · Oraculistas — Piracicaba e Região</p>
     </div>
-    <button id="btnCompartilharGuia" class="btn" title="Compartilhar o guia">
-      <svg class="ic"><use href="#i-enviar"/></svg><span class="hidden sm:inline">Compartilhar</span>
-    </button>
+    <div class="flex items-center gap-1.5">
+      <a href="sobre/" class="btn" title="Sobre o guia — como entrar, corrigir ou sair">
+        <svg class="ic"><use href="#i-info"/></svg><span class="hidden sm:inline">Sobre</span>
+      </a>
+      <button id="btnCompartilharGuia" class="btn" title="Compartilhar o guia">
+        <svg class="ic"><use href="#i-enviar"/></svg><span class="hidden sm:inline">Compartilhar</span>
+      </button>
+    </div>
   </div>
 
   <div class="max-w-7xl mx-auto px-4 sm:px-6 pb-3 space-y-2.5">
