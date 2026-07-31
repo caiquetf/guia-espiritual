@@ -188,22 +188,72 @@ function toast(txt){
   setTimeout(() => el.remove(), 4200);
 }
 
+/* O arquivo do Apps Script, em cru, para dar select-all e copiar — inclusive no
+   celular. HEAD segue o ramo padrão do repositório, sem precisar citá-lo aqui. */
+const FONTE_GS = 'https://raw.githubusercontent.com/caiquetf/guia-espiritual/HEAD/scripts/verificar.gs';
+
 function instalar(){
   document.getElementById('instrucoes').innerHTML = `
     <div class="aviso-caixa">
-      <p><b>Falta ligar o painel à planilha.</b> Enquanto isso, dá para ver quem tem
-      selo, mas não para acender nenhum com um clique.</p>
+      <p><b>Falta ligar o painel à planilha.</b> Até lá dá para ver quem tem selo,
+      mas não para acender nenhum com um clique. São uns cinco minutos, uma vez só.</p>
+
+      <p class="det"><b>Dá para fazer pelo celular.</b> O caminho abaixo não passa por
+      abrir a planilha no navegador — o link dela é sequestrado pelo aplicativo do
+      Sheets, e lá não existe menu de Apps Script. Já o
+      <code>script.google.com</code> não tem aplicativo, então abre no navegador
+      mesmo. Peça <b>Site para computador</b> no menu do navegador (nos <b>⋮</b> do
+      Chrome, ou no <b>ᴀA</b> do Safari) e o editor aparece.</p>
+
+      <h2>1. Copiar o link da planilha</h2>
       <ol>
-        <li>Na planilha de respostas: <b>Extensões → Apps Script</b>. Apague o que
-          estiver lá e cole o conteúdo de <code>scripts/verificar.gs</code>.</li>
-        <li><b>Implantar → Nova implantação → App da Web</b>, com
-          <b>Executar como: eu</b> e <b>Quem tem acesso: somente eu</b>. Copie a URL
-          que termina em <code>/exec</code>.</li>
-        <li>No repositório: <b>Settings → Secrets and variables → Actions →
-          Variables</b>, crie <code>VERIFICAR_URL</code> com essa URL.</li>
+        <li>No aplicativo do Google Sheets, abra a <b>planilha de respostas</b>.</li>
+        <li>Toque nos <b>⋮</b> → <b>Compartilhar e exportar</b> → <b>Copiar link</b>.</li>
       </ol>
-      <p class="det">"Somente eu" é o que torna o painel seu: quem não estiver logado
-      na sua conta Google cai na tela de login e não grava nada.</p>
+
+      <h2>2. Criar o script</h2>
+      <ol>
+        <li>Abra <a href="https://script.google.com/home/projects/create" target="_blank"
+          rel="noopener">script.google.com</a> e crie um <b>projeto novo</b>.</li>
+        <li>Apague tudo o que estiver no editor e cole no lugar
+          <a href="${FONTE_GS}" target="_blank" rel="noopener">este arquivo</a>
+          (abra, selecione tudo, copie).</li>
+        <li>Lá no comecinho tem a linha <code>var PLANILHA = '';</code>. Cole o link
+          da planilha entre as aspas.</li>
+        <li>Salve no disquete 💾.</li>
+      </ol>
+
+      <h2>3. Publicar</h2>
+      <ol>
+        <li>Canto superior direito: <b>Implantar → Nova implantação</b>.</li>
+        <li>Na engrenagem <b>⚙</b> ao lado de "Selecione o tipo", escolha
+          <b>App da Web</b>.</li>
+        <li>Preencha <b>Executar como: Eu</b> e
+          <b>Quem pode acessar: Somente eu</b> — é esta linha que torna o painel seu.</li>
+        <li>Clique em <b>Implantar</b>.</li>
+      </ol>
+
+      <p><b>Vai aparecer um susto, e é normal:</b> a tela
+      <i>"O Google não verificou este app"</i>. Ela aparece porque o script é seu e não
+      passou pela loja do Google — "não seguro" ali quer dizer "não revisado", não
+      "perigoso". O caminho é <b>Avançado</b> →
+      <b>Acessar (não seguro)</b> → <b>Permitir</b>.</p>
+
+      <p>No fim aparece a <b>URL do app da Web</b>, terminando em <code>/exec</code>.
+      Copie.</p>
+
+      <h2>4. Contar ao site</h2>
+      <ol>
+        <li>No repositório: <b>Settings → Secrets and variables → Actions → aba
+          Variables → New repository variable</b>. É a mesma tela das outras duas.</li>
+        <li>Nome <code>VERIFICAR_URL</code>, valor a URL <code>/exec</code>.</li>
+        <li>Para valer na hora: <b>Actions → Sincronizar planilha do formulário →
+          Run workflow</b>.</li>
+      </ol>
+
+      <p class="det">Depois disso esta caixa some e cada cadastro ganha o botão
+      Confirmar. Quem não estiver logado na sua conta Google cai na tela de login e
+      não grava nada.</p>
     </div>`;
 }
 

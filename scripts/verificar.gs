@@ -7,15 +7,19 @@
  * a sua conta Google, autenticada pelo próprio Google.
  *
  * ── Como instalar ────────────────────────────────────────────────────────────
- *  1. Abra a planilha de respostas do formulário.
- *  2. Extensões → Apps Script. Apague o que estiver lá e cole este arquivo.
- *  3. Salve (💾).
- *  4. Implantar → Nova implantação → engrenagem ⚙ → App da Web.
+ *  1. Abra script.google.com e crie um projeto novo. (Pelo celular funciona:
+ *     ao contrário do link da planilha, esse endereço não é sequestrado por
+ *     nenhum aplicativo. Peça "site para computador" no menu do navegador.)
+ *  2. Apague o que estiver no editor e cole este arquivo.
+ *  3. Preencha PLANILHA logo abaixo com o link da planilha de respostas.
+ *     No app do Sheets: ⋮ → Compartilhar e exportar → Copiar link.
+ *  4. Salve (💾).
+ *  5. Implantar → Nova implantação → engrenagem ⚙ → App da Web.
  *       Executar como:      Eu (seu e-mail)
  *       Quem tem acesso:    Somente eu
  *     Implantar → autorize quando o Google pedir → copie a URL gerada
  *     (termina em /exec).
- *  5. No repositório: Settings → Secrets and variables → Actions → Variables →
+ *  6. No repositório: Settings → Secrets and variables → Actions → Variables →
  *     New repository variable, com nome VERIFICAR_URL e essa URL como valor.
  *
  * "Somente eu" é o que faz o painel ser seu: qualquer outra pessoa que clicar
@@ -24,6 +28,15 @@
  * Se você mudar este arquivo depois, precisa criar uma NOVA implantação (ou
  * editar a existente e subir a versão) para a mudança valer.
  */
+
+/**
+ * Link da planilha de respostas — ou só o código dela, entre /d/ e /edit.
+ *
+ * Deixar vazio só funciona quando o script foi criado por dentro da planilha
+ * (Extensões → Apps Script). Como pelo celular esse caminho não abre, o normal
+ * aqui é colar o link.
+ */
+var PLANILHA = '';
 
 /** Nome da coluna que o guia lê. Criada automaticamente se ainda não existir. */
 var COLUNA = 'Verificado';
@@ -37,7 +50,11 @@ function doGet(e) {
 
     if (!alvoTel && !alvoNome) return resposta('erro', 'Faltou dizer qual cadastro.');
 
-    var aba = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
+    var planilha = abrirPlanilha();
+    if (!planilha) {
+      return resposta('erro', 'Preencha PLANILHA no topo do script com o link da planilha de respostas.');
+    }
+    var aba = planilha.getSheets()[0];
     var dados = aba.getDataRange().getValues();
     if (dados.length < 2) return resposta('erro', 'A planilha não tem respostas.');
 
@@ -75,6 +92,19 @@ function doGet(e) {
   } catch (err) {
     return resposta('erro', String(err));
   }
+}
+
+/**
+ * Abre a planilha pelo link colado em PLANILHA. Sem link, tenta a planilha que
+ * hospeda o script — o que só existe quando ele foi criado por dentro dela.
+ */
+function abrirPlanilha() {
+  var v = String(PLANILHA || '').trim();
+  if (v) {
+    var m = /\/d\/([a-zA-Z0-9_-]+)/.exec(v);   // aceita o link inteiro ou só o código
+    return SpreadsheetApp.openById(m ? m[1] : v);
+  }
+  return SpreadsheetApp.getActiveSpreadsheet();
 }
 
 function soDigitos(v) { return String(v == null ? '' : v).replace(/\D/g, ''); }

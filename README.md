@@ -135,9 +135,16 @@ login e não grava nada. Não existe token nem senha guardada em página públic
 que o painel abre não carrega segredo nenhum, só o nome e o telefone do cadastro.
 
 A instalação está comentada no topo de `scripts/verificar.gs`, e o próprio painel mostra
-o passo a passo enquanto a variável `VERIFICAR_URL` não existir. Resumindo: colar o
-arquivo em **Extensões → Apps Script**, implantar como App da Web com acesso "somente
-eu", e criar a variável `VERIFICAR_URL` com a URL `/exec` gerada.
+o passo a passo enquanto a variável `VERIFICAR_URL` não existir. Resumindo: criar um
+projeto em **script.google.com**, colar o arquivo, pôr o link da planilha na constante
+`PLANILHA`, implantar como App da Web com acesso "somente eu", e criar a variável
+`VERIFICAR_URL` com a URL `/exec` gerada.
+
+O script é **solto**, não preso à planilha, justamente para caber num celular: o link de
+uma planilha é sequestrado pelo aplicativo do Sheets, onde não existe menu de Apps
+Script, mas o `script.google.com` não tem aplicativo e abre no navegador. Quem instalar
+por um computador pode continuar usando **Extensões → Apps Script**; nesse caso é só
+deixar `PLANILHA` vazia, que o script usa a planilha que o hospeda.
 
 O painel não finge que o selo já saiu: o cadastro clicado fica marcado como *aguardando
 a sincronização* até a planilha voltar confirmando. Se a planilha contradisser o clique,
