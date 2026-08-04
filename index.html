@@ -480,7 +480,7 @@
       Terreiros, casas de axé, oraculistas e terapeutas de Piracicaba e região entram
       de graça. Você escolhe o que aparece — e pode pedir para sair quando quiser.
     </p>
-    <a id="linkCadastro" class="btn btn-brasa" target="_blank" rel="noopener"
+    <a id="linkCadastro" class="btn btn-brasa" href="cadastrar/"
        style="margin-top:1.3rem; display:inline-flex">Cadastrar meu espaço</a>
   </section>
 </main>
@@ -496,7 +496,7 @@
     <a href="sobre/" style="color:var(--brasa-viva)">Sobre o guia</a> — como um espaço entra,
     como corrigir uma informação e como pedir para sair.
     <span id="cadastroRodape" hidden> ·
-      <a href="#" target="_blank" rel="noopener" style="color:var(--brasa-viva)">Cadastrar meu espaço</a>
+      <a href="cadastrar/" style="color:var(--brasa-viva)">Cadastrar meu espaço</a>
     </span>
   </p>
 </footer>
@@ -678,7 +678,6 @@ async function carregarDados(){
       save();
     }
     marcarAtualizacao(oficial.geradoEm);
-    mostrarCadastro(oficial.formulario);
   } else if (local && local.registros.length){
     baseGeradoEm = local.baseGeradoEm || '';
     DATA = local.registros.map(normalize);
@@ -686,28 +685,21 @@ async function carregarDados(){
     DATA = SAMPLE.map(normalize);
     marcarAtualizacao(null, true);
   }
+  mostrarCadastro();
   render();
   abrirEspacoDoEndereco();
 }
 
 /**
- * Acende o convite ao cadastro. O link vem de `formulario`, no dados.json, que
- * por sua vez vem da variável FORMULARIO_URL do repositório — um lugar só para
- * configurar. Sem link, nada é desenhado: melhor ausência do que botão morto.
- *
- * Confere o esquema antes de usar: o valor vira href, e um `javascript:` vindo
- * de configuração executaria na página de quem clica.
+ * Acende o convite ao cadastro. O formulário é do próprio guia, em /cadastrar/,
+ * então não há nada a configurar e nada que possa faltar — o convite aparece
+ * sempre, e é o QR do cartaz que aponta para o mesmo lugar.
  */
-function mostrarCadastro(url){
-  const link = (url || '').trim();
-  if (!/^https?:\/\//i.test(link)) return;
-
+function mostrarCadastro(){
   const secao = document.getElementById('convite');
-  const botao = document.getElementById('linkCadastro');
-  if (secao && botao){ botao.href = link; secao.hidden = false; }
-
+  if (secao) secao.hidden = false;
   const rodape = document.getElementById('cadastroRodape');
-  if (rodape){ rodape.querySelector('a').href = link; rodape.hidden = false; }
+  if (rodape) rodape.hidden = false;
 }
 
 /** Se o endereço aponta para um espaço, abre a ficha dele de cara. */

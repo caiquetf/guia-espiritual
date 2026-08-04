@@ -220,7 +220,7 @@ ${[
     <p>Cadastro do <a href="../../">Guia Espiritual — Piracicaba e Região</a>.<br>
     Confirme horários, regras e valores diretamente com o espaço antes de comparecer.</p>
     ${linkCorrecao(d, url) ? `<p>Informação errada, ou quer sair do guia? <a href="${esc(linkCorrecao(d, url))}" rel="nofollow noopener">Fale com a gente</a>.</p>` : ''}
-    <p><a href="../../sobre/">Sobre o guia</a>${FORMULARIO ? ` · <a href="${esc(FORMULARIO)}" target="_blank" rel="noopener">Cadastrar meu espaço</a>` : ''}</p>
+    <p><a href="../../sobre/">Sobre o guia</a> · <a href="../../cadastrar/">Cadastrar meu espaço</a></p>
   </footer>
 </main>
 
@@ -255,10 +255,7 @@ if (!existsSync('dados.json')){
   console.log('Sem dados.json — nada a gerar.');
   process.exit(0);
 }
-const { registros = [], geradoEm, formulario = '' } = JSON.parse(readFileSync('dados.json', 'utf8'));
-
-// Só http(s): o valor vem de configuração e é escrito direto num href.
-const FORMULARIO = /^https?:\/\//i.test(formulario.trim()) ? formulario.trim() : '';
+const { registros = [], geradoEm } = JSON.parse(readFileSync('dados.json', 'utf8'));
 
 // Recria a pasta do zero para que espaços removidos da planilha sumam do site.
 rmSync(PASTA, { recursive: true, force: true });
@@ -274,45 +271,6 @@ for (const d of registros){
   mkdirSync(join(PASTA, ap), { recursive: true });
   writeFileSync(join(PASTA, ap, 'index.html'), pagina(d), 'utf8');
   urls.push(`${SITE}/${PASTA}/${ap}/`);
-}
-
-/**
- * Atalho /cadastrar/ para o formulário.
- *
- * Existe por causa do QR Code: a URL do Google Forms tem 90 e poucos caracteres,
- * o que engorda o desenho a ponto de exigir um cartaz grande para o celular ler.
- * Este endereço cabe num QR pequeno, é curto o bastante para ser digitado à mão,
- * e sobrevive à troca do link do formulário.
- */
-if (FORMULARIO){
-  mkdirSync('cadastrar', { recursive: true });
-  writeFileSync(join('cadastrar', 'index.html'),
-`<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="robots" content="noindex" />
-<title>Cadastrar meu espaço — Guia Espiritual</title>
-<meta http-equiv="refresh" content="0; url=${esc(FORMULARIO)}" />
-<link rel="canonical" href="${esc(FORMULARIO)}" />
-${marcacaoContador}<style>
-  body{ margin:0; display:flex; align-items:center; justify-content:center; min-height:100vh;
-        background:#150f0c; color:#f3e7d6; text-align:center; padding:2rem;
-        font:15px/1.6 Inter,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif }
-  a{ color:#e08a53 }
-</style>
-</head>
-<body>
-  <div>
-    <p>Abrindo o formulário de cadastro…</p>
-    <p><a href="${esc(FORMULARIO)}">Se não abrir sozinho, toque aqui.</a></p>
-  </div>
-</body>
-</html>
-`, 'utf8');
-} else {
-  rmSync('cadastrar', { recursive: true, force: true });
 }
 
 const data = (geradoEm || new Date().toISOString()).slice(0, 10);

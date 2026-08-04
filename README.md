@@ -168,7 +168,38 @@ manutenção: o logo fica sobre um painel claro porque o letreiro dele é grafit
 sumiria no fundo do site; e o endereço aparece em três lugares da página — o texto e os
 dois links de rota —, então mudar um exige mudar os três.
 
-## Link do formulário de cadastro
+## Cadastro pelo próprio site
+
+O formulário vive em `cadastrar/`, com a cara do guia. Ele não passa pelo Google Forms:
+envia direto para um Apps Script (`scripts/cadastro.gs`) que grava uma linha na planilha
+de respostas. A sincronização horária não sabe a diferença — para ela é só mais uma
+resposta.
+
+São **duas implantações do Apps Script**, e a diferença entre elas é o ponto todo:
+
+| arquivo | quem pode acessar | para quê |
+|---|---|---|
+| `scripts/verificar.gs` | **somente eu** | acender o selo — só a dona da planilha |
+| `scripts/cadastro.gs` | **qualquer pessoa** | receber cadastro — quem envia é o visitante |
+
+Cole a URL `/exec` da segunda em `API_CADASTRO`, no topo do script de
+`cadastrar/index.html`. Enquanto ela estiver vazia, o formulário nem aparece: a página
+oferece o formulário antigo do Google (se `formulario` ainda estiver no `dados.json`) e
+o WhatsApp. Ninguém deve encontrar uma porta que não abre.
+
+O script recusa o que não deve entrar: sem autorização de divulgação, sem nome, telefone
+sem DDD, espaço já cadastrado, ou enxurrada acima de `LIMITE_POR_MINUTO`. Tem também um
+campo-armadilha invisível — se vier preenchido, a resposta é "ok" e nada é gravado, para
+o robô não descobrir que caiu.
+
+**Coluna que falta é criada, não descartada.** Se a planilha não tiver uma coluna para
+bairro, por exemplo, ela é acrescentada à direita em vez de o dado se perder.
+
+O site não consegue ler a resposta do Google quando a rede falha. Nesse caso a página
+**não diz que recebeu**: mostra o erro e oferece mandar tudo por WhatsApp, com os dados
+já preenchidos na mensagem.
+
+## Link do formulário antigo (rede de segurança)
 
 Sem ele o guia só pode ser lido: não há como alguém se cadastrar pelo site.
 

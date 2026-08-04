@@ -3,22 +3,312 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="robots" content="noindex" />
 <title>Cadastrar meu espaço — Guia Espiritual</title>
-<meta http-equiv="refresh" content="0; url=https://docs.google.com/forms/d/e/1FAIpQLSdha6CPyRtEe_2-ZSJM5NsMNOnXead1ZhU49ZoX3h0ZbIWifg/viewform?usp=header" />
-<link rel="canonical" href="https://docs.google.com/forms/d/e/1FAIpQLSdha6CPyRtEe_2-ZSJM5NsMNOnXead1ZhU49ZoX3h0ZbIWifg/viewform?usp=header" />
-<script data-goatcounter="https://caiquetf.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<meta name="description" content="Cadastre gratuitamente seu terreiro, casa de axé, atendimento oracular ou terapia no Guia Espiritual de Piracicaba e Região. Você escolhe o que aparece e pode pedir para sair quando quiser." />
+<link rel="canonical" href="https://caiquetf.github.io/guia-espiritual/cadastrar/" />
+<link rel="icon" type="image/png" href="../favicon.png" />
+<meta name="theme-color" content="#150f0c" />
+
+<meta property="og:type"        content="website" />
+<meta property="og:site_name"   content="Guia Espiritual" />
+<meta property="og:locale"      content="pt_BR" />
+<meta property="og:url"         content="https://caiquetf.github.io/guia-espiritual/cadastrar/" />
+<meta property="og:title"       content="Cadastrar meu espaço — Guia Espiritual" />
+<meta property="og:description" content="Gratuito. Você escolhe o que aparece e pode pedir para sair quando quiser." />
+<meta property="og:image"       content="https://caiquetf.github.io/guia-espiritual/social.jpg" />
+<meta name="twitter:card"       content="summary_large_image" />
+
 <style>
-  body{ margin:0; display:flex; align-items:center; justify-content:center; min-height:100vh;
-        background:#150f0c; color:#f3e7d6; text-align:center; padding:2rem;
-        font:15px/1.6 Inter,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif }
-  a{ color:#e08a53 }
+  :root{ --tinta:#150f0c; --alta:#1e1613; --topo:#261c17; --linha:#3a2a21; --linha-viva:#5a4032;
+         --papel:#f3e7d6; --meio:#c4ac92; --baixo:#9f8771; --brasa:#c9713f; --brasa-viva:#e08a53;
+         --folha:#6f8f5f; --ouro:#d6a545; }
+  *{ box-sizing:border-box }
+  body{ margin:0; padding:2.2rem 1rem 3.5rem; background:var(--tinta); color:var(--papel);
+        font:15.5px/1.6 Inter,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+        background-image:radial-gradient(52rem 26rem at 50% -6%, rgba(201,113,63,.13), transparent 62%); }
+  main{ max-width:36rem; margin:0 auto }
+  .marca{ display:block; width:66px; height:auto; margin:0 auto 1.4rem }
+  h1{ font:600 26px/1.22 'Iowan Old Style',Palatino,Georgia,serif; margin:0 0 .4rem; text-align:center }
+  .sub{ text-align:center; color:var(--meio); margin:0 0 .4rem; font-size:14.5px }
+  .ornamento{ display:flex; align-items:center; gap:.6rem; color:var(--linha-viva);
+              max-width:12rem; margin:1.4rem auto 1.8rem }
+  .ornamento::before,.ornamento::after{ content:''; height:1px; flex:1;
+              background:linear-gradient(90deg,transparent,currentColor,transparent) }
+  .ornamento i{ width:5px; height:5px; transform:rotate(45deg); border:1px solid currentColor; display:block }
+
+  label{ display:block; margin:1.15rem 0 0 }
+  .rot{ display:block; font-size:11px; font-weight:600; letter-spacing:.12em;
+        text-transform:uppercase; color:var(--baixo); margin-bottom:.35rem }
+  .rot .obg{ color:var(--brasa) }
+  .dica{ display:block; color:var(--baixo); font-size:12.5px; margin-top:.3rem }
+  input[type=text], input[type=tel], input[type=email], textarea, select{
+    width:100%; font:inherit; font-size:15.5px; color:var(--papel); background:var(--alta);
+    border:1px solid var(--linha); border-radius:11px; padding:.7rem .85rem; }
+  textarea{ min-height:4.6rem; resize:vertical }
+  input:focus, textarea:focus, select:focus{ outline:none; border-color:var(--brasa) }
+  .armadilha{ position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden }
+
+  .autorizo{ display:flex; gap:.75rem; align-items:flex-start; background:var(--alta);
+             border:1px solid var(--linha); border-radius:13px; padding:1rem 1.1rem; margin:1.8rem 0 0 }
+  .autorizo input{ width:1.15rem; height:1.15rem; margin:.2rem 0 0; flex:none; accent-color:var(--folha) }
+  .autorizo span{ font-size:14.5px }
+
+  button{ width:100%; font:inherit; font-size:15.5px; font-weight:600; cursor:pointer;
+          margin-top:1.5rem; padding:.85rem 1rem; border-radius:12px; color:#fff7ef;
+          border:1px solid #a4562c; background:linear-gradient(170deg,var(--brasa),#a4562c) }
+  button:hover{ background:linear-gradient(170deg,var(--brasa-viva),#b36031) }
+  button:disabled{ opacity:.55; cursor:progress }
+
+  .recado{ border-radius:13px; padding:1rem 1.15rem; margin:1.4rem 0 0; font-size:14.5px }
+  .recado.erro{ background:rgba(201,113,63,.1); border:1px solid rgba(201,113,63,.4); color:#eaa87e }
+  .recado.aviso{ background:rgba(214,165,69,.08); border:1px solid rgba(214,165,69,.3); color:#e8c777 }
+  .fim{ text-align:center; padding:1rem 0 }
+  .fim .selo{ font-size:44px; line-height:1; color:var(--folha) }
+  .fim h2{ font:600 22px/1.3 'Iowan Old Style',Palatino,Georgia,serif; margin:.9rem 0 .5rem }
+  .fim p{ color:var(--meio); margin:0 0 .8rem }
+  .btn{ display:inline-block; text-decoration:none; padding:.7rem 1.2rem; border-radius:11px;
+        border:1px solid var(--linha); background:var(--topo); color:var(--papel);
+        font-weight:600; font-size:14.5px; margin:.3rem }
+  .btn:hover{ background:#31241d; border-color:var(--linha-viva) }
+  footer{ margin-top:2.6rem; padding-top:1.2rem; border-top:1px solid var(--linha);
+          text-align:center; color:var(--baixo); font-size:12.5px }
+  footer a{ color:var(--brasa) }
 </style>
 </head>
 <body>
-  <div>
-    <p>Abrindo o formulário de cadastro…</p>
-    <p><a href="https://docs.google.com/forms/d/e/1FAIpQLSdha6CPyRtEe_2-ZSJM5NsMNOnXead1ZhU49ZoX3h0ZbIWifg/viewform?usp=header">Se não abrir sozinho, toque aqui.</a></p>
-  </div>
+<main>
+  <a href="../"><img class="marca" src="../marca.webp" width="256" height="256" alt="Guia Espiritual" /></a>
+  <h1>Cadastrar meu espaço</h1>
+  <p class="sub">Gratuito. Você escolhe o que aparece — e pode pedir para sair quando quiser.</p>
+  <p class="sub">Só o nome, a vertente, a cidade e o telefone são obrigatórios.</p>
+  <div class="ornamento"><i></i></div>
+
+  <div id="recado"></div>
+
+  <form id="form" novalidate>
+    <label>
+      <span class="rot">Nome do espaço <span class="obg">*</span></span>
+      <input type="text" name="nome" maxlength="120" autocomplete="organization" />
+      <span class="dica">Do terreiro, da casa, ou o seu nome de atendimento.</span>
+    </label>
+
+    <label>
+      <span class="rot">Nome do dirigente ou responsável</span>
+      <input type="text" name="dirigente" maxlength="120" autocomplete="name" />
+    </label>
+
+    <label>
+      <span class="rot">Vertente espiritual <span class="obg">*</span></span>
+      <input type="text" name="tradicao" maxlength="120" />
+      <span class="dica">Escreva com as suas palavras — Umbanda, Candomblé, Tarô, terapias, o que for.</span>
+    </label>
+
+    <label>
+      <span class="rot">Cidade <span class="obg">*</span></span>
+      <input type="text" name="cidade" maxlength="80" autocomplete="address-level2" />
+    </label>
+
+    <label>
+      <span class="rot">Bairro</span>
+      <input type="text" name="bairro" maxlength="80" />
+    </label>
+
+    <label>
+      <span class="rot">Endereço completo</span>
+      <input type="text" name="endereco" maxlength="200" autocomplete="street-address" />
+      <span class="dica">Deixe em branco se preferir não divulgar — nada é preenchido por dedução.</span>
+    </label>
+
+    <label>
+      <span class="rot">Como são os atendimentos</span>
+      <select name="modalidade">
+        <option value="">Prefiro não dizer</option>
+        <option value="Presencial">Presencial</option>
+        <option value="Online">Online</option>
+        <option value="Ambas">Presencial e online</option>
+      </select>
+    </label>
+
+    <label>
+      <span class="rot">Telefone ou WhatsApp <span class="obg">*</span></span>
+      <input type="tel" name="telefone" maxlength="30" autocomplete="tel" />
+      <span class="dica">Com DDD. É por ele que as pessoas entram em contato.</span>
+    </label>
+
+    <label>
+      <span class="rot">Redes sociais ou site</span>
+      <input type="text" name="redes" maxlength="200" />
+    </label>
+
+    <label>
+      <span class="rot">Dias e horários</span>
+      <textarea name="horarios" maxlength="500"></textarea>
+      <span class="dica">Das giras, trabalhos ou consultas.</span>
+    </label>
+
+    <label>
+      <span class="rot">Serviços e trabalhos oferecidos</span>
+      <textarea name="servicos" maxlength="500"></textarea>
+    </label>
+
+    <label>
+      <span class="rot">Orientações para quem visita</span>
+      <textarea name="regras" maxlength="500"></textarea>
+      <span class="dica">Traje, colaboração, agendamento — o que a pessoa precisa saber antes de ir.</span>
+    </label>
+
+    <label>
+      <span class="rot">Há quanto tempo funciona</span>
+      <input type="text" name="tempo" maxlength="80" />
+    </label>
+
+    <label>
+      <span class="rot">Seu e-mail</span>
+      <input type="email" name="email" maxlength="120" autocomplete="email" />
+      <span class="dica">Não aparece no guia. Serve só para a gente te achar se precisar.</span>
+    </label>
+
+    <!-- Campo-armadilha: invisível para gente, tentador para robô. -->
+    <div class="armadilha" aria-hidden="true">
+      <label>Não preencha este campo
+        <input type="text" name="website" tabindex="-1" autocomplete="off" />
+      </label>
+    </div>
+
+    <label class="autorizo">
+      <input type="checkbox" name="autorizacao" />
+      <span><strong>Autorizo a divulgação</strong> destas informações no Guia Espiritual, e
+        declaro que sou responsável pelo espaço ou tenho autorização para cadastrá-lo.
+        Sei que posso pedir correção ou remoção a qualquer momento.</span>
+    </label>
+
+    <button type="submit" id="enviar">Enviar cadastro</button>
+  </form>
+
+  <footer>
+    <p>O que você escrever aparece com as suas palavras. Campo em branco não aparece.
+      <br><a href="../sobre/">Como o guia funciona</a> · <a href="../">Ver o guia</a></p>
+  </footer>
+</main>
+
+<script>
+/**
+ * Endereço do Apps Script que grava na planilha — veja scripts/cadastro.gs.
+ * Vazio: o formulário nem é mostrado, e a página oferece o WhatsApp no lugar.
+ * Ninguém deve encontrar uma porta que não abre.
+ */
+const API_CADASTRO = '';
+
+/* Canal de sempre, usado como saída quando o envio falha. */
+const CANAL = 'https://wa.me/5519974118980';
+
+/* Mesmo contador do resto do site. */
+const CONTADOR = 'caiquetf';
+if (CONTADOR && /^[a-z0-9-]+$/i.test(CONTADOR)){
+  const s = document.createElement('script');
+  s.async = true; s.src = 'https://gc.zgo.at/count.js';
+  s.dataset.goatcounter = `https://${CONTADOR}.goatcounter.com/count`;
+  document.head.appendChild(s);
+}
+
+const form = document.getElementById('form');
+const recado = document.getElementById('recado');
+const botao = document.getElementById('enviar');
+
+const esc = s => (s ?? '').toString()
+  .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+function aviso(texto, tipo){
+  recado.innerHTML = `<div class="recado ${tipo || 'erro'}">${texto}</div>`;
+  recado.scrollIntoView({ behavior:'smooth', block:'center' });
+}
+
+/** Monta a mensagem de WhatsApp com o que já foi digitado — a saída de emergência. */
+function linkWhats(dados){
+  const rotulos = { nome:'Nome', dirigente:'Dirigente', tradicao:'Vertente', cidade:'Cidade',
+    bairro:'Bairro', endereco:'Endereço', modalidade:'Atendimento', telefone:'Telefone',
+    redes:'Redes', horarios:'Dias e horários', servicos:'Serviços', regras:'Orientações',
+    tempo:'Tempo de funcionamento', email:'E-mail' };
+  const linhas = ['Olá! Quero cadastrar meu espaço no Guia Espiritual:', ''];
+  for (const k in rotulos) if (dados[k]) linhas.push(`${rotulos[k]}: ${dados[k]}`);
+  return `${CANAL}?text=${encodeURIComponent(linhas.join('\n'))}`;
+}
+
+/**
+ * Enquanto o Apps Script não estiver publicado, ninguém pode ficar sem porta.
+ * A página cai no formulário antigo do Google, se ele ainda estiver configurado,
+ * e no WhatsApp em último caso.
+ */
+if (!/^https:\/\/script\.google\.com\//.test(API_CADASTRO)){
+  form.hidden = true;
+  const zap = `<a class="btn" href="${CANAL}?text=${encodeURIComponent('Olá! Quero cadastrar meu espaço no Guia Espiritual.')}" rel="nofollow noopener">Cadastrar pelo WhatsApp</a>`;
+  aviso(`O cadastro pelo site está sendo preparado.<br><br>${zap}`, 'aviso');
+
+  fetch('../dados.json', { cache:'no-store' })
+    .then(r => r.ok ? r.json() : null)
+    .then(j => {
+      const antigo = (j && j.formulario || '').trim();
+      if (!/^https?:\/\//i.test(antigo)) return;
+      aviso(`O cadastro pelo site está sendo preparado. Por enquanto, use o formulário
+        de sempre.<br><br>
+        <a class="btn" href="${esc(antigo)}" target="_blank" rel="noopener">Abrir o formulário</a>
+        ${zap}`, 'aviso');
+    })
+    .catch(() => { /* sem rede: fica só o WhatsApp, que já está na tela */ });
+}
+
+form.addEventListener('submit', async ev => {
+  ev.preventDefault();
+  const dados = Object.fromEntries(new FormData(form).entries());
+  dados.autorizacao = form.autorizacao.checked;
+
+  // Validar aqui é só gentileza: o script confere tudo de novo do outro lado,
+  // porque qualquer um pode falar com ele sem passar por esta página.
+  if (!dados.nome.trim())      return aviso('Escreva o nome do espaço.');
+  if (!dados.tradicao.trim())  return aviso('Escreva a vertente espiritual.');
+  if (!dados.cidade.trim())    return aviso('Escreva a cidade.');
+  if ((dados.telefone || '').replace(/\D/g,'').length < 10)
+    return aviso('Escreva o telefone com DDD.');
+  if (!dados.autorizacao)
+    return aviso('Para aparecer no guia é preciso autorizar a divulgação.');
+
+  botao.disabled = true; botao.textContent = 'Enviando…';
+  recado.innerHTML = '';
+  try {
+    // text/plain evita a permissão prévia que o Apps Script não sabe responder.
+    const r = await fetch(API_CADASTRO, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(dados)
+    });
+    const resposta = await r.json();
+    if (resposta.ok) return pronto(dados);
+    aviso(esc(resposta.erro) || 'Não consegui gravar o cadastro.');
+  } catch (e){
+    // Sem confirmação não dá para dizer que deu certo. Melhor oferecer a saída
+    // que sempre funciona do que inventar um "recebemos".
+    aviso(`Não consegui enviar agora — pode ser a conexão.
+      <br><br><a class="btn" href="${linkWhats(dados)}" rel="nofollow noopener">Enviar por WhatsApp</a>
+      <br><span style="font-size:13px">Seus dados já vão preenchidos na mensagem.</span>`);
+  } finally {
+    botao.disabled = false; botao.textContent = 'Enviar cadastro';
+  }
+});
+
+function pronto(dados){
+  form.hidden = true;
+  recado.innerHTML = `<div class="fim">
+    <div class="selo">✓</div>
+    <h2>Cadastro recebido</h2>
+    <p><strong>${esc(dados.nome)}</strong> entra no guia na próxima atualização,
+      em até uma hora.</p>
+    <p>Se precisar corrigir alguma coisa, ou preferir não aparecer, é só falar com a
+      gente — sem justificativa e sem burocracia.</p>
+    <a class="btn" href="../">Ver o guia</a>
+    <a class="btn" href="${CANAL}" rel="nofollow noopener">Falar no WhatsApp</a>
+  </div>`;
+  recado.scrollIntoView({ behavior:'smooth', block:'center' });
+}
+</script>
 </body>
 </html>
