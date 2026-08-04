@@ -64,6 +64,13 @@
 const SITE = location.origin + location.pathname.replace(/\/avisos\/?$/, '');
 const CHAVE = 'guia-espiritual-avisados';
 
+/**
+ * Endereço do Apps Script "somente eu" — o mesmo do painel verificar/.
+ * É ele que monta a mensagem, porque a mensagem carrega o link privado do
+ * responsável, e essa chave não pode passar pelo site, que é público.
+ */
+const API_DONO = '';
+
 const deaccent = s => (s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'');
 const digitos  = s => (s||'').replace(/\D/g,'');
 
@@ -147,9 +154,22 @@ function desenhar(){
 
 const acha = ap => DADOS.find(d => apelido(d) === ap);
 
+/**
+ * Abre a janelinha do Apps Script, que devolve a mensagem pronta com o link
+ * privado e um botão para o WhatsApp. Sem ele configurado, cai na mensagem
+ * antiga — que avisa, mas não deixa a pessoa cuidar do próprio cadastro.
+ */
 function avisar(ap){
   const d = acha(ap); if (!d) return;
-  window.open(`https://wa.me/${numeroWhats(d.telefone)}?text=${encodeURIComponent(mensagem(d))}`, '_blank', 'noopener');
+  if (/^https:\/\/script\.google\.com\//.test(API_DONO)){
+    const url = API_DONO + (API_DONO.includes('?') ? '&' : '?')
+      + 'acao=avisar&site=' + encodeURIComponent(SITE)
+      + '&nome=' + encodeURIComponent(d.nome || d.dirigente || '')
+      + '&tel=' + encodeURIComponent(digitos(d.telefone));
+    window.open(url, 'guia-avisar', 'width=460,height=560');
+  } else {
+    window.open(`https://wa.me/${numeroWhats(d.telefone)}?text=${encodeURIComponent(mensagem(d))}`, '_blank', 'noopener');
+  }
   marcar(ap, true);
 }
 

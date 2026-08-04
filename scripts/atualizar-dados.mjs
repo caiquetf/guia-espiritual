@@ -273,17 +273,27 @@ if (!reconhecidas){
 
 // Coluna de consentimento: só publica quem autorizou expressamente a divulgação.
 const idxAutorizacao = linhas[0].findIndex(h => /autoriza|divulgac/.test(norm(h)));
+
+// Quem pediu para sair pela própria página. A linha continua na planilha — a
+// resposta original fica registrada —, mas some do site.
+const idxRemovido = linhas[0].findIndex(h => /^removid/.test(norm(h)));
 if (idxAutorizacao === -1){
   console.log('Aviso: nenhuma coluna de autorização de divulgação encontrada — todos os cadastros serão publicados.');
 }
 
 const registros = [];
 let semAutorizacao = 0;
+let removidos = 0;
 for (let r = 1; r < linhas.length; r++){
   const rec = {};
   FIELDS.forEach(f => rec[f.key] = '');
   linhas[r].forEach((v, i) => { if (map[i]) rec[map[i]] = limpar(v); });
   if (!(rec.nome || rec.dirigente || rec.telefone)) continue;      // linha em branco
+
+  if (idxRemovido !== -1 && /^(sim|s|x|1|true)$/i.test((linhas[r][idxRemovido] || '').trim())){
+    removidos++;
+    continue;
+  }
 
   // Exige o "Autorizo a divulgação…". Cuidado: a outra opção da mesma pergunta diz
   // "possuo autorização para cadastrar", que não é permissão para publicar.
@@ -300,6 +310,9 @@ for (let r = 1; r < linhas.length; r++){
   registros.push(rec);
 }
 
+if (removidos){
+  console.log(`${removidos} cadastro(s) pediram para sair — não publicados.`);
+}
 if (semAutorizacao){
   console.log(`${semAutorizacao} cadastro(s) sem autorização de divulgação — não publicados.`);
 }

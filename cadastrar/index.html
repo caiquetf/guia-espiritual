@@ -193,11 +193,11 @@
 
 <script>
 /**
- * Endereço do Apps Script que grava na planilha — veja scripts/cadastro.gs.
- * Vazio: o formulário nem é mostrado, e a página oferece o WhatsApp no lugar.
- * Ninguém deve encontrar uma porta que não abre.
+ * Endereço do Apps Script que grava na planilha — veja scripts/publico.gs.
+ * É o mesmo usado por /meu/. Vazio: o formulário nem é mostrado, e a página
+ * oferece o WhatsApp no lugar. Ninguém deve encontrar uma porta que não abre.
  */
-const API_CADASTRO = '';
+const API_PUBLICA = '';
 
 /* Canal de sempre, usado como saída quando o envio falha. */
 const CANAL = 'https://wa.me/5519974118980';
@@ -239,7 +239,7 @@ function linkWhats(dados){
  * A página cai no formulário antigo do Google, se ele ainda estiver configurado,
  * e no WhatsApp em último caso.
  */
-if (!/^https:\/\/script\.google\.com\//.test(API_CADASTRO)){
+if (!/^https:\/\/script\.google\.com\//.test(API_PUBLICA)){
   form.hidden = true;
   const zap = `<a class="btn" href="${CANAL}?text=${encodeURIComponent('Olá! Quero cadastrar meu espaço no Guia Espiritual.')}" rel="nofollow noopener">Cadastrar pelo WhatsApp</a>`;
   aviso(`O cadastro pelo site está sendo preparado.<br><br>${zap}`, 'aviso');
@@ -276,10 +276,10 @@ form.addEventListener('submit', async ev => {
   recado.innerHTML = '';
   try {
     // text/plain evita a permissão prévia que o Apps Script não sabe responder.
-    const r = await fetch(API_CADASTRO, {
+    const r = await fetch(API_PUBLICA, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify(dados)
+      body: JSON.stringify({ acao:'cadastrar', ...dados })
     });
     const resposta = await r.json();
     if (resposta.ok) return pronto(dados);

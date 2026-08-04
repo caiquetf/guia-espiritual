@@ -1,13 +1,26 @@
 /**
- * Recebe cadastros feitos no próprio site e grava na planilha de respostas.
+ * Tudo o que o público faz na planilha: cadastrar-se e cuidar do próprio cadastro.
  *
- * É o que substitui o Google Forms: o formulário passa a viver em /cadastrar/,
- * com a cara do guia, e a planilha continua sendo o coração de tudo — a
- * sincronização horária não muda em nada.
+ * Substitui o Google Forms. São quatro ações, todas partindo do site:
+ *
+ *   cadastrar  — grava uma linha nova (formulário em /cadastrar/)
+ *   ler        — devolve UM cadastro, para quem tem a chave dele
+ *   salvar     — corrige esse cadastro
+ *   confirmar  — acende o selo: o responsável disse que os dados estão certos
+ *   remover    — tira do guia, sem apagar a linha
+ *
+ * As quatro últimas exigem a **chave** do espaço: um código secreto, guardado
+ * numa coluna da planilha, que só chega ao responsável pela mensagem que você
+ * envia. Sem chave não se lê nem se altera nada — é o que impede uma pessoa de
+ * mexer no cadastro da outra.
+ *
+ * A chave nunca é publicada: a sincronização só copia as colunas que conhece, e
+ * esta não está entre elas.
  *
  * Este arquivo é irmão do verificar.gs, mas NÃO pode morar na mesma implantação:
  * aquele é publicado como "somente eu", porque só a dona da planilha acende
- * selos; este precisa ser "qualquer pessoa", porque quem envia é o visitante.
+ * selos por conta própria; este precisa ser "qualquer pessoa", porque quem usa
+ * é o visitante.
  *
  * ── Como instalar ────────────────────────────────────────────────────────────
  *  1. script.google.com → Novo projeto (pelo celular, peça "site para
@@ -21,8 +34,11 @@
  *       Quem pode acessar:  QUALQUER PESSOA   ← diferente do outro script
  *  6. Autorize (a tela "o Google não verificou este app" é normal:
  *     Avançado → Acessar → Permitir) e copie a URL /exec.
- *  7. Me mande essa URL, ou cole você mesmo em API_CADASTRO, no topo do
- *     script de cadastrar/index.html.
+ *  7. Me mande essa URL, ou cole você mesmo em API_PUBLICA — ela vai no topo do
+ *     script de cadastrar/index.html e de meu/index.html.
+ *  8. No editor, escolha a função `gerarChaves` e clique em Executar, uma vez.
+ *     Isso dá chave aos cadastros que já existem. Quem entrar daqui em diante
+ *     ganha a sua no momento do cadastro.
  *
  * "Qualquer pessoa" é o preço de ter cadastro aberto — é o mesmo que o Google
  * Forms fazia. Quem executa continua sendo você: ninguém alcança a planilha,
@@ -37,6 +53,10 @@ var TEXTO_AUTORIZACAO = 'Autorizo a divulgação das informações no Guia Espir
 
 /** Teto de cadastros por minuto, no total. Um humano nunca esbarra nisso. */
 var LIMITE_POR_MINUTO = 8;
+
+/** Colunas de controle, criadas sozinhas. Nenhuma é publicada no site. */
+var COL_CHAVE = 'Chave';
+var COL_REMOVIDO = 'Removido';
 
 /**
  * Campos aceitos e onde cada um cai na planilha.
@@ -68,6 +88,21 @@ function doPost(e) {
   try {
     var corpo = {};
     try { corpo = JSON.parse(e.postData.contents); } catch (err) { return json({ ok:false, erro:'Não entendi o envio.' }); }
+
+    switch (corpo.acao) {
+      case 'ler':       return lerCadastro(corpo);
+      case 'salvar':    return salvarCadastro(corpo);
+      case 'confirmar': return confirmarCadastro(corpo);
+      case 'remover':   return removerCadastro(corpo);
+    }
+    return cadastrar(corpo);
+  } catch (err) {
+    return json({ ok:false, erro: 'Erro no servidor: ' + err });
+  }
+}
+
+function cadastrar(corpo) {
+  try {
 
     // Campo-armadilha: fica escondido no formulário, então só robô preenche.
     // Responde "ok" de propósito — quem está automatizando não descobre que caiu.
@@ -114,6 +149,11 @@ function doPost(e) {
         linha[col] = valor;
       }
 
+      // A chave nasce junto com a linha: é o que permitirá ao responsável
+      // cuidar do próprio cadastro depois.
+      var chave = novaChave();
+      linha[colunaControle(aba, cabecalho, COL_CHAVE)] = chave;
+
       aba.appendRow(linha);
       return json({ ok:true, nome: nome || dirigente });
     } finally {
@@ -127,6 +167,156 @@ function doPost(e) {
 /** Só para conferir, pelo navegador, se a implantação está de pé. */
 function doGet() {
   return json({ ok:true, servico:'cadastro do Guia Espiritual', planilha: !!abrirPlanilha() });
+}
+
+/* ══════════ O responsável cuidando do próprio cadastro ══════════ */
+
+/**
+ * Acha a linha pela chave. Toda ação do responsável passa por aqui, e é o
+ * único jeito de chegar a uma linha sem ser dona da planilha.
+ */
+function acharPelaChave(chave) {
+  chave = String(chave || '').trim();
+  if (chave.length < 20) return null;              // chave curta demais nem é procurada
+  var planilha = abrirPlanilha();
+  if (!planilha) return null;
+  var aba = planilha.getSheets()[0];
+  if (aba.getLastRow() < 2) return null;
+
+  var cabecalho = aba.getRange(1, 1, 1, Math.max(aba.getLastColumn(), 1)).getValues()[0];
+  var colChave = acharColuna(cabecalho, COL_CHAVE);
+  if (colChave === -1) return null;
+
+  var valores = aba.getRange(2, 1, aba.getLastRow() - 1, aba.getLastColumn()).getValues();
+  for (var i = 0; i < valores.length; i++) {
+    if (String(valores[i][colChave] || '').trim() === chave) {
+      return { aba: aba, cabecalho: cabecalho, linha: i + 2, valores: valores[i],
+               colunas: mapear(aba, cabecalho) };
+    }
+  }
+  return null;
+}
+
+/** Devolve o cadastro para a página do responsável preencher a tela. */
+function lerCadastro(corpo) {
+  var alvo = acharPelaChave(corpo.chave);
+  if (!alvo) return json({ ok:false, erro:'Este link não vale mais. Peça outro para quem mantém o guia.' });
+
+  var colRem = acharColuna(alvo.cabecalho, COL_REMOVIDO);
+  if (colRem !== -1 && /^sim$/i.test(String(alvo.valores[colRem] || '').trim())) {
+    return json({ ok:false, removido:true, erro:'Este espaço já saiu do guia.' });
+  }
+
+  var dados = {};
+  for (var k in alvo.colunas) {
+    if (k === 'autorizacao') continue;             // não é para editar; já foi dada
+    dados[k] = String(alvo.valores[alvo.colunas[k]] || '');
+  }
+  var colVer = acharColuna(alvo.cabecalho, 'Verificado');
+  dados.confirmado = colVer !== -1 &&
+    /^(sim|s|x|ok|1|true|verdadeiro|confirmado|verificado)$/i.test(String(alvo.valores[colVer] || '').trim());
+  return json({ ok:true, dados: dados });
+}
+
+/**
+ * Grava as correções. Confirmar junto é proposital: quem acabou de rever cada
+ * campo é justamente quem pode dizer que estão certos — é o que o selo promete.
+ */
+function salvarCadastro(corpo) {
+  var alvo = acharPelaChave(corpo.chave);
+  if (!alvo) return json({ ok:false, erro:'Este link não vale mais.' });
+
+  var dados = corpo.dados || {};
+  var tel = String(dados.telefone || '').replace(/\D/g, '');
+  if (!limpar(dados.nome) && !limpar(dados.dirigente)) return json({ ok:false, erro:'O nome não pode ficar vazio.' });
+  if (tel.length < 10) return json({ ok:false, erro:'Informe um telefone com DDD.' });
+
+  var trava = LockService.getScriptLock();
+  if (!trava.tryLock(20000)) return json({ ok:false, erro:'Servidor ocupado. Tente de novo.' });
+  try {
+    for (var k in alvo.colunas) {
+      if (k === 'autorizacao') continue;
+      if (!(k in dados)) continue;
+      alvo.aba.getRange(alvo.linha, alvo.colunas[k] + 1).setValue(limpar(dados[k]));
+    }
+    marcarConfirmado(alvo, 'sim');
+    return json({ ok:true });
+  } finally {
+    trava.releaseLock();
+  }
+}
+
+/** Só acende o selo, sem mexer em mais nada. */
+function confirmarCadastro(corpo) {
+  var alvo = acharPelaChave(corpo.chave);
+  if (!alvo) return json({ ok:false, erro:'Este link não vale mais.' });
+  marcarConfirmado(alvo, 'sim');
+  return json({ ok:true });
+}
+
+/**
+ * Tira do guia sem apagar a linha: a resposta original continua registrada,
+ * inclusive a autorização que um dia foi dada, mas a sincronização deixa de
+ * publicá-la. Apagar seria perder a prova de que o cadastro existiu.
+ */
+function removerCadastro(corpo) {
+  var alvo = acharPelaChave(corpo.chave);
+  if (!alvo) return json({ ok:false, erro:'Este link não vale mais.' });
+  var col = colunaControle(alvo.aba, alvo.cabecalho, COL_REMOVIDO);
+  alvo.aba.getRange(alvo.linha, col + 1).setValue('sim');
+  marcarConfirmado(alvo, '');
+  return json({ ok:true });
+}
+
+function marcarConfirmado(alvo, valor) {
+  var col = colunaControle(alvo.aba, alvo.cabecalho, 'Verificado');
+  alvo.aba.getRange(alvo.linha, col + 1).setValue(valor);
+}
+
+/* ══════════ Chaves ══════════ */
+
+/**
+ * Dá chave a quem ainda não tem. Rode uma vez, pelo editor, para os cadastros
+ * que já existiam antes desta página — os novos já nascem com a sua.
+ */
+function gerarChaves() {
+  var aba = abrirPlanilha().getSheets()[0];
+  var ultima = aba.getLastRow();
+  if (ultima < 2) return;
+  var cabecalho = aba.getRange(1, 1, 1, Math.max(aba.getLastColumn(), 1)).getValues()[0];
+  var col = colunaControle(aba, cabecalho, COL_CHAVE);
+  var valores = aba.getRange(2, col + 1, ultima - 1, 1).getValues();
+  var novas = 0;
+  for (var i = 0; i < valores.length; i++) {
+    if (String(valores[i][0] || '').trim()) continue;
+    aba.getRange(i + 2, col + 1).setValue(novaChave());
+    novas++;
+  }
+  Logger.log(novas + ' chave(s) gerada(s).');
+}
+
+/** Aleatória e longa o bastante para não se adivinhar por tentativa. */
+function novaChave() {
+  var letras = 'abcdefghijkmnopqrstuvwxyz23456789';   // sem l/1/0/o, que se confundem
+  var s = '';
+  for (var i = 0; i < 28; i++) s += letras.charAt(Math.floor(Math.random() * letras.length));
+  return s;
+}
+
+/** Coluna de controle: acha, ou cria à direita de tudo. */
+function colunaControle(aba, cabecalho, rotulo) {
+  var i = acharColuna(cabecalho, rotulo);
+  if (i !== -1) return i;
+  i = cabecalho.length;
+  aba.getRange(1, i + 1).setValue(rotulo);
+  cabecalho.push(rotulo);
+  return i;
+}
+
+function acharColuna(cabecalho, rotulo) {
+  var alvo = normalizar(rotulo);
+  for (var i = 0; i < cabecalho.length; i++) if (normalizar(cabecalho[i]) === alvo) return i;
+  return -1;
 }
 
 /* ───────────────────────────────────────────────────────────── */

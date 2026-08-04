@@ -3,5 +3,6 @@ Allow: /
 Disallow: /avisos/
 Disallow: /revisar/
 Disallow: /verificar/
+Disallow: /meu/
 
 Sitemap: https://caiquetf.github.io/guia-espiritual/sitemap.xml

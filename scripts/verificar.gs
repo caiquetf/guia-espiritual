@@ -44,6 +44,11 @@ var COLUNA = 'Verificado';
 function doGet(e) {
   try {
     var p = (e && e.parameter) || {};
+
+    // A ação "avisar" não mexe em nada: devolve a mensagem pronta, com o link
+    // secreto do cadastro. Ela mora aqui, e não no script público, justamente
+    // porque esta implantação é "somente eu" — a chave nunca passa pelo site.
+    if (p.acao === 'avisar') return montarAviso(p);
     var alvoTel = soDigitos(p.tel);
     var alvoNome = normalizar(p.nome);
     var valor = p.valor === 'nao' ? '' : 'sim';
@@ -134,6 +139,66 @@ function acharColunaPor(cabecalho, pedacos) {
     }
   }
   return -1;
+}
+
+/**
+ * Monta a mensagem de aviso com o link privado do responsável e devolve um
+ * botão que abre o WhatsApp já com tudo escrito.
+ */
+function montarAviso(p) {
+  var planilha = abrirPlanilha();
+  if (!planilha) return resposta('erro', 'Preencha PLANILHA no topo do script.');
+  var aba = planilha.getSheets()[0];
+  var dados = aba.getDataRange().getValues();
+  var cabecalho = dados[0];
+
+  var colTel = acharColunaPor(cabecalho, ['telefone', 'whats', 'celular', 'contato']);
+  var colNome = acharColunaPor(cabecalho, ['nome do espaco', 'nome profissional', 'nome']);
+  var colChave = acharColuna(cabecalho, 'Chave');
+
+  var alvoTel = soDigitos(p.tel), alvoNome = normalizar(p.nome);
+  var achou = -1;
+  for (var i = 1; i < dados.length; i++) {
+    var t = colTel === -1 ? '' : soDigitos(dados[i][colTel]);
+    var n = colNome === -1 ? '' : normalizar(dados[i][colNome]);
+    if (alvoTel && t ? fim(t) === fim(alvoTel) : (alvoNome && n === alvoNome)) { achou = i; break; }
+  }
+  if (achou === -1) return resposta('erro', 'Não encontrei esse cadastro na planilha.');
+
+  if (colChave === -1) {
+    return resposta('erro', 'A coluna Chave ainda não existe. Rode gerarChaves no script de cadastro.');
+  }
+  var chave = String(dados[achou][colChave] || '').trim();
+  if (!chave) return resposta('erro', 'Este cadastro ainda não tem chave. Rode gerarChaves no script de cadastro.');
+
+  var nome = colNome === -1 ? '' : String(dados[achou][colNome] || '');
+  var site = String(p.site || '').replace(/\/$/, '');
+  var texto = 'Olá! O espaço *' + nome + '* foi cadastrado no Guia Espiritual — Piracicaba e Região, '
+    + 'um guia gratuito de terreiros, casas de axé, oraculistas e terapeutas da região.\n\n'
+    + 'Este link é só seu. Por ele você confere os dados, corrige o que precisar, '
+    + 'ou pede para sair do guia — sem falar com ninguém:\n'
+    + site + '/meu/?c=' + chave + '\n\n'
+    + 'Não repasse este link: quem o tiver pode alterar o cadastro.';
+
+  var wa = soDigitos(p.tel).replace(/^0+/, '');
+  if (wa && wa.indexOf('55') !== 0) wa = '55' + wa;
+
+  var html = '<!DOCTYPE html><meta charset="utf-8">'
+    + '<body style="margin:0;padding:1.5rem;background:#150f0c;color:#f3e7d6;'
+    + 'font:15px/1.6 system-ui,-apple-system,Roboto,sans-serif">'
+    + '<p style="color:#9f8771;font-size:12.5px;margin:0 0 .8rem">Mensagem pronta para <b>'
+    + escapar(nome) + '</b></p>'
+    + '<pre style="white-space:pre-wrap;background:#1e1613;border:1px solid #3a2a21;'
+    + 'border-radius:12px;padding:1rem;font:inherit;font-size:13.5px;margin:0 0 1rem">'
+    + escapar(texto) + '</pre>'
+    + '<a href="https://wa.me/' + wa + '?text=' + encodeURIComponent(texto) + '" target="_blank" '
+    + 'style="display:block;text-align:center;text-decoration:none;padding:.85rem;border-radius:12px;'
+    + 'background:linear-gradient(170deg,#6f8f5f,#4f6b41);color:#f2f7ee;font-weight:600">'
+    + 'Abrir o WhatsApp</a>'
+    + '<p style="color:#9f8771;font-size:12.5px;margin:1rem 0 0">O link é secreto — '
+    + 'mande só para o responsável.</p>';
+  return HtmlService.createHtmlOutput(html)
+    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 }
 
 /** Página mínima que avisa o painel e some sozinha. */

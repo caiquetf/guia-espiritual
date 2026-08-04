@@ -168,10 +168,34 @@ manutenção: o logo fica sobre um painel claro porque o letreiro dele é grafit
 sumiria no fundo do site; e o endereço aparece em três lugares da página — o texto e os
 dois links de rota —, então mudar um exige mudar os três.
 
+## O responsável cuidando do próprio cadastro
+
+`meu/?c=<chave>` é a página de quem está listado. Ela mostra os dados do espaço já
+preenchidos e oferece três caminhos: **Está tudo certo** (acende o selo), **Salvar
+correções** (edita e confirma junto — quem acabou de rever cada campo é justamente quem
+pode dizer que estão certos) e **Não quero mais aparecer**.
+
+A **chave** é um código de 28 letras guardado na coluna `Chave` da planilha. Sem ela não
+se lê nem se altera nada, e ela **nunca é publicada**: a sincronização só copia as
+colunas que conhece, e essa não está entre elas. O link só chega ao responsável pela
+mensagem que você envia.
+
+Por isso o botão **Avisar no WhatsApp**, na `avisos/`, passa pelo Apps Script "somente
+eu" (`API_DONO`): é ele que lê a chave e devolve a mensagem pronta com o link, sem que o
+segredo passe pelo site público. Sem `API_DONO` configurado, o botão volta à mensagem
+antiga — que avisa, mas não dá autonomia a ninguém.
+
+**Sair não apaga a linha.** Marca `Removido` = sim, e a sincronização para de publicar.
+A resposta original continua registrada, inclusive a autorização que um dia foi dada —
+apagar seria perder a prova de que o cadastro existiu.
+
+Depois de instalar, rode **uma vez** a função `gerarChaves` pelo editor do Apps Script:
+ela dá chave aos cadastros que já existiam. Os novos já nascem com a sua.
+
 ## Cadastro pelo próprio site
 
 O formulário vive em `cadastrar/`, com a cara do guia. Ele não passa pelo Google Forms:
-envia direto para um Apps Script (`scripts/cadastro.gs`) que grava uma linha na planilha
+envia direto para um Apps Script (`scripts/publico.gs`) que grava uma linha na planilha
 de respostas. A sincronização horária não sabe a diferença — para ela é só mais uma
 resposta.
 
@@ -180,9 +204,9 @@ São **duas implantações do Apps Script**, e a diferença entre elas é o pont
 | arquivo | quem pode acessar | para quê |
 |---|---|---|
 | `scripts/verificar.gs` | **somente eu** | acender o selo — só a dona da planilha |
-| `scripts/cadastro.gs` | **qualquer pessoa** | receber cadastro — quem envia é o visitante |
+| `scripts/publico.gs` | **qualquer pessoa** | receber cadastro — quem envia é o visitante |
 
-Cole a URL `/exec` da segunda em `API_CADASTRO`, no topo do script de
+Cole a URL `/exec` da segunda em `API_PUBLICA`, no topo do script de
 `cadastrar/index.html`. Enquanto ela estiver vazia, o formulário nem aparece: a página
 oferece o formulário antigo do Google (se `formulario` ainda estiver no `dados.json`) e
 o WhatsApp. Ninguém deve encontrar uma porta que não abre.
