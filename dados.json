@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-07-31T20:36:38.743Z",
+  "geradoEm": "2026-08-04T22:21:15.286Z",
   "formulario": "https://docs.google.com/forms/d/e/1FAIpQLSdha6CPyRtEe_2-ZSJM5NsMNOnXead1ZhU49ZoX3h0ZbIWifg/viewform?usp=header",
   "apiVerificar": "https://script.google.com/macros/s/AKfycbwL7x0AjzjgGesE7Sz4wuUtb2SM-dRy8hEBQzFWp_pspLZTYeYCBOqFuTLn88KyXgND/exec",
   "registros": [
@@ -116,6 +116,25 @@
       "verificado": "sim",
       "regras": "",
       "grupo": "Quimbanda"
+    },
+    {
+      "timestamp": "04/08/2026 18:45:05",
+      "email": "",
+      "nome": "Ialorixá dofona de odé",
+      "dirigente": "Cristina",
+      "tradicao": "Candomblé",
+      "tempo": "1 ano",
+      "cidade": "Piracicaba",
+      "bairro": "",
+      "endereco": "Água branca",
+      "modalidade": "Online",
+      "telefone": "19982857919",
+      "redes": "",
+      "horarios": "Segunda e quinta",
+      "servicos": "Jogo de Búzios",
+      "verificado": "",
+      "regras": "",
+      "grupo": "Candomblé"
     },
     {
       "timestamp": "31/07/2026 01:42:03",
