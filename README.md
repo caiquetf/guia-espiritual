@@ -7,6 +7,29 @@ Aplicativo de página única (SPA) em **um único arquivo** — `index.html` —
 
 Abra `index.html` no navegador (duplo clique já basta — não precisa de servidor nem instalação).
 
+## Roteiro de instalação
+
+O site funciona sozinho depois de configurado. São **duas implantações do Apps Script** e
+**três variáveis** no repositório — abaixo, na ordem, com o que cada uma destrava.
+
+| # | O quê | Onde | Destrava |
+|---|---|---|---|
+| 1 | Publicar a planilha como CSV | Planilha → Arquivo → Compartilhar → Publicar na web | a sincronização |
+| 2 | Variável `PLANILHA_CSV_URL` | Settings → Variables | idem |
+| 3 | `scripts/publico.gs` → App da Web, **qualquer pessoa** | script.google.com | cadastro em `/cadastrar/` e a página do responsável em `/meu/` |
+| 4 | Rodar `gerarChaves` uma vez | editor do Apps Script | dá chave aos cadastros que já existem |
+| 5 | Colar a URL `/exec` em `API_PUBLICA` | `cadastrar/index.html` e `meu/index.html` | idem |
+| 6 | `scripts/verificar.gs` → App da Web, **somente eu** | script.google.com | o painel `verificar/` e o aviso com link privado |
+| 7 | Variável `VERIFICAR_URL` e a constante `API_DONO` | Settings → Variables e `avisos/index.html` | idem |
+
+A diferença entre "qualquer pessoa" e "somente eu" é o coração da segurança aqui:
+o script público recebe cadastros e obedece a quem tem a **chave** de um espaço; o script
+privado obedece só a você, autenticada pelo Google — e é por isso que é ele quem lê as
+chaves para montar as mensagens.
+
+Enquanto os passos 3 a 7 não estiverem prontos, nada quebra: cada página mostra o que
+falta e oferece o caminho antigo (formulário do Google, WhatsApp) no lugar.
+
 ## Sincronização automática com o formulário
 
 O site busca os cadastros de `dados.json`, gerado de hora em hora a partir da planilha

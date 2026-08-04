@@ -125,7 +125,7 @@ const REGRAS = [
     porque:'passou de ' + MESES_PARA_AVISO + ' meses e o site já exibe o aviso de confirmar antes de ir',
     falta: d => { const m = meses(d); return m !== null && m >= MESES_PARA_AVISO; } },
   { id:'confirmar', peso:1, leve:true, rotulo:'ainda sem selo',
-    porque:'o responsável ainda não confirmou os dados na planilha',
+    porque:'o responsável ainda não abriu o link dele para confirmar os dados',
     falta: d => !ehVerificado(d.verificado) }
 ];
 
