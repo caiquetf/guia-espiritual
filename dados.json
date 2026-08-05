@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-08-05T03:31:52.242Z",
+  "geradoEm": "2026-08-05T09:47:28.509Z",
   "formulario": "https://docs.google.com/forms/d/e/1FAIpQLSdha6CPyRtEe_2-ZSJM5NsMNOnXead1ZhU49ZoX3h0ZbIWifg/viewform?usp=header",
   "apiVerificar": "https://script.google.com/macros/s/AKfycbwL7x0AjzjgGesE7Sz4wuUtb2SM-dRy8hEBQzFWp_pspLZTYeYCBOqFuTLn88KyXgND/exec",
   "registros": [
@@ -401,6 +401,25 @@
       "verificado": "sim",
       "regras": "Agende pelo WhatsApp! Trabalhamos com cartomancia e trabalhos espirituais (financeiro, amoroso, mental, etc)",
       "grupo": "Umbanda"
+    },
+    {
+      "timestamp": "05/08/2026 06:44:43",
+      "email": "",
+      "nome": "Kwe vodun Togun omi",
+      "dirigente": "Romualdo",
+      "tradicao": "Candomblé",
+      "tempo": "9 meses",
+      "cidade": "Piracicaba-Sp",
+      "bairro": "",
+      "endereco": "Rua: voluntários de Piracicaba número 422 centro",
+      "modalidade": "Presencial",
+      "telefone": "19976053820",
+      "redes": "",
+      "horarios": "De 15 em 15 dias nas segundas tocamos mais temos também nossas consultas particulares só marca o dia temos jogos de búzios, ebó, banhos jogos de cartas lembrando que nossas consultas temos seu Zé pilintra, seu tranca rua de embaré, seu Marabó toquinho entre outros",
+      "servicos": "Consulta espiritual particular",
+      "verificado": "",
+      "regras": "Vir com roupas comportadas, de preferência roupas claras serão muito bem vindos a sua presença é nosso maior ASÉ para mais informações entra em contato com o número dechado ou também nesse número se preferir 19997441756",
+      "grupo": "Candomblé"
     }
   ]
 }
