@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-08-05T09:47:28.509Z",
+  "geradoEm": "2026-08-05T14:32:56.209Z",
   "formulario": "https://docs.google.com/forms/d/e/1FAIpQLSdha6CPyRtEe_2-ZSJM5NsMNOnXead1ZhU49ZoX3h0ZbIWifg/viewform?usp=header",
   "apiVerificar": "https://script.google.com/macros/s/AKfycbwL7x0AjzjgGesE7Sz4wuUtb2SM-dRy8hEBQzFWp_pspLZTYeYCBOqFuTLn88KyXgND/exec",
   "registros": [
@@ -116,6 +116,25 @@
       "verificado": "sim",
       "regras": "",
       "grupo": "Quimbanda"
+    },
+    {
+      "timestamp": "05/08/2026 09:56:37",
+      "email": "",
+      "nome": "Fran cartomante",
+      "dirigente": "Franciele",
+      "tradicao": "Umbanda",
+      "tempo": "1 ano",
+      "cidade": "Piracicaba",
+      "bairro": "",
+      "endereco": "Rua Cristiano Mathiensen 159",
+      "modalidade": "Online",
+      "telefone": "19971171884",
+      "redes": "",
+      "horarios": "Seg A sábado ds 9 as 19",
+      "servicos": "Cartomancia",
+      "verificado": "",
+      "regras": "Oque o baralho cigano tem para te dizer? Esclarece dúvidas, orientações  e conselhos",
+      "grupo": "Umbanda"
     },
     {
       "timestamp": "04/08/2026 18:45:05",
