@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-08-04T22:21:15.286Z",
+  "geradoEm": "2026-08-05T03:31:52.242Z",
   "formulario": "https://docs.google.com/forms/d/e/1FAIpQLSdha6CPyRtEe_2-ZSJM5NsMNOnXead1ZhU49ZoX3h0ZbIWifg/viewform?usp=header",
   "apiVerificar": "https://script.google.com/macros/s/AKfycbwL7x0AjzjgGesE7Sz4wuUtb2SM-dRy8hEBQzFWp_pspLZTYeYCBOqFuTLn88KyXgND/exec",
   "registros": [
@@ -267,6 +267,25 @@
       "servicos": "Consulta espiritual particular",
       "verificado": "sim",
       "regras": "Atendo consulta individual ou casal, para maiores informações ligar no watsapp",
+      "grupo": "Umbanda"
+    },
+    {
+      "timestamp": "04/08/2026 21:48:53",
+      "email": "",
+      "nome": "Templo de umbanda caboclo 7 penachos",
+      "dirigente": "Pai Tarcísio carvalho",
+      "tradicao": "Umbanda",
+      "tempo": "5 anos",
+      "cidade": "Piracicaba",
+      "bairro": "",
+      "endereco": "Rua Francisco Alves 151",
+      "modalidade": "Ambas",
+      "telefone": "19996721211",
+      "redes": "",
+      "horarios": "Quinta feira às 20:30 gira aberta",
+      "servicos": "Consultas oracular,giras de umbanda",
+      "verificado": "",
+      "regras": "Temos giras de umbanda e também consulta oracular particular",
       "grupo": "Umbanda"
     },
     {
