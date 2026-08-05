@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-08-05T14:32:56.209Z",
+  "geradoEm": "2026-08-05T16:51:26.108Z",
   "formulario": "https://docs.google.com/forms/d/e/1FAIpQLSdha6CPyRtEe_2-ZSJM5NsMNOnXead1ZhU49ZoX3h0ZbIWifg/viewform?usp=header",
   "apiVerificar": "https://script.google.com/macros/s/AKfycbwL7x0AjzjgGesE7Sz4wuUtb2SM-dRy8hEBQzFWp_pspLZTYeYCBOqFuTLn88KyXgND/exec",
   "registros": [
@@ -78,6 +78,25 @@
       "verificado": "sim",
       "regras": "",
       "grupo": "Umbanda"
+    },
+    {
+      "timestamp": "05/08/2026 12:50:34",
+      "email": "",
+      "nome": "Cartomancia de Maria Navalha",
+      "dirigente": "Priscila Lopes",
+      "tradicao": "Luciferiana",
+      "tempo": "4 anos",
+      "cidade": "Piracicaba",
+      "bairro": "",
+      "endereco": "Giocondo bandeira 172 vila Cristina",
+      "modalidade": "Ambas",
+      "telefone": "19976032281",
+      "redes": "",
+      "horarios": "Por agendamento",
+      "servicos": "Consulta espiritual particular",
+      "verificado": "",
+      "regras": "Entra em contato para mais detalhes",
+      "grupo": "Outros"
     },
     {
       "timestamp": "30/07/2026 16:04:49",
