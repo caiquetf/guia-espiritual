@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-08-07T10:10:38.666Z",
+  "geradoEm": "2026-08-07T13:36:41.308Z",
   "formulario": "https://docs.google.com/forms/d/e/1FAIpQLSdha6CPyRtEe_2-ZSJM5NsMNOnXead1ZhU49ZoX3h0ZbIWifg/viewform?usp=header",
   "apiVerificar": "https://script.google.com/macros/s/AKfycbwL7x0AjzjgGesE7Sz4wuUtb2SM-dRy8hEBQzFWp_pspLZTYeYCBOqFuTLn88KyXgND/exec",
   "registros": [
@@ -137,6 +137,25 @@
       "grupo": "Umbanda"
     },
     {
+      "timestamp": "07/08/2026 10:27:40",
+      "email": "",
+      "nome": "Entre Cartas e Luz 🔮",
+      "dirigente": "Maria",
+      "tradicao": "Umbanda",
+      "tempo": "3 anos",
+      "cidade": "Piracicaba",
+      "bairro": "",
+      "endereco": "São Jorge",
+      "modalidade": "Online",
+      "telefone": "19971182569",
+      "redes": "",
+      "horarios": "Com agendamento",
+      "servicos": "Cartomancia",
+      "verificado": "",
+      "regras": "Seja bem-vindo(a)! 🌿\n\nEste é um espaço dedicado ao acolhimento, ao autoconhecimento e à orientação espiritual por meio do Baralho Cigano, fundamentado nos princípios de respeito e ética da Umbanda.\n\nAntes de iniciar seu atendimento, procure estar em um ambiente tranquilo e faça suas perguntas com sinceridade. As leituras têm como objetivo oferecer direcionamento, clareza e fortalecimento emocional, sempre respeitando seu livre-arbítrio.\n\nTodas as informações compartilhadas durante a consulta são tratadas com total sigilo e respeito. Lembre-se de que o oráculo orienta caminhos e possibilidades, não substituindo acompanhamento médico, psicológico ou jurídico quando necessário.\n\nQue sua visita seja um momento de luz, reflexão e conexão com sua própria essência. Seja muito bem-vindo(a)!",
+      "grupo": "Umbanda"
+    },
+    {
       "timestamp": "31/07/2026 13:31:48",
       "email": "",
       "nome": "Filha das almas",
@@ -249,6 +268,25 @@
       "verificado": "sim",
       "regras": "Consultas apenas online.",
       "grupo": "Holístico/Terapia"
+    },
+    {
+      "timestamp": "07/08/2026 10:34:47",
+      "email": "",
+      "nome": "Maria D’ Quitéria",
+      "dirigente": "Maria",
+      "tradicao": "Umbanda",
+      "tempo": "6anos",
+      "cidade": "Piracicaba",
+      "bairro": "",
+      "endereco": "São Jorge",
+      "modalidade": "Ambas",
+      "telefone": "19971182569",
+      "redes": "",
+      "horarios": "Segunda a sábado",
+      "servicos": "Cartomancia",
+      "verificado": "",
+      "regras": "Seja bem-vindo(a)! 🌿\n\nEste é um espaço dedicado ao acolhimento, ao autoconhecimento e à orientação espiritual por meio do Baralho Cigano, fundamentado nos princípios de respeito e ética da Umbanda.\n\nAntes de iniciar seu atendimento, procure estar em um ambiente tranquilo e faça suas perguntas com sinceridade. As leituras têm como objetivo oferecer direcionamento, clareza e fortalecimento emocional, sempre respeitando seu livre-arbítrio.\n\nTodas as informações compartilhadas durante a consulta são tratadas com total sigilo e respeito. Lembre-se de que o oráculo orienta caminhos e possibilidades, não substituindo acompanhamento médico, psicológico ou jurídico quando necessário.\n\nQue sua visita seja um momento de luz, reflexão e conexão com sua própria essência. Seja muito bem-vindo(a)!",
+      "grupo": "Umbanda"
     },
     {
       "timestamp": "30/07/2026 16:06:13",
