@@ -300,11 +300,15 @@ if (idxAutorizacao === -1){
 const registros = [];
 let semAutorizacao = 0;
 let removidos = 0;
+let emBranco = 0;
 for (let r = 1; r < linhas.length; r++){
   const rec = {};
   FIELDS.forEach(f => rec[f.key] = '');
   linhas[r].forEach((v, i) => { if (map[i]) rec[map[i]] = limpar(v); });
-  if (!(rec.nome || rec.dirigente || rec.telefone)) continue;      // linha em branco
+  if (!(rec.nome || rec.dirigente || rec.telefone)){                // linha em branco
+    emBranco++;
+    continue;
+  }
 
   if (idxRemovido !== -1 && /^(sim|s|x|1|true)$/i.test((linhas[r][idxRemovido] || '').trim())){
     removidos++;
@@ -345,6 +349,10 @@ if (!registros.length){
 // Remove duplicatas mantendo a resposta mais recente (a última linha vence).
 const porChave = new Map();
 registros.forEach(r => porChave.set(norm(r.nome) + '|' + (r.telefone||'').replace(/\D/g,''), r));
+if (registros.length > porChave.size){
+  console.log(`${registros.length - porChave.size} resposta(s) repetida(s) — mesmo nome e telefone, vale a mais recente.`);
+}
+if (emBranco) console.log(`${emBranco} linha(s) sem nome nem telefone — ignoradas.`);
 const finais = [...porChave.values()]
   .sort((a,b) => (a.cidade||'').localeCompare(b.cidade||'','pt-BR') || (a.nome||'').localeCompare(b.nome||'','pt-BR'));
 
