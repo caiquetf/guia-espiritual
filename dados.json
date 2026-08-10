@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-08-07T13:36:41.308Z",
+  "geradoEm": "2026-08-10T20:45:35.349Z",
   "formulario": "https://docs.google.com/forms/d/e/1FAIpQLSdha6CPyRtEe_2-ZSJM5NsMNOnXead1ZhU49ZoX3h0ZbIWifg/viewform?usp=header",
   "apiVerificar": "https://script.google.com/macros/s/AKfycbwL7x0AjzjgGesE7Sz4wuUtb2SM-dRy8hEBQzFWp_pspLZTYeYCBOqFuTLn88KyXgND/exec",
   "registros": [
@@ -37,7 +37,7 @@
       "redes": "",
       "horarios": "Agendamento tarô e outras práticas",
       "servicos": "Tarô, baralho cigano, mesa rádionica, constelação familiar, cromoterapia, Reiki, alinhamento de Chakras",
-      "verificado": "",
+      "verificado": "sim",
       "regras": "",
       "grupo": "Umbanda"
     },
@@ -113,7 +113,7 @@
       "redes": "",
       "horarios": "Por agendamento",
       "servicos": "Consulta espiritual particular",
-      "verificado": "",
+      "verificado": "sim",
       "regras": "Entra em contato para mais detalhes",
       "grupo": "Outros"
     },
@@ -189,7 +189,7 @@
       "redes": "",
       "horarios": "Seg A sábado ds 9 as 19",
       "servicos": "Cartomancia",
-      "verificado": "",
+      "verificado": "sim",
       "regras": "Oque o baralho cigano tem para te dizer? Esclarece dúvidas, orientações  e conselhos",
       "grupo": "Umbanda"
     },
@@ -208,7 +208,7 @@
       "redes": "",
       "horarios": "Segunda e quinta",
       "servicos": "Jogo de Búzios",
-      "verificado": "",
+      "verificado": "sim",
       "regras": "",
       "grupo": "Candomblé"
     },
@@ -360,7 +360,7 @@
       "redes": "",
       "horarios": "7 as 22hs",
       "servicos": "Cartomancia",
-      "verificado": "",
+      "verificado": "sim",
       "regras": "",
       "grupo": "Candomblé"
     },
@@ -379,7 +379,7 @@
       "redes": "",
       "horarios": "Aos finais de semana, horário marcado",
       "servicos": "Cartomancia",
-      "verificado": "",
+      "verificado": "sim",
       "regras": "Consulta oracular por meio de baralho cigano, com fotos + explicação ou ligação via vídeo por whatsapp, também com orientações de auto cuidado, proteçãoz banhos, patuás e afins",
       "grupo": "Umbanda"
     },
@@ -417,7 +417,7 @@
       "redes": "",
       "horarios": "Todos os dias, mediante agendamento.",
       "servicos": "Cartomancia",
-      "verificado": "",
+      "verificado": "sim",
       "regras": "",
       "grupo": "Quimbanda"
     },
@@ -436,7 +436,7 @@
       "redes": "",
       "horarios": "Quinta feira às 20:30 gira aberta",
       "servicos": "Consultas oracular,giras de umbanda",
-      "verificado": "",
+      "verificado": "sim",
       "regras": "Temos giras de umbanda e também consulta oracular particular",
       "grupo": "Umbanda"
     },
@@ -569,7 +569,7 @@
       "redes": "",
       "horarios": "Segunda feira às 20:00",
       "servicos": "",
-      "verificado": "",
+      "verificado": "sim",
       "regras": "Venha de coração aberto para receber o axé na sua vida",
       "grupo": "Umbanda"
     },
@@ -588,7 +588,7 @@
       "redes": "",
       "horarios": "Todos os dias,  mediante agendamento",
       "servicos": "Cartomancia",
-      "verificado": "",
+      "verificado": "sim",
       "regras": "",
       "grupo": "Quimbanda"
     },
@@ -607,7 +607,7 @@
       "redes": "",
       "horarios": "De 15 em 15 dias nas segundas tocamos mais temos também nossas consultas particulares só marca o dia temos jogos de búzios, ebó, banhos jogos de cartas lembrando que nossas consultas temos seu Zé pilintra, seu tranca rua de embaré, seu Marabó toquinho entre outros",
       "servicos": "Consulta espiritual particular",
-      "verificado": "",
+      "verificado": "sim",
       "regras": "Vir com roupas comportadas, de preferência roupas claras serão muito bem vindos a sua presença é nosso maior ASÉ para mais informações entra em contato com o número dechado ou também nesse número se preferir 19997441756",
       "grupo": "Candomblé"
     }
