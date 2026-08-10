@@ -224,7 +224,22 @@ if (!URL_CSV){
 }
 
 console.log('Buscando a planilha…');
-const resp = await fetch(URL_CSV, { redirect:'follow', headers:{ 'User-Agent':'guia-espiritual-sync' } });
+
+/**
+ * O endereço leva um parâmetro que muda a cada execução. Ele não significa nada
+ * para o Google — serve para o pedido nunca ser idêntico ao anterior, e assim
+ * nenhum cache no caminho poder devolver a resposta de ontem.
+ */
+const urlSemCache = URL_CSV + (URL_CSV.includes('?') ? '&' : '?') + '_=' + Date.now();
+const resp = await fetch(urlSemCache, {
+  redirect: 'follow',
+  cache: 'no-store',
+  headers: {
+    'User-Agent': 'guia-espiritual-sync',
+    'Cache-Control': 'no-cache, no-store, max-age=0',
+    'Pragma': 'no-cache'
+  }
+});
 if (!resp.ok){
   console.error(`A planilha respondeu HTTP ${resp.status}. Verifique se ela está publicada na web como CSV.`);
   process.exit(1);
@@ -237,6 +252,7 @@ if (/^\s*<(!doctype|html)/i.test(texto)){
 }
 
 const linhas = parseCSV(texto);
+console.log(`Planilha recebida: ${texto.length} caracteres, ${linhas.length - 1} linha(s) de resposta.`);
 if (linhas.length < 2){
   console.error('A planilha não tem linhas de resposta.');
   process.exit(1);
