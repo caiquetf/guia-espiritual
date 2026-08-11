@@ -194,10 +194,13 @@
 <script>
 /**
  * Endereço do Apps Script que grava na planilha — veja scripts/publico.gs.
- * É o mesmo usado por /meu/. Vazio: o formulário nem é mostrado, e a página
- * oferece o WhatsApp no lugar. Ninguém deve encontrar uma porta que não abre.
+ * É o mesmo usado por /meu/.
+ *
+ * Normalmente vem do dados.json, escrito pela sincronização a partir da
+ * variável CADASTRO_URL do repositório: assim liga-se em um lugar só, sem
+ * editar HTML. Preencher aqui é o atalho para testar sem esperar a sincronia.
  */
-const API_PUBLICA = '';
+let API_PUBLICA = '';
 
 /* Canal de sempre, usado como saída quando o envio falha. */
 const CANAL = 'https://wa.me/5519974118980';
@@ -234,28 +237,35 @@ function linkWhats(dados){
   return `${CANAL}?text=${encodeURIComponent(linhas.join('\n'))}`;
 }
 
+const ehApi = u => /^https:\/\/script\.google\.com\//.test((u || '').trim());
+
 /**
  * Enquanto o Apps Script não estiver publicado, ninguém pode ficar sem porta.
  * A página cai no formulário antigo do Google, se ele ainda estiver configurado,
  * e no WhatsApp em último caso.
  */
-if (!/^https:\/\/script\.google\.com\//.test(API_PUBLICA)){
+function semFormulario(antigo){
   form.hidden = true;
   const zap = `<a class="btn" href="${CANAL}?text=${encodeURIComponent('Olá! Quero cadastrar meu espaço no Guia Espiritual.')}" rel="nofollow noopener">Cadastrar pelo WhatsApp</a>`;
+  if (/^https?:\/\//i.test(antigo || '')){
+    return aviso(`O cadastro pelo site está sendo preparado. Por enquanto, use o
+      formulário de sempre.<br><br>
+      <a class="btn" href="${esc(antigo)}" target="_blank" rel="noopener">Abrir o formulário</a>
+      ${zap}`, 'aviso');
+  }
   aviso(`O cadastro pelo site está sendo preparado.<br><br>${zap}`, 'aviso');
-
-  fetch('../dados.json', { cache:'no-store' })
-    .then(r => r.ok ? r.json() : null)
-    .then(j => {
-      const antigo = (j && j.formulario || '').trim();
-      if (!/^https?:\/\//i.test(antigo)) return;
-      aviso(`O cadastro pelo site está sendo preparado. Por enquanto, use o formulário
-        de sempre.<br><br>
-        <a class="btn" href="${esc(antigo)}" target="_blank" rel="noopener">Abrir o formulário</a>
-        ${zap}`, 'aviso');
-    })
-    .catch(() => { /* sem rede: fica só o WhatsApp, que já está na tela */ });
 }
+
+// O formulário só aparece depois de saber que há para onde enviar.
+form.hidden = true;
+fetch('../dados.json', { cache:'no-store' })
+  .then(r => r.ok ? r.json() : null)
+  .then(j => {
+    if (!ehApi(API_PUBLICA)) API_PUBLICA = (j && j.apiPublica || '').trim();
+    if (ehApi(API_PUBLICA)){ form.hidden = false; recado.innerHTML = ''; return; }
+    semFormulario(j && j.formulario);
+  })
+  .catch(() => semFormulario(''));
 
 form.addEventListener('submit', async ev => {
   ev.preventDefault();

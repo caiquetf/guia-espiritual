@@ -18,7 +18,7 @@ O site funciona sozinho depois de configurado. São **duas implantações do App
 | 2 | Variável `PLANILHA_CSV_URL` | Settings → Variables | idem |
 | 3 | `scripts/publico.gs` → App da Web, **qualquer pessoa** | script.google.com | cadastro em `/cadastrar/` e a página do responsável em `/meu/` |
 | 4 | Rodar `gerarChaves` uma vez | editor do Apps Script | dá chave aos cadastros que já existem |
-| 5 | Colar a URL `/exec` em `API_PUBLICA` | `cadastrar/index.html` e `meu/index.html` | idem |
+| 5 | Variável `CADASTRO_URL` com a URL `/exec` | Settings → Variables | idem |
 | 6 | `scripts/verificar.gs` → App da Web, **somente eu** | script.google.com | o painel `verificar/` e o aviso com link privado |
 | 7 | Variável `VERIFICAR_URL` e a constante `API_DONO` | Settings → Variables e `avisos/index.html` | idem |
 
@@ -229,10 +229,14 @@ São **duas implantações do Apps Script**, e a diferença entre elas é o pont
 | `scripts/verificar.gs` | **somente eu** | acender o selo — só a dona da planilha |
 | `scripts/publico.gs` | **qualquer pessoa** | receber cadastro — quem envia é o visitante |
 
-Cole a URL `/exec` da segunda em `API_PUBLICA`, no topo do script de
-`cadastrar/index.html`. Enquanto ela estiver vazia, o formulário nem aparece: a página
-oferece o formulário antigo do Google (se `formulario` ainda estiver no `dados.json`) e
-o WhatsApp. Ninguém deve encontrar uma porta que não abre.
+A URL `/exec` da segunda vai na variável **`CADASTRO_URL`** do repositório. A
+sincronização a copia para o `dados.json`, e `/cadastrar/` e `/meu/` a leem de lá —
+ligar não exige editar HTML. (A constante `API_PUBLICA`, no topo das duas páginas,
+continua valendo como atalho para testar sem esperar a sincronização.)
+
+Enquanto ela não existir, o formulário nem aparece: a página oferece o formulário antigo
+do Google (se `formulario` ainda estiver no `dados.json`) e o WhatsApp. Ninguém deve
+encontrar uma porta que não abre.
 
 O script recusa o que não deve entrar: sem autorização de divulgação, sem nome, telefone
 sem DDD, espaço já cadastrado, ou enxurrada acima de `LIMITE_POR_MINUTO`. Tem também um

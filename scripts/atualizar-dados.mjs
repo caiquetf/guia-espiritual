@@ -32,6 +32,17 @@ function linkVerificar(){
   return urlDaVariavel('VERIFICAR_URL');
 }
 
+/**
+ * Endereço do Apps Script público — o que recebe cadastros em /cadastrar/ e
+ * atende a página do responsável em /meu/. Vem da variável CADASTRO_URL.
+ *
+ * Também não é segredo: quem manda nele é a chave de cada espaço, e a chave
+ * nunca sai da planilha. Publicá-lo aqui é o que evita ter de editar HTML.
+ */
+function linkPublico(){
+  return urlDaVariavel('CADASTRO_URL');
+}
+
 function urlDaVariavel(nome){
   const v = (process.env[nome] || '').trim();
   if (!v) return '';
@@ -376,6 +387,11 @@ console.log(apiVerificar
   ? 'Painel de verificação ligado à planilha.'
   : 'Sem VERIFICAR_URL — o painel verificar/ mostra as instruções de instalação.');
 
+const apiPublica = linkPublico();
+console.log(apiPublica
+  ? 'Cadastro pelo site e página do responsável ligados à planilha.'
+  : 'Sem CADASTRO_URL — /cadastrar/ e /meu/ mostram o caminho alternativo.');
+
 writeFileSync(SAIDA,
-  JSON.stringify({ geradoEm, formulario, apiVerificar, registros: finais }, null, 2) + '\n', 'utf8');
+  JSON.stringify({ geradoEm, formulario, apiVerificar, apiPublica, registros: finais }, null, 2) + '\n', 'utf8');
 console.log(`${finais.length} cadastro(s) gravado(s) em ${SAIDA}. Colunas reconhecidas: ${reconhecidas}/${FIELDS.length}.`);

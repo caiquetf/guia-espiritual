@@ -90,8 +90,12 @@
 </main>
 
 <script>
-/** Mesmo endereço usado por /cadastrar/ — veja scripts/publico.gs. */
-const API_PUBLICA = '';
+/**
+ * Mesmo endereço usado por /cadastrar/ — veja scripts/publico.gs. Vem do
+ * dados.json, escrito pela sincronização a partir da variável CADASTRO_URL.
+ * Preencher aqui é o atalho para testar sem esperar a sincronia.
+ */
+let API_PUBLICA = '';
 
 const CANAL = 'https://wa.me/5519974118980';
 
@@ -173,6 +177,12 @@ function terminou(titulo, texto){
 }
 
 async function iniciar(){
+  if (!/^https:\/\/script\.google\.com\//.test(API_PUBLICA)){
+    try {
+      const j = await (await fetch('../dados.json', { cache:'no-store' })).json();
+      API_PUBLICA = (j.apiPublica || '').trim();
+    } catch (e){ /* sem rede: cai no aviso abaixo */ }
+  }
   if (!/^https:\/\/script\.google\.com\//.test(API_PUBLICA)){
     return aviso('Esta página ainda está sendo preparada.' + pedirAjuda(), 'aviso');
   }
