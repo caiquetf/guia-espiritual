@@ -68,8 +68,12 @@ const CHAVE = 'guia-espiritual-avisados';
  * Endereço do Apps Script "somente eu" — o mesmo do painel verificar/.
  * É ele que monta a mensagem, porque a mensagem carrega o link privado do
  * responsável, e essa chave não pode passar pelo site, que é público.
+ *
+ * Fica vazio de propósito: o endereço chega pelo dados.json, escrito pela
+ * sincronização a partir da variável VERIFICAR_URL. Assim ninguém precisa
+ * editar HTML para trocá-lo.
  */
-const API_DONO = '';
+let API_DONO = '';
 
 const deaccent = s => (s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'');
 const digitos  = s => (s||'').replace(/\D/g,'');
@@ -188,7 +192,10 @@ function nota(txt){
 
 fetch('../dados.json', { cache:'no-store' })
   .then(r => r.ok ? r.json() : Promise.reject(r.status))
-  .then(j => { DADOS = j.registros || []; desenhar(); })
+  .then(j => {
+    if (!/^https:\/\/script\.google\.com\//.test(API_DONO)) API_DONO = (j.apiVerificar || '').trim();
+    DADOS = j.registros || []; desenhar();
+  })
   .catch(() => {
     document.getElementById('lista').innerHTML =
       '<p class="semfone">Não consegui carregar os cadastros. Abra esta página pelo site publicado.</p>';
