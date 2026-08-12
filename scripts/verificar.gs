@@ -49,11 +49,21 @@ function doGet(e) {
     // secreto do cadastro. Ela mora aqui, e não no script público, justamente
     // porque esta implantação é "somente eu" — a chave nunca passa pelo site.
     if (p.acao === 'avisar') return montarAviso(p);
+
     var alvoTel = soDigitos(p.tel);
     var alvoNome = normalizar(p.nome);
-    var valor = p.valor === 'nao' ? '' : 'sim';
 
     if (!alvoTel && !alvoNome) return resposta('erro', 'Faltou dizer qual cadastro.');
+
+    // Daqui para baixo só se acende ou apaga selo, e isso exige que o pedido
+    // diga qual dos dois. Sem "valor" explícito não se supõe nada: um pedido
+    // que este código não entende — porque veio de uma versão mais nova do
+    // site — tem que parar aqui, e não acender um selo que ninguém pediu.
+    if (p.valor !== 'sim' && p.valor !== 'nao') {
+      return resposta('erro', 'Pedido desconhecido. Publique a versão nova do script: '
+        + 'Implantar → Gerenciar implantações → ✏️ → Versão: Nova versão.');
+    }
+    var valor = p.valor === 'nao' ? '' : 'sim';
 
     var planilha = abrirPlanilha();
     if (!planilha) {
