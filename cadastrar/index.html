@@ -226,34 +226,22 @@ function aviso(texto, tipo){
   recado.scrollIntoView({ behavior:'smooth', block:'center' });
 }
 
-/** Monta a mensagem de WhatsApp com o que já foi digitado — a saída de emergência. */
-function linkWhats(dados){
-  const rotulos = { nome:'Nome', dirigente:'Dirigente', tradicao:'Vertente', cidade:'Cidade',
-    bairro:'Bairro', endereco:'Endereço', modalidade:'Atendimento', telefone:'Telefone',
-    redes:'Redes', horarios:'Dias e horários', servicos:'Serviços', regras:'Orientações',
-    tempo:'Tempo de funcionamento', email:'E-mail' };
-  const linhas = ['Olá! Quero cadastrar meu espaço no Guia Espiritual:', ''];
-  for (const k in rotulos) if (dados[k]) linhas.push(`${rotulos[k]}: ${dados[k]}`);
-  return `${CANAL}?text=${encodeURIComponent(linhas.join('\n'))}`;
-}
-
 const ehApi = u => /^https:\/\/script\.google\.com\//.test((u || '').trim());
 
 /**
- * Enquanto o Apps Script não estiver publicado, ninguém pode ficar sem porta.
- * A página cai no formulário antigo do Google, se ele ainda estiver configurado,
- * e no WhatsApp em último caso.
+ * Enquanto o Apps Script não estiver publicado, a página cai no formulário
+ * antigo do Google, se ele ainda estiver configurado. Não existe caminho por
+ * WhatsApp: cadastro é uma coisa só, e é aqui.
  */
 function semFormulario(antigo){
   form.hidden = true;
-  const zap = `<a class="btn" href="${CANAL}?text=${encodeURIComponent('Olá! Quero cadastrar meu espaço no Guia Espiritual.')}" rel="nofollow noopener">Cadastrar pelo WhatsApp</a>`;
   if (/^https?:\/\//i.test(antigo || '')){
     return aviso(`O cadastro pelo site está sendo preparado. Por enquanto, use o
       formulário de sempre.<br><br>
-      <a class="btn" href="${esc(antigo)}" target="_blank" rel="noopener">Abrir o formulário</a>
-      ${zap}`, 'aviso');
+      <a class="btn" href="${esc(antigo)}" target="_blank" rel="noopener">Abrir o formulário</a>`, 'aviso');
   }
-  aviso(`O cadastro pelo site está sendo preparado.<br><br>${zap}`, 'aviso');
+  aviso(`O cadastro está passando por um ajuste e volta em pouco tempo.
+    Tente de novo mais tarde.`, 'aviso');
 }
 
 // O formulário só aparece depois de saber que há para onde enviar.
@@ -295,11 +283,12 @@ form.addEventListener('submit', async ev => {
     if (resposta.ok) return pronto(dados);
     aviso(esc(resposta.erro) || 'Não consegui gravar o cadastro.');
   } catch (e){
-    // Sem confirmação não dá para dizer que deu certo. Melhor oferecer a saída
-    // que sempre funciona do que inventar um "recebemos".
+    // Sem confirmação não dá para dizer que deu certo. O formulário fica como
+    // está, preenchido, para que tentar de novo custe um clique — e não que a
+    // pessoa tenha de digitar tudo outra vez.
     aviso(`Não consegui enviar agora — pode ser a conexão.
-      <br><br><a class="btn" href="${linkWhats(dados)}" rel="nofollow noopener">Enviar por WhatsApp</a>
-      <br><span style="font-size:13px">Seus dados já vão preenchidos na mensagem.</span>`);
+      <br><br>Nada do que você escreveu se perdeu: confira a internet e toque
+      em <strong>Enviar cadastro</strong> outra vez.`);
   } finally {
     botao.disabled = false; botao.textContent = 'Enviar cadastro';
   }
