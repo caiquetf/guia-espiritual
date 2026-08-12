@@ -295,6 +295,28 @@ function gerarChaves() {
   Logger.log(novas + ' chave(s) gerada(s).');
 }
 
+/**
+ * Troca TODAS as chaves, inclusive as que já existem. Serve para quando a
+ * coluna vazou — uma cópia da planilha que saiu da sua mão, um print, um PDF.
+ *
+ * O preço: todo link /meu/ já enviado para de funcionar, e é preciso mandar
+ * os novos. Por isso só use quando houver motivo; para o dia a dia, gerarChaves
+ * basta, porque ele não mexe em quem já tem.
+ */
+function trocarChaves() {
+  var aba = abrirPlanilha().getSheets()[0];
+  var ultima = aba.getLastRow();
+  if (ultima < 2) { Logger.log('Planilha sem cadastros.'); return; }
+  var cabecalho = aba.getRange(1, 1, 1, Math.max(aba.getLastColumn(), 1)).getValues()[0];
+  var col = colunaControle(aba, cabecalho, COL_CHAVE);
+  var trocadas = 0;
+  for (var i = 2; i <= ultima; i++) {
+    aba.getRange(i, col + 1).setValue(novaChave());
+    trocadas++;
+  }
+  Logger.log(trocadas + ' chave(s) trocada(s). Os links antigos morreram.');
+}
+
 /** Aleatória e longa o bastante para não se adivinhar por tentativa. */
 function novaChave() {
   var letras = 'abcdefghijkmnopqrstuvwxyz23456789';   // sem l/1/0/o, que se confundem
