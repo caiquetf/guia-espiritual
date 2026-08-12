@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-08-10T20:45:35.349Z",
+  "geradoEm": "2026-08-12T00:15:44.387Z",
   "formulario": "https://docs.google.com/forms/d/e/1FAIpQLSdha6CPyRtEe_2-ZSJM5NsMNOnXead1ZhU49ZoX3h0ZbIWifg/viewform?usp=header",
   "apiVerificar": "https://script.google.com/macros/s/AKfycbwL7x0AjzjgGesE7Sz4wuUtb2SM-dRy8hEBQzFWp_pspLZTYeYCBOqFuTLn88KyXgND/exec",
   "apiPublica": "https://script.google.com/macros/s/AKfycbwk2wZQlhq4Ueo8vAaJmpcHT5SdNtLeE8L7ARn0L6ariXRcosA2q--oJIPOe9NpL2RF/exec",
@@ -611,6 +611,25 @@
       "verificado": "sim",
       "regras": "Vir com roupas comportadas, de preferência roupas claras serão muito bem vindos a sua presença é nosso maior ASÉ para mais informações entra em contato com o número dechado ou também nesse número se preferir 19997441756",
       "grupo": "Candomblé"
+    },
+    {
+      "timestamp": "11/08/2026 21:13:40",
+      "email": "teste",
+      "nome": "Teste claude",
+      "dirigente": "Teste",
+      "tradicao": "Teste",
+      "tempo": "Teste",
+      "cidade": "Teste",
+      "bairro": "Teste",
+      "endereco": "Teste",
+      "modalidade": "Ambas",
+      "telefone": "19974118980",
+      "redes": "Teste",
+      "horarios": "Teste",
+      "servicos": "Teste",
+      "verificado": "",
+      "regras": "Teste",
+      "grupo": "Outros"
     }
   ]
 }
