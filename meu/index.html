@@ -163,7 +163,12 @@ async function chamar(acao, extra){
     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
     body: JSON.stringify({ acao, chave, ...extra })
   });
-  return r.json();
+  // O script sempre responde JSON, inclusive quando dá erro do lado dele. Se
+  // veio outra coisa, quem respondeu não foi ele — e dizer "sem conexão" aqui
+  // mandaria a pessoa procurar defeito no lugar errado.
+  const texto = await r.text();
+  try { return JSON.parse(texto); }
+  catch (e){ throw new Error('o servidor respondeu algo que não entendi (código ' + r.status + ')'); }
 }
 
 function desenharCampos(dados){
@@ -239,11 +244,19 @@ async function iniciar(){
   if (!chave){
     return aviso('Este endereço está incompleto. Use o link que você recebeu por mensagem.' + pedirAjuda(), 'aviso');
   }
+  // Buscar e desenhar são erros diferentes e merecem recados diferentes: um é
+  // do servidor, o outro é desta página. Juntar os dois num "pode ser a
+  // conexão" só faz procurar defeito onde ele não está.
+  let r;
   try {
-    const r = await chamar('ler');
-    if (!r.ok){
-      return aviso(esc(r.erro || 'Não consegui abrir seu cadastro.') + pedirAjuda(), 'aviso');
-    }
+    r = await chamar('ler');
+  } catch (e){
+    return aviso('Não consegui falar com o servidor — ' + esc(e.message) + '.' + pedirAjuda());
+  }
+  if (!r.ok){
+    return aviso(esc(r.erro || 'Não consegui abrir seu cadastro.') + pedirAjuda(), 'aviso');
+  }
+  try {
     DADOS = r.dados;
     desenharFicha(DADOS);
     desenharCampos(DADOS);
@@ -256,7 +269,8 @@ async function iniciar(){
         <strong>Pode corrigir de novo sempre que mudar alguma coisa.</strong></div>`;
     }
   } catch (e){
-    aviso('Não consegui carregar agora — pode ser a conexão. Tente de novo daqui a pouco.' + pedirAjuda());
+    aviso('Seu cadastro chegou, mas esta página não conseguiu montar a tela: '
+      + esc(e.message) + '.' + pedirAjuda());
   }
 }
 
