@@ -41,7 +41,7 @@ jobs:
           # logado na conta dona da planilha recebe a tela de login. Se um dia
           # a implantação virar "qualquer pessoa", aí sim a URL vira uma chave
           # de escrita e precisa sair daqui.
-          VERIFICAR_URL: ${{ vars.VERIFICAR_URL || 'https://script.google.com/macros/s/AKfycbwL7x0AjzjgGesE7Sz4wuUtb2SM-dRy8hEBQzFWp_pspLZTYeYCBOqFuTLn88KyXgND/exec' }}
+          VERIFICAR_URL: ${{ vars.VERIFICAR_URL || 'https://script.google.com/macros/s/AKfycbya_mjHgaMdzr2NPX4SwFy5inm2G2qnGuNhq-TuJpwtOuguxym56fnjgl7RnJb5VDA-aA/exec' }}
         run: |
           set +e
           node scripts/atualizar-dados.mjs
