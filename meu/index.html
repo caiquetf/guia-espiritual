@@ -37,6 +37,8 @@
   input:focus, textarea:focus, select:focus{ outline:none; border-color:var(--brasa) }
 
   .acoes{ display:flex; flex-wrap:wrap; gap:.6rem; margin:1.6rem 0 0 }
+  /* display:flex venceria o [hidden] do navegador; aqui o hidden manda. */
+  .acoes[hidden]{ display:none }
   button{ flex:1; min-width:12rem; font:inherit; font-size:15px; font-weight:600; cursor:pointer;
           padding:.8rem 1rem; border-radius:12px; border:1px solid var(--linha);
           background:var(--topo); color:var(--papel) }
@@ -47,6 +49,14 @@
                color:var(--baixo); font-weight:500; font-size:13.5px; margin-top:1.6rem }
   button.sair:hover{ color:#eaa87e; background:transparent }
   button:disabled{ opacity:.5; cursor:progress }
+
+  /* Ficha de conferência: os mesmos campos, em forma de leitura. */
+  .ficha{ background:var(--alta); border:1px solid var(--linha); border-radius:13px;
+          padding:.4rem 1.15rem 1rem }
+  .ficha .item{ padding:.85rem 0; border-bottom:1px solid var(--linha) }
+  .ficha .item:last-child{ border-bottom:none }
+  .ficha p{ margin:0; white-space:pre-wrap; overflow-wrap:anywhere }
+  .ficha .privado{ color:var(--baixo); font-size:13px }
 
   .recado{ border-radius:13px; padding:1rem 1.15rem; margin:1.3rem 0 0; font-size:14.5px }
   .recado.erro{ background:rgba(201,113,63,.1); border:1px solid rgba(201,113,63,.4); color:#eaa87e }
@@ -75,10 +85,17 @@
 
   <div id="recado"></div>
   <div id="corpo" hidden>
-    <form id="form"></form>
-    <div class="acoes">
+    <!-- Primeiro se lê, depois se edita: quem abre o link vem conferir, não
+         digitar. O formulário só aparece a pedido. -->
+    <div id="ficha"></div>
+    <form id="form" hidden></form>
+    <div class="acoes" id="acoes-ver">
       <button type="button" class="folha" id="btnConfirmar">Está tudo certo</button>
+      <button type="button" id="btnEditar">Editar informações</button>
+    </div>
+    <div class="acoes" id="acoes-editar" hidden>
       <button type="button" class="brasa" id="btnSalvar">Salvar correções</button>
+      <button type="button" id="btnCancelar">Cancelar</button>
     </div>
     <button type="button" class="sair" id="btnSair">Não quero mais aparecer no guia</button>
   </div>
@@ -127,6 +144,10 @@ const chave = new URLSearchParams(location.search).get('c') || '';
 const recado = document.getElementById('recado');
 const corpo = document.getElementById('corpo');
 const form = document.getElementById('form');
+const ficha = document.getElementById('ficha');
+
+/* O que veio da planilha, guardado para o botão Cancelar poder voltar atrás. */
+let DADOS = {};
 
 function aviso(texto, tipo){
   recado.innerHTML = `<div class="recado ${tipo || 'erro'}">${texto}</div>`;
@@ -158,6 +179,35 @@ function desenharCampos(dados){
   }).join('') +
   `<p class="dica" style="margin-top:1rem">Campo em branco não aparece no guia —
     é assim que você escolhe o que fica público.</p>`;
+}
+
+/**
+ * A ficha mostra só o que está preenchido — é o mesmo critério do guia, onde
+ * campo em branco não vira linha nenhuma. Assim o que a pessoa lê aqui é o que
+ * o visitante vê lá.
+ */
+function desenharFicha(dados){
+  const cheios = CAMPOS.filter(([k]) => String(dados[k] || '').trim());
+  const vazios = CAMPOS.length - cheios.length;
+  const itens = cheios.map(([k, rotulo]) =>
+    `<div class="item"><span class="rot">${rotulo}</span>
+      <p${k === 'email' ? ' class="privado"' : ''}>${esc(dados[k])}</p></div>`).join('');
+  const falta = vazios === 0 ? 'Nenhum campo ficou em branco.'
+    : vazios === 1 ? 'Um campo está em branco e por isso não aparece.'
+    : `${vazios} campos estão em branco e por isso não aparecem.`;
+  ficha.innerHTML = `<div class="ficha">${itens}</div>
+    <p class="dica" style="margin-top:.8rem">É isto que aparece no guia. ${falta}
+      Para mudar qualquer coisa, toque em <strong>Editar informações</strong>.</p>`;
+}
+
+/** Alterna entre conferir e editar. Uma coisa de cada vez, na mesma página. */
+function mostrar(modo){
+  const editando = modo === 'editar';
+  ficha.hidden = editando;
+  form.hidden = !editando;
+  document.getElementById('acoes-ver').hidden = editando;
+  document.getElementById('acoes-editar').hidden = !editando;
+  if (editando) form.querySelector('input, textarea, select').focus();
 }
 
 function coletar(){
@@ -194,7 +244,10 @@ async function iniciar(){
     if (!r.ok){
       return aviso(esc(r.erro || 'Não consegui abrir seu cadastro.') + pedirAjuda(), 'aviso');
     }
-    desenharCampos(r.dados);
+    DADOS = r.dados;
+    desenharFicha(DADOS);
+    desenharCampos(DADOS);
+    mostrar('ver');
     corpo.hidden = false;
     document.getElementById('linha-sub').textContent =
       `${r.dados.nome || r.dados.dirigente || 'Seu espaço'} — confira e corrija o que precisar.`;
@@ -227,6 +280,16 @@ async function agir(botao, acao, extra, aoDarCerto){
 document.getElementById('btnConfirmar').addEventListener('click', ev =>
   agir(ev.target, 'confirmar', {}, () => terminou('Obrigado por confirmar',
     'Seu cadastro passa a exibir o selo de confirmado, que quer dizer apenas isto: você conferiu que os dados estão certos.')));
+
+document.getElementById('btnEditar').addEventListener('click', () => mostrar('editar'));
+
+// Cancelar devolve o que veio da planilha: o que foi digitado e não gravado
+// não pode sobreviver, senão vira uma correção pela metade na próxima vez.
+document.getElementById('btnCancelar').addEventListener('click', () => {
+  desenharCampos(DADOS);
+  recado.innerHTML = '';
+  mostrar('ver');
+});
 
 document.getElementById('btnSalvar').addEventListener('click', ev => {
   const dados = coletar();
