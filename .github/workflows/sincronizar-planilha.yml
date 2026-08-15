@@ -34,7 +34,7 @@ jobs:
           # feitos em /cadastrar/ e atende a página do responsável em /meu/.
           # Não é segredo — quem manda nele é a chave de cada espaço, e a
           # chave nunca sai da planilha.
-          CADASTRO_URL: ${{ vars.CADASTRO_URL }}
+          CADASTRO_URL: ${{ vars.CADASTRO_URL || 'https://script.google.com/macros/s/AKfycbyfdY1Gqr8Ndp_VBSuXdO2ztFT_jXpkY-YxKoNnT_UH5iQh_VHy-81vqmqn9VgNTT7sRQ/exec' }}
           # Apps Script que o painel verificar/ chama para acender o selo.
           # Veja scripts/verificar.gs. Não é segredo: a implantação está como
           # "quem tem acesso: somente eu", então quem abrir a URL sem estar
