@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-08-12T02:41:50.969Z",
+  "geradoEm": "2026-08-21T22:38:57.272Z",
   "formulario": "https://docs.google.com/forms/d/e/1FAIpQLSdha6CPyRtEe_2-ZSJM5NsMNOnXead1ZhU49ZoX3h0ZbIWifg/viewform?usp=header",
   "apiVerificar": "https://script.google.com/macros/s/AKfycbya_mjHgaMdzr2NPX4SwFy5inm2G2qnGuNhq-TuJpwtOuguxym56fnjgl7RnJb5VDA-aA/exec",
   "apiPublica": "https://script.google.com/macros/s/AKfycbwk2wZQlhq4Ueo8vAaJmpcHT5SdNtLeE8L7ARn0L6ariXRcosA2q--oJIPOe9NpL2RF/exec",
@@ -611,6 +611,25 @@
       "verificado": "sim",
       "regras": "Vir com roupas comportadas, de preferência roupas claras serão muito bem vindos a sua presença é nosso maior ASÉ para mais informações entra em contato com o número dechado ou também nesse número se preferir 19997441756",
       "grupo": "Candomblé"
+    },
+    {
+      "timestamp": "21/08/2026 19:21:56",
+      "email": "",
+      "nome": "Templo de Umbanda Caminhos de Oxaguiã",
+      "dirigente": "Pai Dinho De Oxoguiã",
+      "tradicao": "Umbanda Omolocô",
+      "tempo": "3 anos",
+      "cidade": "Piracicaba-SP",
+      "bairro": "",
+      "endereco": "Rua Aquilino Pacheco 1138",
+      "modalidade": "Ambas",
+      "telefone": "19994063003",
+      "redes": "",
+      "horarios": "Consultas todos os dias. Giras quinzenais",
+      "servicos": "Todos ( exceto ifá) apenas jogo de Exu",
+      "verificado": "",
+      "regras": "Respeito ao espaço sagrado, trazer velas!",
+      "grupo": "Umbanda"
     },
     {
       "timestamp": "11/08/2026 21:13:40",
