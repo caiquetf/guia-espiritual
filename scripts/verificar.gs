@@ -197,11 +197,23 @@ function montarAviso(p) {
 
   var nome = colNome === -1 ? '' : String(dados[achou][colNome] || '');
   var site = String(p.site || '').replace(/\/$/, '');
-  var texto = 'Olá! O espaço *' + nome + '* foi cadastrado no Guia Espiritual — Piracicaba e Região, '
-    + 'um guia gratuito de terreiros, casas de axé, oraculistas e terapeutas da região.\n\n'
-    + 'Este link é só seu. Por ele você confere os dados, corrige o que precisar, '
-    + 'ou pede para sair do guia — sem falar com ninguém:\n'
+  // Os nomes dos botões aparecem aqui exatamente como estão na tela do /meu/.
+  // Quem lê no WhatsApp e abre o link depois precisa reconhecer o que procurar,
+  // sem ter de interpretar.
+  var texto = 'Olá! O espaço *' + nome + '* está cadastrado no Guia Espiritual — Piracicaba e '
+    + 'Região, um guia gratuito de terreiros, casas de axé, oraculistas e terapeutas da região.\n\n'
+    + 'Peço um favor: *confira se os dados estão certos*. Leva um minuto.\n\n'
+    + 'Este link é só seu:\n'
     + site + '/meu/?c=' + chave + '\n\n'
+    + 'Nele você vê tudo o que aparece no guia sobre o seu espaço — endereço, telefone, dias e '
+    + 'horários, tipos de atendimento, orientações para quem visita.\n\n'
+    + '• Se algo estiver errado ou faltando, toque em *Editar informações*, corrija ali mesmo e '
+    + 'salve. Não precisa falar com ninguém, nem explicar nada.\n'
+    + '• Se estiver tudo certo, toque em *Está tudo certo*. Seu cadastro passa a mostrar o selo '
+    + 'de confirmado, que diz ao visitante que foi você quem conferiu.\n'
+    + '• Se preferir não aparecer no guia, o mesmo link tem a opção de sair, sem burocracia.\n\n'
+    + 'O link continua valendo depois: sempre que mudar horário, endereço ou telefone, é só abrir '
+    + 'de novo e corrigir.\n\n'
     + 'Não repasse este link: quem o tiver pode alterar o cadastro.';
 
   var wa = soDigitos(p.tel).replace(/^0+/, '');
