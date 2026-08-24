@@ -133,7 +133,7 @@ function cadastrar(corpo) {
       var cabecalho = aba.getRange(1, 1, 1, Math.max(aba.getLastColumn(), 1)).getValues()[0];
       var colunas = mapear(aba, cabecalho);
 
-      if (jaExiste(aba, colunas, nome, tel)) {
+      if (jaExiste(aba, colunas, cabecalho, nome, tel)) {
         return json({ ok:false, erro:'Este espaço já está cadastrado. Para corrigir alguma informação, fale com a gente.' });
       }
 
@@ -144,7 +144,7 @@ function cadastrar(corpo) {
       for (var k in colunas) {
         var col = colunas[k];
         if (col === 0) continue;                // não sobrescreve o carimbo
-        var valor = k === 'autorizacao' ? TEXTO_AUTORIZACAO : limpar(corpo[k]);
+        var valor = k === 'autorizacao' ? TEXTO_AUTORIZACAO : limpar(corpo[k], CAMPOS_LONGOS[k]);
         while (linha.length <= col) linha.push('');
         linha[col] = valor;
       }
@@ -178,6 +178,7 @@ function doGet() {
 function acharPelaChave(chave) {
   chave = String(chave || '').trim();
   if (chave.length < 20) return null;              // chave curta demais nem é procurada
+  if (excedeuPorChave(chave) || excedeuErros()) return null;
   var planilha = abrirPlanilha();
   if (!planilha) return null;
   var aba = planilha.getSheets()[0];
@@ -194,6 +195,7 @@ function acharPelaChave(chave) {
                colunas: mapear(aba, cabecalho) };
     }
   }
+  anotarErro();
   return null;
 }
 
@@ -237,7 +239,7 @@ function salvarCadastro(corpo) {
     for (var k in alvo.colunas) {
       if (k === 'autorizacao') continue;
       if (!(k in dados)) continue;
-      alvo.aba.getRange(alvo.linha, alvo.colunas[k] + 1).setValue(limpar(dados[k]));
+      alvo.aba.getRange(alvo.linha, alvo.colunas[k] + 1).setValue(limpar(dados[k], CAMPOS_LONGOS[k]));
     }
     marcarConfirmado(alvo, 'sim');
     return json({ ok:true });
@@ -317,11 +319,23 @@ function trocarChaves() {
   Logger.log(trocadas + ' chave(s) trocada(s). Os links antigos morreram.');
 }
 
-/** Aleatória e longa o bastante para não se adivinhar por tentativa. */
+/**
+ * A chave é a única credencial que existe: quem a tem lê, corrige e apaga
+ * aquele cadastro. Math.random não serve para isso — é um gerador previsível,
+ * e o gerarChaves sorteia todas as chaves numa execução só, do mesmo fluxo.
+ * Quem tivesse uma chave legítima poderia deduzir as vizinhas.
+ *
+ * getUuid vem do gerador criptográfico do Java, por baixo do Apps Script.
+ * Dois deles dão 64 dígitos hexadecimais; ficamos com 28 caracteres do
+ * alfabeto sem l/1/0/o, que ninguém confunde ao ditar por telefone.
+ */
 function novaChave() {
   var letras = 'abcdefghijkmnopqrstuvwxyz23456789';   // sem l/1/0/o, que se confundem
+  var fonte = (Utilities.getUuid() + Utilities.getUuid()).replace(/-/g, '');
   var s = '';
-  for (var i = 0; i < 28; i++) s += letras.charAt(Math.floor(Math.random() * letras.length));
+  for (var i = 0; i < 28; i++) {
+    s += letras.charAt(parseInt(fonte.charAt(i * 2) + fonte.charAt(i * 2 + 1), 16) % letras.length);
+  }
   return s;
 }
 
@@ -378,19 +392,67 @@ function mapear(aba, cabecalho) {
   return mapa;
 }
 
-/** Mesmo par que a sincronização usa para desduplicar: nome + fim do telefone. */
-function jaExiste(aba, colunas, nome, tel) {
+/**
+ * Recusa cadastro repetido: mesmo nome e mesmo fim de telefone.
+ *
+ * Linha marcada como removida não conta. O /meu/ promete, em letras grandes,
+ * que quem sai pode voltar quando quiser — e a linha de quem saiu continua na
+ * planilha, de propósito. Sem esta exceção a porta ficaria fechada dos dois
+ * lados: o link antigo já não abre, e o cadastro novo seria barrado.
+ */
+function jaExiste(aba, colunas, cabecalho, nome, tel) {
   var ultima = aba.getLastRow();
   if (ultima < 2) return false;
   var alvoNome = normalizar(nome);
   var alvoTel = tel.slice(-8);
+  var colRem = acharColuna(cabecalho, COL_REMOVIDO);
   var dados = aba.getRange(2, 1, ultima - 1, aba.getLastColumn()).getValues();
   for (var i = 0; i < dados.length; i++) {
+    if (colRem !== -1 && /^sim$/i.test(String(dados[i][colRem] || '').trim())) continue;
     var n = normalizar(dados[i][colunas.nome]);
     var t = String(dados[i][colunas.telefone] || '').replace(/\D/g, '').slice(-8);
     if (alvoNome && n === alvoNome && alvoTel && t === alvoTel) return true;
   }
   return false;
+}
+
+/**
+ * Freios das ações que usam a chave (ler, salvar, confirmar, remover).
+ *
+ * São dois, com alvos diferentes:
+ *
+ *   por chave  — impede martelar UM cadastro. Conta por chave, então o
+ *                exagero de um não atrapalha ninguém.
+ *   por erro   — impede varrer chaves no escuro. Conta só as tentativas que
+ *                não acharam linha nenhuma; quem tem link de verdade nunca
+ *                erra, e por isso nunca esbarra neste.
+ *
+ * Adivinhar já era inviável — 28 caracteres de um alfabeto de 33, sorteados
+ * pelo gerador criptográfico. Isto aqui é o segundo cadeado, não o primeiro.
+ */
+var LIMITE_POR_CHAVE = 20;
+var LIMITE_ERROS = 60;
+
+function excedeuPorChave(chave) {
+  var cache = CacheService.getScriptCache();
+  var k = 'chave-' + Utilities.base64EncodeWebSafe(
+    Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, String(chave))) +
+    '-' + Math.floor(Date.now() / 60000);
+  var n = Number(cache.get(k) || 0) + 1;
+  cache.put(k, String(n), 120);
+  return n > LIMITE_POR_CHAVE;
+}
+
+function excedeuErros() {
+  var cache = CacheService.getScriptCache();
+  var k = 'chaves-erradas-' + Math.floor(Date.now() / 60000);
+  return Number(cache.get(k) || 0) > LIMITE_ERROS;
+}
+
+function anotarErro() {
+  var cache = CacheService.getScriptCache();
+  var k = 'chaves-erradas-' + Math.floor(Date.now() / 60000);
+  cache.put(k, String(Number(cache.get(k) || 0) + 1), 120);
 }
 
 /** Freio contra enxurrada. Não distingue pessoas — conta o total no minuto. */
@@ -407,9 +469,29 @@ function carimbo() {
   return Utilities.formatDate(new Date(), 'America/Sao_Paulo', 'dd/MM/yyyy HH:mm:ss');
 }
 
-function limpar(v) {
-  return String(v == null ? '' : v).replace(/\s+/g, ' ').trim().slice(0, 600);
+/**
+ * Arruma o texto que chega do formulário.
+ *
+ * Nos campos longos as quebras de linha são conteúdo, não sujeira: é assim que
+ * uma casa lista "Segunda 20h / Quarta 19h30" em linhas separadas, e as páginas
+ * do guia mostram isso com white-space:pre-line. Achatar tudo num parágrafo só
+ * destruiria, na planilha, o que a pessoa escreveu — sem volta.
+ */
+function limpar(v, multilinha) {
+  var s = String(v == null ? '' : v);
+  if (multilinha) {
+    s = s.replace(/\r\n?/g, '\n')          // fim de linha do Windows
+         .replace(/[^\S\n]+/g, ' ')         // espaços e tabs, menos a quebra
+         .replace(/ *\n */g, '\n')          // sem espaço sobrando nas pontas
+         .replace(/\n{3,}/g, '\n\n');       // no máximo uma linha em branco
+  } else {
+    s = s.replace(/\s+/g, ' ');
+  }
+  return s.trim().slice(0, 600);
 }
+
+/** Campos onde a quebra de linha é parte da resposta. */
+var CAMPOS_LONGOS = { horarios:true, servicos:true, regras:true };
 
 function normalizar(v) {
   return String(v == null ? '' : v)

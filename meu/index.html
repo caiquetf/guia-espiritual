@@ -177,8 +177,7 @@ function desenharCampos(dados){
     const campo = tipo === 'longo'
       ? `<textarea name="${k}" maxlength="500">${v}</textarea>`
       : tipo === 'modalidade'
-        ? `<select name="${k}">${['','Presencial','Online','Ambas'].map(o =>
-            `<option value="${o}"${(dados[k]||'') === o ? ' selected' : ''}>${o || 'Prefiro não dizer'}</option>`).join('')}</select>`
+        ? montarModalidade(k, dados[k] || '')
         : `<input type="text" name="${k}" maxlength="200" value="${v}" />`;
     return `<label><span class="rot">${rotulo}</span>${campo}</label>`;
   }).join('') +
@@ -213,6 +212,20 @@ function mostrar(modo){
   document.getElementById('acoes-ver').hidden = editando;
   document.getElementById('acoes-editar').hidden = !editando;
   if (editando) form.querySelector('input, textarea, select').focus();
+}
+
+/**
+ * A caixa de modalidade tem quatro opções, mas a planilha guarda o que a pessoa
+ * escreveu — e muita gente respondeu por extenso ("Presencial e online"). Se a
+ * resposta dela não estivesse na lista, a caixa abriria vazia e o Salvar
+ * apagaria o que ela disse. Então a resposta de fora entra na lista, já
+ * escolhida, e só sai se ela mesma trocar.
+ */
+function montarModalidade(k, atual){
+  const padrao = ['', 'Presencial', 'Online', 'Ambas'];
+  const opcoes = padrao.includes(atual) ? padrao : padrao.concat([atual]);
+  return `<select name="${k}">${opcoes.map(o =>
+    `<option value="${esc(o)}"${atual === o ? ' selected' : ''}>${esc(o) || 'Prefiro não dizer'}</option>`).join('')}</select>`;
 }
 
 function coletar(){
