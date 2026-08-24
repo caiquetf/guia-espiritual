@@ -157,12 +157,29 @@ function pedirAjuda(){
   return `<br><br><a class="btn" href="${CANAL}" rel="nofollow noopener">Falar com quem mantém o guia</a>`;
 }
 
+/** Prazo para o Google responder. Passou disso, é falha, não lentidão. */
+const PRAZO = 25000;
+
 async function chamar(acao, extra){
-  const r = await fetch(API_PUBLICA, {
-    method: 'POST',
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify({ acao, chave, ...extra })
-  });
+  // Sem prazo, uma resposta que nunca chega deixa a página parada para sempre
+  // — e quem abriu não tem como saber se está carregando ou se quebrou.
+  const corte = new AbortController();
+  const relogio = setTimeout(() => corte.abort(), PRAZO);
+  let r;
+  try {
+    r = await fetch(API_PUBLICA, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ acao, chave, ...extra }),
+      signal: corte.signal
+    });
+  } catch (e){
+    throw new Error(corte.signal.aborted
+      ? 'a resposta demorou mais de ' + (PRAZO/1000) + ' segundos'
+      : 'não consegui completar o pedido');
+  } finally {
+    clearTimeout(relogio);
+  }
   // O script sempre responde JSON, inclusive quando dá erro do lado dele. Se
   // veio outra coisa, quem respondeu não foi ele — e dizer "sem conexão" aqui
   // mandaria a pessoa procurar defeito no lugar errado.
@@ -244,7 +261,13 @@ function terminou(titulo, texto){
   </div>`;
 }
 
+function carregando(){
+  recado.innerHTML = `<div class="caixa" id="carregando">Carregando seu cadastro…
+    <br><span style="font-size:13px">Costuma levar poucos segundos.</span></div>`;
+}
+
 async function iniciar(){
+  carregando();
   if (!/^https:\/\/script\.google\.com\//.test(API_PUBLICA)){
     try {
       const j = await (await fetch('../dados.json', { cache:'no-store' })).json();
@@ -264,7 +287,9 @@ async function iniciar(){
   try {
     r = await chamar('ler');
   } catch (e){
-    return aviso('Não consegui falar com o servidor — ' + esc(e.message) + '.' + pedirAjuda());
+    return aviso('Não consegui carregar seu cadastro — ' + esc(e.message) + '.'
+      + '<br><br><button type="button" class="btn" onclick="iniciar()">Tentar de novo</button>'
+      + pedirAjuda());
   }
   if (!r.ok){
     return aviso(esc(r.erro || 'Não consegui abrir seu cadastro.') + pedirAjuda(), 'aviso');
@@ -277,6 +302,7 @@ async function iniciar(){
     corpo.hidden = false;
     document.getElementById('linha-sub').textContent =
       `${r.dados.nome || r.dados.dirigente || 'Seu espaço'} — confira e corrija o que precisar.`;
+    recado.innerHTML = '';                   // some com o "carregando"
     if (r.dados.confirmado){
       recado.innerHTML = `<div class="caixa">Você já confirmou estes dados.
         <strong>Pode corrigir de novo sempre que mudar alguma coisa.</strong></div>`;
