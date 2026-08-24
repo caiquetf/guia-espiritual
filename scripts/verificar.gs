@@ -167,13 +167,24 @@ function montarAviso(p) {
   var colChave = acharColuna(cabecalho, 'Chave');
 
   var alvoTel = soDigitos(p.tel), alvoNome = normalizar(p.nome);
-  var achou = -1;
+  var achados = [];
   for (var i = 1; i < dados.length; i++) {
     var t = colTel === -1 ? '' : soDigitos(dados[i][colTel]);
     var n = colNome === -1 ? '' : normalizar(dados[i][colNome]);
-    if (alvoTel && t ? fim(t) === fim(alvoTel) : (alvoNome && n === alvoNome)) { achou = i; break; }
+    if (alvoTel && t ? fim(t) === fim(alvoTel) : (alvoNome && n === alvoNome)) achados.push(i);
   }
-  if (achou === -1) return resposta('erro', 'Não encontrei esse cadastro na planilha.');
+  if (!achados.length) return resposta('erro', 'Não encontrei esse cadastro na planilha.');
+
+  // A comparação é pelos últimos 8 dígitos, então dois cadastros podem casar:
+  // um telefone de casa compartilhado, ou o mesmo número digitado com e sem o
+  // nono dígito. Marcar selo errado se conserta; mandar a chave de um espaço
+  // para o WhatsApp de outro entrega a edição do cadastro alheio e não tem
+  // volta. Na dúvida, não escolhe.
+  if (achados.length > 1) {
+    return resposta('erro', 'Encontrei ' + achados.length + ' cadastros com esse telefone. '
+      + 'Não dá para saber de quem é a chave — pegue o link na planilha, na coluna Chave.');
+  }
+  var achou = achados[0];
 
   if (colChave === -1) {
     return resposta('erro', 'A coluna Chave ainda não existe. Rode gerarChaves no script de cadastro.');

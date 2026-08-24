@@ -59,6 +59,15 @@ const esc = s => (s ?? '').toString()
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
   .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 
+/**
+ * JSON destinado a ficar DENTRO de uma tag <script>. O navegador procura o
+ * primeiro "</script>" antes de entregar o conteúdo ao JavaScript, então um
+ * cadastro chamado `Casa</script><script>...` fecharia a tag e o que viesse
+ * depois viraria código nosso, rodando no endereço do guia. Escapar o "<"
+ * como \u003c resolve: o JSON continua o mesmo, e a tag não fecha.
+ */
+const jsonEmScript = valor => JSON.stringify(valor).replace(/</g, '\\u003c');
+
 function whatsapp(tel){
   let d = digitos(tel).replace(/^0+/, '');
   if (!d) return '';
@@ -101,7 +110,7 @@ function estruturado(d, url){
   if (d.servicos) o.makesOffer = d.servicos.split(/[,;·]/).map(t => t.trim()).filter(Boolean)
     .slice(0, 12).map(t => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', name: t } }));
   if (d.dirigente) o.employee = { '@type': 'Person', name: d.dirigente };
-  return JSON.stringify(o);
+  return jsonEmScript(o);
 }
 
 function linkCorrecao(d, url){
@@ -227,7 +236,7 @@ ${[
 <script>
   // Bandeja do sistema no celular; onde não existe, copia o endereço.
   document.getElementById('compartilhar').addEventListener('click', async () => {
-    const dados = { title: document.title, text: ${JSON.stringify(`${d.nome || d.dirigente} — no Guia Espiritual de Piracicaba e Região`)}, url: location.href };
+    const dados = { title: document.title, text: ${jsonEmScript(`${d.nome || d.dirigente} — no Guia Espiritual de Piracicaba e Região`)}, url: location.href };
     try {
       if (navigator.share){ await navigator.share(dados); return; }
       await navigator.clipboard.writeText(location.href);

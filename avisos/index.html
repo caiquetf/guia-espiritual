@@ -61,7 +61,7 @@
 </main>
 
 <script>
-const SITE = location.origin + location.pathname.replace(/\/avisos\/?$/, '');
+const SITE = location.origin + location.pathname.replace(/\/avisos\/?(index\.html)?$/, '');
 const CHAVE = 'guia-espiritual-avisados';
 
 /**
@@ -165,14 +165,22 @@ const acha = ap => DADOS.find(d => apelido(d) === ap);
  */
 function avisar(ap){
   const d = acha(ap); if (!d) return;
+  let janela;
   if (/^https:\/\/script\.google\.com\//.test(API_DONO)){
     const url = API_DONO + (API_DONO.includes('?') ? '&' : '?')
       + 'acao=avisar&site=' + encodeURIComponent(SITE)
       + '&nome=' + encodeURIComponent(d.nome || d.dirigente || '')
       + '&tel=' + encodeURIComponent(digitos(d.telefone));
-    window.open(url, 'guia-avisar', 'width=460,height=560');
+    janela = window.open(url, 'guia-avisar', 'width=460,height=560');
   } else {
-    window.open(`https://wa.me/${numeroWhats(d.telefone)}?text=${encodeURIComponent(mensagem(d))}`, '_blank', 'noopener');
+    janela = window.open(`https://wa.me/${numeroWhats(d.telefone)}?text=${encodeURIComponent(mensagem(d))}`, '_blank', 'noopener');
+  }
+  // Janela bloqueada é o caso comum no celular. Marcar assim mesmo tiraria a
+  // pessoa da fila para sempre, sem que mensagem nenhuma tivesse saído — e
+  // ninguém notaria, porque o cartão sumiria dos pendentes.
+  if (!janela){
+    nota('O navegador bloqueou a janela. Libere os pop-ups e clique de novo.');
+    return;
   }
   marcar(ap, true);
 }

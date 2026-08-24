@@ -392,6 +392,15 @@ console.log(apiPublica
   ? 'Cadastro pelo site e página do responsável ligados à planilha.'
   : 'Sem CADASTRO_URL — /cadastrar/ e /meu/ mostram o caminho alternativo.');
 
+/**
+ * O e-mail fica de fora do arquivo publicado. Os dois formulários prometem
+ * isso com todas as letras — "não aparece no guia", "serve só para a gente te
+ * achar se precisar" — e o dados.json é servido pelo GitHub Pages, aberto a
+ * quem digitar o endereço. Ele continua na planilha, que é onde a promessa
+ * disse que ficaria.
+ */
+const publicaveis = finais.map(r => { const { email, ...resto } = r; return resto; });
+
 writeFileSync(SAIDA,
-  JSON.stringify({ geradoEm, formulario, apiVerificar, apiPublica, registros: finais }, null, 2) + '\n', 'utf8');
+  JSON.stringify({ geradoEm, formulario, apiVerificar, apiPublica, registros: publicaveis }, null, 2) + '\n', 'utf8');
 console.log(`${finais.length} cadastro(s) gravado(s) em ${SAIDA}. Colunas reconhecidas: ${reconhecidas}/${FIELDS.length}.`);
