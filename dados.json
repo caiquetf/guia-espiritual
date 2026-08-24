@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-08-21T22:38:57.272Z",
+  "geradoEm": "2026-08-24T12:48:19.958Z",
   "formulario": "https://docs.google.com/forms/d/e/1FAIpQLSdha6CPyRtEe_2-ZSJM5NsMNOnXead1ZhU49ZoX3h0ZbIWifg/viewform?usp=header",
   "apiVerificar": "https://script.google.com/macros/s/AKfycbya_mjHgaMdzr2NPX4SwFy5inm2G2qnGuNhq-TuJpwtOuguxym56fnjgl7RnJb5VDA-aA/exec",
   "apiPublica": "https://script.google.com/macros/s/AKfycbyGzZR9M3IQZCdR1cbCRvvdciMl7Ixtz_NSYwUEHsinjVH2q2HNqLtk5kVhhufM-0dA/exec",
@@ -470,6 +470,24 @@
       "servicos": "Todos acima",
       "verificado": "sim",
       "regras": "Não vir de roupa decotada, transparente, ou justa/curta. Mandar mensagem no WhatsApp do terreiro pedindo para guardar senha.",
+      "grupo": "Umbanda"
+    },
+    {
+      "timestamp": "30/07/2026 21:32:21",
+      "nome": "Terreiro de umbanda caboclo pena branca e mãe Iemanjá",
+      "dirigente": "Alda medina/ Gustavo Medina",
+      "tradicao": "Umbanda",
+      "tempo": "3 anos",
+      "cidade": "Piracicaba",
+      "bairro": "",
+      "endereco": "R José Soledade,295 VL resende",
+      "modalidade": "Presencial",
+      "telefone": "19996838661",
+      "redes": "",
+      "horarios": "Segunda feira às 19:30",
+      "servicos": "Tarot, atendimento particular,passes",
+      "verificado": "sim",
+      "regras": "Cuidado com vestimenta e ir com muita fé nas entidades e orixás",
       "grupo": "Umbanda"
     },
     {
