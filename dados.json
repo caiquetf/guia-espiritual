@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-08-24T12:48:19.958Z",
+  "geradoEm": "2026-08-24T13:11:22.406Z",
   "formulario": "https://docs.google.com/forms/d/e/1FAIpQLSdha6CPyRtEe_2-ZSJM5NsMNOnXead1ZhU49ZoX3h0ZbIWifg/viewform?usp=header",
   "apiVerificar": "https://script.google.com/macros/s/AKfycbya_mjHgaMdzr2NPX4SwFy5inm2G2qnGuNhq-TuJpwtOuguxym56fnjgl7RnJb5VDA-aA/exec",
   "apiPublica": "https://script.google.com/macros/s/AKfycbyGzZR9M3IQZCdR1cbCRvvdciMl7Ixtz_NSYwUEHsinjVH2q2HNqLtk5kVhhufM-0dA/exec",
@@ -18,7 +18,7 @@
       "redes": "",
       "horarios": "as terças e quintas - das 17h às 00h",
       "servicos": "Cartomancia",
-      "verificado": "sim",
+      "verificado": "",
       "regras": "faço atendimentos urgentes caso o consulente necessite",
       "grupo": "Umbanda"
     },
@@ -36,7 +36,7 @@
       "redes": "",
       "horarios": "Agendamento tarô e outras práticas",
       "servicos": "Tarô, baralho cigano, mesa rádionica, constelação familiar, cromoterapia, Reiki, alinhamento de Chakras",
-      "verificado": "sim",
+      "verificado": "",
       "regras": "",
       "grupo": "Umbanda"
     },
@@ -54,7 +54,7 @@
       "redes": "",
       "horarios": "Com agendamento de segunda a sábado",
       "servicos": "Cartomancia",
-      "verificado": "sim",
+      "verificado": "",
       "regras": "",
       "grupo": "Cartomancia/Tarô"
     },
@@ -72,7 +72,7 @@
       "redes": "",
       "horarios": "Desenvolvimento 2z ao mês / atendimento com Oráculo com hora marcada",
       "servicos": "Consulta espiritual particular",
-      "verificado": "sim",
+      "verificado": "",
       "regras": "Tirar dúvidas e agendar consulta pelo WhatsApp",
       "grupo": "Quimbanda"
     },
@@ -90,7 +90,7 @@
       "redes": "",
       "horarios": "Quarta, quinta e sexta, mediante agendamento.",
       "servicos": "Consulta espiritual particular",
-      "verificado": "sim",
+      "verificado": "",
       "regras": "",
       "grupo": "Umbanda"
     },
@@ -108,7 +108,7 @@
       "redes": "",
       "horarios": "Por agendamento",
       "servicos": "Consulta espiritual particular",
-      "verificado": "sim",
+      "verificado": "",
       "regras": "Entra em contato para mais detalhes",
       "grupo": "Outros"
     },
@@ -126,7 +126,7 @@
       "redes": "",
       "horarios": "1x ao mês, domingo 7h30 da manhã: giras abertas e gratuitas",
       "servicos": "Desenvolvimento",
-      "verificado": "sim",
+      "verificado": "",
       "regras": "Favor confirmar presença na gira",
       "grupo": "Umbanda"
     },
@@ -162,7 +162,7 @@
       "redes": "",
       "horarios": "Todos os dias das 9 as 00",
       "servicos": "Cartomancia",
-      "verificado": "sim",
+      "verificado": "",
       "regras": "",
       "grupo": "Quimbanda"
     },
@@ -180,7 +180,7 @@
       "redes": "",
       "horarios": "Seg A sábado ds 9 as 19",
       "servicos": "Cartomancia",
-      "verificado": "sim",
+      "verificado": "",
       "regras": "Oque o baralho cigano tem para te dizer? Esclarece dúvidas, orientações  e conselhos",
       "grupo": "Umbanda"
     },
@@ -198,7 +198,7 @@
       "redes": "",
       "horarios": "Segunda e quinta",
       "servicos": "Jogo de Búzios",
-      "verificado": "sim",
+      "verificado": "",
       "regras": "",
       "grupo": "Candomblé"
     },
@@ -216,7 +216,7 @@
       "redes": "",
       "horarios": "Quintas feiras 19:30h",
       "servicos": "Todos os trabalhos mencionados acima",
-      "verificado": "sim",
+      "verificado": "",
       "regras": "",
       "grupo": "Candomblé"
     },
@@ -234,7 +234,7 @@
       "redes": "",
       "horarios": "Atendimento com horário marcado",
       "servicos": "Cartomancia",
-      "verificado": "sim",
+      "verificado": "",
       "regras": "Instagram @isabellereato",
       "grupo": "Outros"
     },
@@ -252,7 +252,7 @@
       "redes": "",
       "horarios": "Seg a sab - 09hrs as 19hrs",
       "servicos": "Cartomancia",
-      "verificado": "sim",
+      "verificado": "",
       "regras": "Consultas apenas online.",
       "grupo": "Holístico/Terapia"
     },
@@ -288,7 +288,7 @@
       "redes": "",
       "horarios": "De segunda a sexta",
       "servicos": "Consulta espiritual particular",
-      "verificado": "sim",
+      "verificado": "",
       "regras": "Trabalhos oracular de dadomancia e cartomancia com atendimentos e trabalhos espirituais",
       "grupo": "Umbanda"
     },
@@ -324,7 +324,7 @@
       "redes": "",
       "horarios": "9 as 21",
       "servicos": "Cartomancia",
-      "verificado": "sim",
+      "verificado": "",
       "regras": "",
       "grupo": "Magia"
     },
@@ -342,7 +342,7 @@
       "redes": "",
       "horarios": "7 as 22hs",
       "servicos": "Cartomancia",
-      "verificado": "sim",
+      "verificado": "",
       "regras": "",
       "grupo": "Candomblé"
     },
@@ -360,7 +360,7 @@
       "redes": "",
       "horarios": "Aos finais de semana, horário marcado",
       "servicos": "Cartomancia",
-      "verificado": "sim",
+      "verificado": "",
       "regras": "Consulta oracular por meio de baralho cigano, com fotos + explicação ou ligação via vídeo por whatsapp, também com orientações de auto cuidado, proteçãoz banhos, patuás e afins",
       "grupo": "Umbanda"
     },
@@ -378,7 +378,7 @@
       "redes": "",
       "horarios": "Trabalho de segunda a sexta das 07 as 19 horas",
       "servicos": "Consulta espiritual particular",
-      "verificado": "sim",
+      "verificado": "",
       "regras": "Atendo consulta individual ou casal, para maiores informações ligar no watsapp",
       "grupo": "Umbanda"
     },
@@ -396,7 +396,7 @@
       "redes": "",
       "horarios": "Todos os dias, mediante agendamento.",
       "servicos": "Cartomancia",
-      "verificado": "sim",
+      "verificado": "",
       "regras": "",
       "grupo": "Quimbanda"
     },
@@ -414,7 +414,7 @@
       "redes": "",
       "horarios": "Quinta feira às 20:30 gira aberta",
       "servicos": "Consultas oracular,giras de umbanda",
-      "verificado": "sim",
+      "verificado": "",
       "regras": "Temos giras de umbanda e também consulta oracular particular",
       "grupo": "Umbanda"
     },
@@ -432,7 +432,7 @@
       "redes": "",
       "horarios": "Trabalho são  todas as Sexta-feira   das 20 horas ate 22 horas",
       "servicos": "Consulta espiritual particular",
-      "verificado": "sim",
+      "verificado": "",
       "regras": "NÃO  USAR  Roupas  Curtas Nem cores Preto e Vermelha",
       "grupo": "Umbanda"
     },
@@ -450,7 +450,7 @@
       "redes": "",
       "horarios": "Os trabalhos acontecem aos sábados sendo 2 sim um não (giras gratuitas)",
       "servicos": "Aplicação de cone hindu,magias  limpezas espirituais.",
-      "verificado": "sim",
+      "verificado": "",
       "regras": "Proibido roupas curtas,e pessoas alcoolizadas",
       "grupo": "Umbanda"
     },
@@ -468,7 +468,7 @@
       "redes": "",
       "horarios": "Aos sábados, quinzenais, a partir das 19:30",
       "servicos": "Todos acima",
-      "verificado": "sim",
+      "verificado": "",
       "regras": "Não vir de roupa decotada, transparente, ou justa/curta. Mandar mensagem no WhatsApp do terreiro pedindo para guardar senha.",
       "grupo": "Umbanda"
     },
@@ -486,7 +486,7 @@
       "redes": "",
       "horarios": "Segunda feira às 19:30",
       "servicos": "Tarot, atendimento particular,passes",
-      "verificado": "sim",
+      "verificado": "",
       "regras": "Cuidado com vestimenta e ir com muita fé nas entidades e orixás",
       "grupo": "Umbanda"
     },
@@ -504,7 +504,7 @@
       "redes": "",
       "horarios": "Segunda feiras às 19h30m",
       "servicos": "Desenvolvimento, Cartomancia, consulta particular, benzimento",
-      "verificado": "sim",
+      "verificado": "",
       "regras": "",
       "grupo": "Umbanda"
     },
@@ -522,7 +522,7 @@
       "redes": "",
       "horarios": "Segunda sexta sábado",
       "servicos": "Todos",
-      "verificado": "sim",
+      "verificado": "",
       "regras": "Respeito e sigilo",
       "grupo": "Umbanda"
     },
@@ -540,7 +540,7 @@
       "redes": "",
       "horarios": "Conforme agendamento",
       "servicos": "Cartomancia",
-      "verificado": "sim",
+      "verificado": "",
       "regras": "Agende pelo WhatsApp! Trabalhamos com cartomancia e trabalhos espirituais (financeiro, amoroso, mental, etc)",
       "grupo": "Umbanda"
     },
@@ -558,7 +558,7 @@
       "redes": "",
       "horarios": "Segunda feira às 20:00",
       "servicos": "",
-      "verificado": "sim",
+      "verificado": "",
       "regras": "Venha de coração aberto para receber o axé na sua vida",
       "grupo": "Umbanda"
     },
@@ -576,7 +576,7 @@
       "redes": "",
       "horarios": "Todos os dias,  mediante agendamento",
       "servicos": "Cartomancia",
-      "verificado": "sim",
+      "verificado": "",
       "regras": "",
       "grupo": "Quimbanda"
     },
@@ -594,7 +594,7 @@
       "redes": "",
       "horarios": "De 15 em 15 dias nas segundas tocamos mais temos também nossas consultas particulares só marca o dia temos jogos de búzios, ebó, banhos jogos de cartas lembrando que nossas consultas temos seu Zé pilintra, seu tranca rua de embaré, seu Marabó toquinho entre outros",
       "servicos": "Consulta espiritual particular",
-      "verificado": "sim",
+      "verificado": "",
       "regras": "Vir com roupas comportadas, de preferência roupas claras serão muito bem vindos a sua presença é nosso maior ASÉ para mais informações entra em contato com o número dechado ou também nesse número se preferir 19997441756",
       "grupo": "Candomblé"
     },
@@ -615,24 +615,6 @@
       "verificado": "",
       "regras": "Respeito ao espaço sagrado, trazer velas!",
       "grupo": "Umbanda"
-    },
-    {
-      "timestamp": "11/08/2026 21:13:40",
-      "nome": "Teste claude",
-      "dirigente": "Teste",
-      "tradicao": "Teste",
-      "tempo": "Teste",
-      "cidade": "Teste",
-      "bairro": "Teste",
-      "endereco": "Teste",
-      "modalidade": "Ambas",
-      "telefone": "19974118980",
-      "redes": "Teste",
-      "horarios": "Teste",
-      "servicos": "Teste",
-      "verificado": "sim",
-      "regras": "Teste",
-      "grupo": "Outros"
     }
   ]
 }
