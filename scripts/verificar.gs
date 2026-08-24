@@ -41,6 +41,9 @@ var PLANILHA = '';
 /** Nome da coluna que o guia lê. Criada automaticamente se ainda não existir. */
 var COLUNA = 'Verificado';
 
+/** Endereço do site — para onde as respostas desta janelinha podem falar. */
+var ORIGEM_DO_SITE = 'https://caiquetf.github.io';
+
 function doGet(e) {
   try {
     var p = (e && e.parameter) || {};
@@ -234,8 +237,11 @@ function resposta(estado, texto) {
     (estado === 'ok' ? '✓ ' : '⚠ ') + escapar(texto) + '</p>' +
     '<p style="color:#9f8771;font-size:13px;margin:0">Pode fechar esta janela.</p></div>' +
     '<script>' +
+    // Alvo estreito: a mensagem carrega só um aviso de tela, mas gritar para
+    // "*" a entrega a qualquer página que esteja no meio do caminho.
     'try{ window.opener && window.opener.postMessage(' +
-    JSON.stringify({ guia: 'verificar', estado: estado }) + ', "*"); }catch(e){}' +
+    JSON.stringify({ guia: 'verificar', estado: estado }) + ', ' +
+    JSON.stringify(ORIGEM_DO_SITE) + '); }catch(e){}' +
     (estado === 'ok' ? 'setTimeout(function(){ window.close(); }, 900);' : '') +
     '<\/script>';
   return HtmlService.createHtmlOutput(html)

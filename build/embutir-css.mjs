@@ -24,7 +24,10 @@ const marca = '<!-- Tailwind compilado localmente (npm run css). Sem CDN: carreg
 const ini = html.indexOf(marca);
 if (ini === -1) throw new Error('Marcador do CSS compilado não encontrado no index.html.');
 const abre = html.indexOf('<style>', ini);
-const fecha = html.indexOf('</style>', abre) + '</style>'.length;
+if (abre === -1) throw new Error('Depois do marcador não há <style> para substituir.');
+const fim = html.indexOf('</style>', abre);
+if (fim === -1) throw new Error('O <style> depois do marcador nunca é fechado.');
+const fecha = fim + '</style>'.length;
 
 writeFileSync('index.html', html.slice(0, abre) + '<style>' + css + '</style>' + html.slice(fecha), 'utf8');
 console.log(`CSS embutido: ${(css.length / 1024).toFixed(1)} KB`);

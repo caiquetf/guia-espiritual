@@ -40,9 +40,12 @@ function avisoAntigo(d){
   const m = /(\d{1,2})\/(\d{1,2})\/(\d{4})/.exec(d.timestamp || '');
   if (!m) return '';
   const [,dia,mes,ano] = m;
-  const t = new Date(+ano, +mes-1, +dia).getTime();
+  const data = new Date(+ano, +mes-1, +dia);
+  const t = data.getTime();
   if (!t || (Date.now() - t) / (1000*60*60*24*30.44) < MESES_PARA_AVISO) return '';
-  return `Informação de ${MESES[+mes-1]} de ${ano}`;
+  // O mês sai da data já construída, não do que veio escrito: uma planilha em
+  // outro idioma manda 3/15/2023, e MESES[14] seria "undefined" na página.
+  return `Informação de ${MESES[data.getMonth()]} de ${data.getFullYear()}`;
 }
 
 const deaccent = s => (s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -258,6 +261,27 @@ ${[
 `;
 }
 
+/** Página mínima que leva do endereço antigo ao atual, sem depender de script. */
+function encaminhar(destino){
+  const url = `${SITE}/${PASTA}/${destino}/`;
+  return `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="robots" content="noindex, follow" />
+<meta http-equiv="refresh" content="0; url=../${destino}/" />
+<link rel="canonical" href="${url}" />
+<title>Este espaço mudou de endereço — Guia Espiritual</title>
+</head>
+<body style="margin:0;padding:2.5rem 1rem;background:#150f0c;color:#f3e7d6;text-align:center;
+             font:15.5px/1.6 Inter,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif">
+<p>Este espaço agora fica em outro endereço.</p>
+<p><a href="../${destino}/" style="color:#c9713f">Abrir a página dele</a></p>
+</body>
+</html>
+`;
+}
+
 /* ─────────────────────────────────────────────────────────── */
 
 if (!existsSync('dados.json')){
@@ -270,8 +294,21 @@ const { registros = [], geradoEm } = JSON.parse(readFileSync('dados.json', 'utf8
 rmSync(PASTA, { recursive: true, force: true });
 mkdirSync(PASTA, { recursive: true });
 
+/**
+ * Apelidos antigos, para que link enviado continue chegando.
+ *
+ * O apelido carrega o fim do telefone, então corrigir o número muda o endereço
+ * da página — e mata a mensagem já mandada no WhatsApp, o resultado de busca e
+ * o link que alguém guardou. Aqui se anota, para cada cadastro, por quais
+ * endereços ele já passou. O carimbo de data serve de identidade porque é a
+ * única coisa que a pessoa não edita.
+ */
+const MAPA = 'espaco-apelidos.json';
+const historico = existsSync(MAPA) ? JSON.parse(readFileSync(MAPA, 'utf8')) : {};
+
 const vistos = new Set();
 const urls = [];
+const atuais = new Map();          // carimbo -> apelido de agora
 for (const d of registros){
   if (!(d.nome || d.dirigente)) continue;
   let ap = apelido(d), n = 2;
@@ -280,7 +317,31 @@ for (const d of registros){
   mkdirSync(join(PASTA, ap), { recursive: true });
   writeFileSync(join(PASTA, ap, 'index.html'), pagina(d), 'utf8');
   urls.push(`${SITE}/${PASTA}/${ap}/`);
+
+  const id = d.timestamp || ap;
+  atuais.set(id, ap);
+  const antigos = historico[id] || [];
+  if (!antigos.includes(ap)) antigos.push(ap);
+  historico[id] = antigos;
 }
+
+// Endereços que este cadastro já teve e não usa mais viram uma página que
+// encaminha para o atual. Fora do sitemap e fora do índice: existem para
+// atender quem chega por um link antigo, não para serem achadas.
+let encaminhamentos = 0;
+for (const [id, antigos] of Object.entries(historico)){
+  const agora = atuais.get(id);
+  if (!agora) continue;                     // cadastro saiu do guia: sem destino
+  for (const velho of antigos){
+    if (velho === agora || vistos.has(velho)) continue;
+    mkdirSync(join(PASTA, velho), { recursive: true });
+    writeFileSync(join(PASTA, velho, 'index.html'), encaminhar(agora), 'utf8');
+    vistos.add(velho);
+    encaminhamentos++;
+  }
+}
+if (encaminhamentos) console.log(`${encaminhamentos} endereço(s) antigo(s) encaminhando para o novo.`);
+writeFileSync(MAPA, JSON.stringify(historico, null, 2) + '\n', 'utf8');
 
 const data = (geradoEm || new Date().toISOString()).slice(0, 10);
 writeFileSync('sitemap.xml',

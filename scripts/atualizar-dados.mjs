@@ -358,10 +358,16 @@ if (!registros.length){
 }
 
 // Remove duplicatas mantendo a resposta mais recente (a última linha vence).
+//
+// O dirigente entra na chave porque a linha é aceita quando qualquer um dos
+// três campos está preenchido: quem responde só "Dirigente" — comum quando a
+// casa é conhecida pelo nome do pai ou da mãe de santo — cairia todo mundo na
+// mesma chave vazia e só o último sobreviveria, sem ninguém notar.
 const porChave = new Map();
-registros.forEach(r => porChave.set(norm(r.nome) + '|' + (r.telefone||'').replace(/\D/g,''), r));
+const chaveDe = r => [norm(r.nome), norm(r.dirigente), (r.telefone||'').replace(/\D/g,'')].join('|');
+registros.forEach(r => porChave.set(chaveDe(r), r));
 if (registros.length > porChave.size){
-  console.log(`${registros.length - porChave.size} resposta(s) repetida(s) — mesmo nome e telefone, vale a mais recente.`);
+  console.log(`${registros.length - porChave.size} resposta(s) repetida(s) — mesmo nome, dirigente e telefone; vale a mais recente.`);
 }
 if (emBranco) console.log(`${emBranco} linha(s) sem nome nem telefone — ignoradas.`);
 const finais = [...porChave.values()]
