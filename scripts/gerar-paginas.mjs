@@ -306,9 +306,28 @@ mkdirSync(PASTA, { recursive: true });
 const MAPA = 'espaco-apelidos.json';
 const historico = existsSync(MAPA) ? JSON.parse(readFileSync(MAPA, 'utf8')) : {};
 
+/**
+ * Identidade estável do cadastro, para saber que a página de hoje é a mesma de
+ * ontem com outro apelido.
+ *
+ * O carimbo do formulário serve porque é a única coisa que a pessoa não edita.
+ * Mas ele tem precisão de segundos, e dois envios podem cair no mesmo instante
+ * — aí os dois dividiriam o histórico, e quando um saísse do guia o endereço
+ * antigo dele passaria a encaminhar para a página do outro. Quando o carimbo se
+ * repete, cada um fica com a sua identidade e perde o encaminhamento: melhor um
+ * link antigo morto do que um link antigo levando à casa errada.
+ */
+const carimbosRepetidos = new Set(
+  registros.map(d => d.timestamp).filter((c, i, todos) => c && todos.indexOf(c) !== i));
+
+function identidade(d, ap){
+  if (!d.timestamp) return ap;
+  return carimbosRepetidos.has(d.timestamp) ? d.timestamp + '#' + ap : d.timestamp;
+}
+
 const vistos = new Set();
 const urls = [];
-const atuais = new Map();          // carimbo -> apelido de agora
+const atuais = new Map();          // identidade -> apelido de agora
 for (const d of registros){
   if (!(d.nome || d.dirigente)) continue;
   let ap = apelido(d), n = 2;
@@ -318,7 +337,7 @@ for (const d of registros){
   writeFileSync(join(PASTA, ap, 'index.html'), pagina(d), 'utf8');
   urls.push(`${SITE}/${PASTA}/${ap}/`);
 
-  const id = d.timestamp || ap;
+  const id = identidade(d, ap);
   atuais.set(id, ap);
   const antigos = historico[id] || [];
   if (!antigos.includes(ap)) antigos.push(ap);

@@ -995,7 +995,15 @@ function filtered(){
       : (a.cidade||'').localeCompare(b.cidade||'','pt-BR') || (a.nome||'').localeCompare(b.nome||'','pt-BR'));
 }
 
+/**
+ * A busca espera 120ms antes de filtrar, para não recalcular a cada tecla.
+ * Quem limpa os filtros precisa cancelar essa espera: senão o que foi digitado
+ * volta sozinho um instante depois, com o campo de busca já vazio na tela.
+ */
+let searchTimer;
+
 function resetFilters(){
+  clearTimeout(searchTimer);
   state = { ...state, q:'', city:'', trads:new Set(), mods:new Set(), soConfirmados:false };
   document.getElementById('q').value = '';
   document.getElementById('fCity').value = '';
@@ -1477,13 +1485,13 @@ function toggleTrad(name){ state.trads.has(name) ? state.trads.delete(name) : st
 function toggleConfirmados(){ state.soConfirmados = !state.soConfirmados; render(); }
 function toggleMod(name){  state.mods.has(name)  ? state.mods.delete(name)  : state.mods.add(name);  render(); }
 
-let searchTimer;
 document.getElementById('q').addEventListener('input', e => {
   clearTimeout(searchTimer);
   const v = e.target.value;
   searchTimer = setTimeout(() => { state.q = v; render(); }, 120);
 });
 document.getElementById('qClear').addEventListener('click', () => {
+  clearTimeout(searchTimer);
   state.q = ''; document.getElementById('q').value = ''; render();
 });
 document.getElementById('fCity').addEventListener('change', e => { state.city = e.target.value; render(); });

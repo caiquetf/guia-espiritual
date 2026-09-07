@@ -173,7 +173,11 @@ function avisar(ap){
       + '&tel=' + encodeURIComponent(digitos(d.telefone));
     janela = window.open(url, 'guia-avisar', 'width=460,height=560');
   } else {
-    janela = window.open(`https://wa.me/${numeroWhats(d.telefone)}?text=${encodeURIComponent(mensagem(d))}`, '_blank', 'noopener');
+    // Sem 'noopener' nas opções: com ele, o window.open devolve null por
+    // especificação — e o teste de janela bloqueada logo abaixo entenderia
+    // como bloqueio toda vez, deixando o cartão preso em "a avisar" para
+    // sempre. O wa.me é destino conhecido; o que se perde aqui é pouco.
+    janela = window.open(`https://wa.me/${numeroWhats(d.telefone)}?text=${encodeURIComponent(mensagem(d))}`, '_blank');
   }
   // Janela bloqueada é o caso comum no celular. Marcar assim mesmo tiraria a
   // pessoa da fila para sempre, sem que mensagem nenhuma tivesse saído — e

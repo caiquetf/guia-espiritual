@@ -373,13 +373,27 @@ if (emBranco) console.log(`${emBranco} linha(s) sem nome nem telefone — ignora
 const finais = [...porChave.values()]
   .sort((a,b) => (a.cidade||'').localeCompare(b.cidade||'','pt-BR') || (a.nome||'').localeCompare(b.nome||'','pt-BR'));
 
+/**
+ * O e-mail fica de fora do arquivo publicado. Os dois formulários prometem
+ * isso com todas as letras — "não aparece no guia", "serve só para a gente te
+ * achar se precisar" — e o dados.json é servido pelo GitHub Pages, aberto a
+ * quem digitar o endereço. Ele continua na planilha, que é onde a promessa
+ * disse que ficaria.
+ */
+const publicaveis = finais.map(r => { const { email, ...resto } = r; return resto; });
+
 // Só marca nova data de geração se o conteúdo realmente mudou — assim o
 // arquivo não muda a cada hora sem motivo e o site não republica à toa.
+//
+// A comparação é contra `publicaveis`, que é exatamente o que foi gravado da
+// última vez. Comparar contra `finais`, que ainda carrega o e-mail, nunca dava
+// igual: a data era reescrita toda hora, o robô comitava sem nada ter mudado, e
+// o navegador de cada visitante jogava fora o que tinha guardado.
 let geradoEm = new Date().toISOString();
 if (existsSync(SAIDA)){
   try {
     const anterior = JSON.parse(readFileSync(SAIDA, 'utf8'));
-    if (JSON.stringify(anterior.registros) === JSON.stringify(finais)) geradoEm = anterior.geradoEm;
+    if (JSON.stringify(anterior.registros) === JSON.stringify(publicaveis)) geradoEm = anterior.geradoEm;
   } catch { /* arquivo anterior ilegível, segue com a data nova */ }
 }
 
@@ -397,15 +411,6 @@ const apiPublica = linkPublico();
 console.log(apiPublica
   ? 'Cadastro pelo site e página do responsável ligados à planilha.'
   : 'Sem CADASTRO_URL — /cadastrar/ e /meu/ mostram o caminho alternativo.');
-
-/**
- * O e-mail fica de fora do arquivo publicado. Os dois formulários prometem
- * isso com todas as letras — "não aparece no guia", "serve só para a gente te
- * achar se precisar" — e o dados.json é servido pelo GitHub Pages, aberto a
- * quem digitar o endereço. Ele continua na planilha, que é onde a promessa
- * disse que ficaria.
- */
-const publicaveis = finais.map(r => { const { email, ...resto } = r; return resto; });
 
 writeFileSync(SAIDA,
   JSON.stringify({ geradoEm, formulario, apiVerificar, apiPublica, registros: publicaveis }, null, 2) + '\n', 'utf8');

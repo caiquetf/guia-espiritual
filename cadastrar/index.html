@@ -279,13 +279,25 @@ form.addEventListener('submit', async ev => {
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify({ acao:'cadastrar', ...dados })
     });
-    const resposta = await r.json();
+
+    // O script sempre responde JSON, mesmo quando recusa. Se veio outra coisa
+    // — tela de autorização do Google, erro de implantação —, quem respondeu
+    // não foi ele. Mandar conferir a internet nesse caso é conselho errado, e
+    // pior: a linha pode ter sido gravada, e o reenvio esbarraria em "este
+    // espaço já está cadastrado", contradizendo o recado anterior.
+    const bruto = await r.text();
+    let resposta;
+    try { resposta = JSON.parse(bruto); }
+    catch (e){
+      return aviso(`O servidor respondeu de um jeito que não entendi (código ${r.status}).
+        <br><br>Não sei dizer se o cadastro entrou. <strong>Não envie de novo</strong> —
+        fale com a gente que eu confiro na planilha.` + linkAjuda());
+    }
     if (resposta.ok) return pronto(dados);
     aviso(esc(resposta.erro) || 'Não consegui gravar o cadastro.');
   } catch (e){
-    // Sem confirmação não dá para dizer que deu certo. O formulário fica como
-    // está, preenchido, para que tentar de novo custe um clique — e não que a
-    // pessoa tenha de digitar tudo outra vez.
+    // Aqui o pedido não chegou a ter resposta: é rede mesmo. O formulário fica
+    // como está, preenchido, para que tentar de novo custe um clique.
     aviso(`Não consegui enviar agora — pode ser a conexão.
       <br><br>Nada do que você escreveu se perdeu: confira a internet e toque
       em <strong>Enviar cadastro</strong> outra vez.`);
@@ -293,6 +305,11 @@ form.addEventListener('submit', async ev => {
     botao.disabled = false; botao.textContent = 'Enviar cadastro';
   }
 });
+
+/** Caminho de contato para o caso em que nem nós sabemos o que aconteceu. */
+function linkAjuda(){
+  return `<br><br><a class="btn" href="${CANAL}" rel="nofollow noopener">Falar no WhatsApp</a>`;
+}
 
 function pronto(dados){
   form.hidden = true;
