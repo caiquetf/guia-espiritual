@@ -90,6 +90,9 @@ function doPost(e) {
     try { corpo = JSON.parse(e.postData.contents); } catch (err) { return json({ ok:false, erro:'Não entendi o envio.' }); }
 
     switch (corpo.acao) {
+      // Diz quem é, para a página conferir que está falando com o script certo
+      // antes de mostrar o formulário. Não toca em nada.
+      case 'quemsou':   return json({ ok:true, servico:'cadastro', planilha: !!abrirPlanilha() });
       case 'ler':       return lerCadastro(corpo);
       case 'salvar':    return salvarCadastro(corpo);
       case 'confirmar': return confirmarCadastro(corpo);

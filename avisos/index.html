@@ -58,6 +58,10 @@
     aparece zerada. Nada é enviado sozinho: cada mensagem sai da sua mão.
     <br><a href="../">Voltar ao guia</a> · <a href="../revisar/">Revisar cadastros</a> · <a href="../verificar/">Verificar cadastros</a>
   </p>
+  <p class="nota" style="margin-top:1.4rem; border-top:none; padding-top:0">
+    <button type="button" id="btnTestar" style="font-size:12.5px">Testar este endereço</button>
+    <span id="resultadoTeste" style="margin-left:.6rem"></span>
+  </p>
 </main>
 
 <script>
@@ -201,6 +205,53 @@ function nota(txt){
   document.body.appendChild(el);
   setTimeout(() => el.remove(), 2800);
 }
+
+/**
+ * Confere que o endereço configurado responde o script do dono — e não o do
+ * cadastro, nem uma implantação velha. Foi a troca entre os dois que custou uma
+ * semana: o painel parecia bem, e o erro só aparecia depois de mandar mensagem
+ * para gente de verdade.
+ *
+ * A pergunta vai por janelinha, não por fetch: esta implantação é "somente eu",
+ * e o navegador não deixa a página ler resposta do Google de outra origem.
+ */
+function testarEndereco(){
+  const onde = document.getElementById('resultadoTeste');
+  if (!/^https:\/\/script\.google\.com\//.test(API_DONO)){
+    onde.textContent = '⚠ Nenhum endereço configurado.';
+    onde.style.color = '#eaa87e';
+    return;
+  }
+  onde.textContent = 'perguntando…';
+  onde.style.color = '';
+  const janela = window.open(API_DONO + (API_DONO.includes('?') ? '&' : '?') + 'acao=quemsou',
+    'guia-teste', 'width=430,height=320');
+  if (!janela){
+    onde.textContent = '⚠ O navegador bloqueou a janela.';
+    onde.style.color = '#eaa87e';
+    return;
+  }
+  // Se nada responder, é porque a janelinha mostrou outra coisa — quase sempre
+  // o script errado, que não conhece "quemsou".
+  clearTimeout(window.__relogioTeste);
+  window.__relogioTeste = setTimeout(() => {
+    if (onde.textContent === 'perguntando…'){
+      onde.textContent = '⚠ Não reconheci a resposta — veja a janelinha.';
+      onde.style.color = '#eaa87e';
+    }
+  }, 12000);
+}
+document.getElementById('btnTestar').addEventListener('click', testarEndereco);
+
+window.addEventListener('message', ev => {
+  if (ev.origin !== 'https://script.google.com') return;
+  const m = ev.data;
+  if (!m || m.guia !== 'verificar' || !m.texto) return;
+  if (!/painel do dono/i.test(m.texto)) return;
+  const onde = document.getElementById('resultadoTeste');
+  onde.textContent = m.estado === 'ok' ? '✓ ' + m.texto : '⚠ ' + m.texto;
+  onde.style.color = m.estado === 'ok' ? '#6f8f5f' : '#eaa87e';
+});
 
 fetch('../dados.json', { cache:'no-store' })
   .then(r => r.ok ? r.json() : Promise.reject(r.status))

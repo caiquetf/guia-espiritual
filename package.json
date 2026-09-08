@@ -3,7 +3,9 @@
   "private": true,
   "description": "Guia e diretório de espaços espirituais de Piracicaba e região",
   "scripts": {
-    "css": "node build/embutir-css.mjs"
+    "css": "node build/embutir-css.mjs",
+    "test": "node testes/executar.mjs",
+    "test:web": "node testes/executar.mjs --navegador"
   },
   "devDependencies": {
     "tailwindcss": "^3.4.17"

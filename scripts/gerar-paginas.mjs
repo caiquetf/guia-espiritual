@@ -71,6 +71,31 @@ const esc = s => (s ?? '').toString()
  */
 const jsonEmScript = valor => JSON.stringify(valor).replace(/</g, '\\u003c');
 
+/**
+ * Link para o mapa, montado com o endereço que a pessoa escreveu.
+ *
+ * É só um link: nada de terceiro é carregado enquanto ninguém clica, então a
+ * página continua sem rastreador nenhum. Quem não informou endereço não ganha
+ * botão — como em todo o resto do guia, campo vazio não vira nada.
+ */
+function mapa(d){
+  // Sem número no endereço, o mapa cairia no meio da cidade ou em coisa
+  // nenhuma. Melhor não oferecer o botão do que oferecer um que não leva.
+  if (!/\d/.test(d.endereco || '') && !d.bairro) return '';
+  // Muita gente escreve o bairro e a cidade dentro do endereço. Repetir na
+  // busca ("Rua X, Nova Piracicaba, Nova Piracicaba") atrapalha o mapa.
+  const partes = [];
+  const solto = txt => new RegExp('(^|[^\\p{L}])' + deaccent(txt).toLowerCase()
+    .replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '([^\\p{L}]|$)', 'u');
+  // "Nova Piracicaba" não contém a cidade "Piracicaba" como palavra inteira —
+  // por isso a comparação é por palavra, e não por pedaço de texto.
+  const jaTem = txt => partes.some(p => solto(txt).test(deaccent(p).toLowerCase()));
+  for (const p of [d.endereco, d.bairro, d.cidade]) if (p && !jaTem(p)) partes.push(p);
+  const busca = partes.join(', ');
+  const comUF = /\b(sp|s\.p\.|sao paulo|são paulo)\b/i.test(deaccent(busca)) ? busca : busca + ' - SP';
+  return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(comUF);
+}
+
 function whatsapp(tel){
   let d = digitos(tel).replace(/^0+/, '');
   if (!d) return '';
@@ -208,6 +233,7 @@ ${marcacaoContador}
 
   <div class="acoes">
     ${wa ? `<a class="btn zap" href="${wa}" rel="nofollow noopener">Chamar no WhatsApp</a>` : ''}
+    ${mapa(d) ? `<a class="btn" href="${mapa(d)}" target="_blank" rel="nofollow noopener">Abrir no mapa</a>` : ''}
     <button class="btn" type="button" id="compartilhar">Compartilhar</button>
     <a class="btn" href="../../?espaco=${esc(ap)}">Ver no guia completo</a>
   </div>

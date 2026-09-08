@@ -217,7 +217,12 @@ const CIDADES = ['Piracicaba','Limeira','Rio Claro','Americana',"Santa Bárbara 
 function corrigirCidade(texto){
   const t = (texto || '').trim();
   if (!t) return '';
-  const achada = CIDADES.find(c => norm(c) === norm(t));
+  // "Piracicaba-SP", "Piracicaba/SP" e "Piracicaba SP" são a mesma cidade que
+  // "Piracicaba" — e, sem tirar o estado antes de comparar, viravam três
+  // entradas diferentes no filtro, cada uma com um punhado de espaços. Só o
+  // sufixo do estado sai; o nome escrito pela pessoa continua intacto.
+  const semUF = t.replace(/[\s,]*[-\/–—]?\s*(sp|s\.p\.|sao paulo|são paulo)\.?$/i, '').trim() || t;
+  const achada = CIDADES.find(c => norm(c) === norm(semUF));
   return achada || corrigirGrafia(t);
 }
 

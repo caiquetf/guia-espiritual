@@ -244,13 +244,43 @@ function semFormulario(antigo){
     Tente de novo mais tarde.`, 'aviso');
 }
 
-// O formulário só aparece depois de saber que há para onde enviar.
+/**
+ * Pergunta ao endereço quem ele é, antes de confiar nele.
+ *
+ * Ter um endereço configurado não prova nada: já aconteceu de ele apontar para
+ * o script errado, e a página mostrar o formulário mesmo assim — quem
+ * preenchesse só descobriria no envio, com o trabalho todo feito. A ação
+ * "quemsou" não escreve nada e responde em um instante.
+ */
+async function conferirEndereco(){
+  const corte = new AbortController();
+  const relogio = setTimeout(() => corte.abort(), 15000);
+  try {
+    const r = await fetch(API_PUBLICA, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ acao:'quemsou' }),
+      signal: corte.signal
+    });
+    const j = JSON.parse(await r.text());
+    return j.ok === true && j.servico === 'cadastro';
+  } catch (e){
+    return false;
+  } finally {
+    clearTimeout(relogio);
+  }
+}
+
+// O formulário só aparece depois de saber que há para onde enviar — e que quem
+// está do outro lado é mesmo o cadastro.
 form.hidden = true;
 fetch('../dados.json', { cache:'no-store' })
   .then(r => r.ok ? r.json() : null)
-  .then(j => {
+  .then(async j => {
     if (!ehApi(API_PUBLICA)) API_PUBLICA = (j && j.apiPublica || '').trim();
-    if (ehApi(API_PUBLICA)){ form.hidden = false; recado.innerHTML = ''; return; }
+    if (ehApi(API_PUBLICA) && await conferirEndereco()){
+      form.hidden = false; recado.innerHTML = ''; return;
+    }
     semFormulario(j && j.formulario);
   })
   .catch(() => semFormulario(''));

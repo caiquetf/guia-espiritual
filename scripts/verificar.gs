@@ -53,6 +53,15 @@ function doGet(e) {
     // porque esta implantação é "somente eu" — a chave nunca passa pelo site.
     if (p.acao === 'avisar') return montarAviso(p);
 
+    // Diz quem é, para os painéis conferirem o endereço antes de você sair
+    // avisando gente de verdade. Não escreve nada.
+    if (p.acao === 'quemsou') {
+      var planilha = abrirPlanilha();
+      return resposta(planilha ? 'ok' : 'erro', planilha
+        ? 'Este é o painel do dono, e ele alcança a planilha.'
+        : 'É o painel do dono, mas o link da planilha não está preenchido.');
+    }
+
     var alvoTel = soDigitos(p.tel);
     var alvoNome = normalizar(p.nome);
 
@@ -252,7 +261,7 @@ function resposta(estado, texto) {
     // Alvo estreito: a mensagem carrega só um aviso de tela, mas gritar para
     // "*" a entrega a qualquer página que esteja no meio do caminho.
     'try{ window.opener && window.opener.postMessage(' +
-    JSON.stringify({ guia: 'verificar', estado: estado }) + ', ' +
+    JSON.stringify({ guia: 'verificar', estado: estado, texto: texto }) + ', ' +
     JSON.stringify(ORIGEM_DO_SITE) + '); }catch(e){}' +
     (estado === 'ok' ? 'setTimeout(function(){ window.close(); }, 900);' : '') +
     '<\/script>';
