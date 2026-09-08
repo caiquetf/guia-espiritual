@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-09-07T19:56:22.368Z",
+  "geradoEm": "2026-09-08T05:56:29.391Z",
   "formulario": "https://docs.google.com/forms/d/e/1FAIpQLSdha6CPyRtEe_2-ZSJM5NsMNOnXead1ZhU49ZoX3h0ZbIWifg/viewform?usp=header",
   "apiVerificar": "https://script.google.com/macros/s/AKfycbya_mjHgaMdzr2NPX4SwFy5inm2G2qnGuNhq-TuJpwtOuguxym56fnjgl7RnJb5VDA-aA/exec",
   "apiPublica": "https://script.google.com/macros/s/AKfycbyGzZR9M3IQZCdR1cbCRvvdciMl7Ixtz_NSYwUEHsinjVH2q2HNqLtk5kVhhufM-0dA/exec",
@@ -221,6 +221,24 @@
       "grupo": "Outros"
     },
     {
+      "timestamp": "05/08/2026 06:44:43",
+      "nome": "Kwe vodun Togun omi",
+      "dirigente": "Romualdo",
+      "tradicao": "Candomblé",
+      "tempo": "9 meses",
+      "cidade": "Piracicaba",
+      "bairro": "",
+      "endereco": "Rua: voluntários de Piracicaba número 422 centro",
+      "modalidade": "Presencial",
+      "telefone": "19976053820",
+      "redes": "",
+      "horarios": "De 15 em 15 dias nas segundas tocamos mais temos também nossas consultas particulares só marca o dia temos jogos de búzios, ebó, banhos jogos de cartas lembrando que nossas consultas temos seu Zé pilintra, seu tranca rua de embaré, seu Marabó toquinho entre outros",
+      "servicos": "Consulta espiritual particular",
+      "verificado": "",
+      "regras": "Vir com roupas comportadas, de preferência roupas claras serão muito bem vindos a sua presença é nosso maior ASÉ para mais informações entra em contato com o número dechado ou também nesse número se preferir 19997441756",
+      "grupo": "Candomblé"
+    },
+    {
       "timestamp": "30/07/2026 14:38:16",
       "nome": "Livia Tarot / Terapia Holística e complementares",
       "dirigente": "Livia",
@@ -383,6 +401,24 @@
       "grupo": "Umbanda"
     },
     {
+      "timestamp": "21/08/2026 19:21:56",
+      "nome": "Templo de Umbanda Caminhos de Oxaguiã",
+      "dirigente": "Pai Dinho De Oxoguiã",
+      "tradicao": "Umbanda Omolocô",
+      "tempo": "3 anos",
+      "cidade": "Piracicaba",
+      "bairro": "",
+      "endereco": "Rua Aquilino Pacheco 1138",
+      "modalidade": "Ambas",
+      "telefone": "19994063003",
+      "redes": "",
+      "horarios": "Consultas todos os dias. Giras quinzenais",
+      "servicos": "Todos ( exceto ifá) apenas jogo de Exu",
+      "verificado": "",
+      "regras": "Respeito ao espaço sagrado, trazer velas!",
+      "grupo": "Umbanda"
+    },
+    {
       "timestamp": "30/07/2026 19:59:38",
       "nome": "Tenda de Umbanda Caboclo Flecheiro",
       "dirigente": "Cecília Brione",
@@ -507,42 +543,6 @@
       "verificado": "sim",
       "regras": "",
       "grupo": "Quimbanda"
-    },
-    {
-      "timestamp": "05/08/2026 06:44:43",
-      "nome": "Kwe vodun Togun omi",
-      "dirigente": "Romualdo",
-      "tradicao": "Candomblé",
-      "tempo": "9 meses",
-      "cidade": "Piracicaba-Sp",
-      "bairro": "",
-      "endereco": "Rua: voluntários de Piracicaba número 422 centro",
-      "modalidade": "Presencial",
-      "telefone": "19976053820",
-      "redes": "",
-      "horarios": "De 15 em 15 dias nas segundas tocamos mais temos também nossas consultas particulares só marca o dia temos jogos de búzios, ebó, banhos jogos de cartas lembrando que nossas consultas temos seu Zé pilintra, seu tranca rua de embaré, seu Marabó toquinho entre outros",
-      "servicos": "Consulta espiritual particular",
-      "verificado": "",
-      "regras": "Vir com roupas comportadas, de preferência roupas claras serão muito bem vindos a sua presença é nosso maior ASÉ para mais informações entra em contato com o número dechado ou também nesse número se preferir 19997441756",
-      "grupo": "Candomblé"
-    },
-    {
-      "timestamp": "21/08/2026 19:21:56",
-      "nome": "Templo de Umbanda Caminhos de Oxaguiã",
-      "dirigente": "Pai Dinho De Oxoguiã",
-      "tradicao": "Umbanda Omolocô",
-      "tempo": "3 anos",
-      "cidade": "Piracicaba-SP",
-      "bairro": "",
-      "endereco": "Rua Aquilino Pacheco 1138",
-      "modalidade": "Ambas",
-      "telefone": "19994063003",
-      "redes": "",
-      "horarios": "Consultas todos os dias. Giras quinzenais",
-      "servicos": "Todos ( exceto ifá) apenas jogo de Exu",
-      "verificado": "",
-      "regras": "Respeito ao espaço sagrado, trazer velas!",
-      "grupo": "Umbanda"
     }
   ]
 }
