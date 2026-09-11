@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-09-08T05:56:29.391Z",
+  "geradoEm": "2026-09-11T00:39:15.456Z",
   "formulario": "https://docs.google.com/forms/d/e/1FAIpQLSdha6CPyRtEe_2-ZSJM5NsMNOnXead1ZhU49ZoX3h0ZbIWifg/viewform?usp=header",
   "apiVerificar": "https://script.google.com/macros/s/AKfycbya_mjHgaMdzr2NPX4SwFy5inm2G2qnGuNhq-TuJpwtOuguxym56fnjgl7RnJb5VDA-aA/exec",
   "apiPublica": "https://script.google.com/macros/s/AKfycbyGzZR9M3IQZCdR1cbCRvvdciMl7Ixtz_NSYwUEHsinjVH2q2HNqLtk5kVhhufM-0dA/exec",
@@ -19,7 +19,11 @@
       "horarios": "as terças e quintas - das 17h às 00h",
       "servicos": "Cartomancia",
       "verificado": "sim",
+      "confirmadoEm": "",
       "regras": "faço atendimentos urgentes caso o consulente necessite",
+      "grupos": [
+        "Umbanda"
+      ],
       "grupo": "Umbanda"
     },
     {
@@ -37,7 +41,11 @@
       "horarios": "Agendamento tarô e outras práticas",
       "servicos": "Tarô, baralho cigano, mesa rádionica, constelação familiar, cromoterapia, Reiki, alinhamento de Chakras",
       "verificado": "",
+      "confirmadoEm": "",
       "regras": "",
+      "grupos": [
+        "Umbanda"
+      ],
       "grupo": "Umbanda"
     },
     {
@@ -55,7 +63,11 @@
       "horarios": "Agendamento de segunda a sábado",
       "servicos": "Cartomancia\nBaralho cigano\nBaralho Luciferiano\nBúzios de Exú\nTrabalhos espirituais",
       "verificado": "sim",
+      "confirmadoEm": "",
       "regras": "",
+      "grupos": [
+        "Cartomancia/Tarô"
+      ],
       "grupo": "Cartomancia/Tarô"
     },
     {
@@ -73,7 +85,11 @@
       "horarios": "Desenvolvimento 2z ao mês / atendimento com Oráculo com hora marcada",
       "servicos": "Consulta espiritual particular",
       "verificado": "",
+      "confirmadoEm": "",
       "regras": "Tirar dúvidas e agendar consulta pelo WhatsApp",
+      "grupos": [
+        "Quimbanda"
+      ],
       "grupo": "Quimbanda"
     },
     {
@@ -91,7 +107,12 @@
       "horarios": "Quarta, quinta e sexta, mediante agendamento.",
       "servicos": "Consulta espiritual particular: trabalho com radiestesia, apometria, terapia de vidas passadas, regressão, banhos, escalda pés, magia do fogo e de ervas, reiki, transmutação energética, etc.",
       "verificado": "sim",
+      "confirmadoEm": "",
       "regras": "",
+      "grupos": [
+        "Umbanda",
+        "Espiritismo/Kardecismo"
+      ],
       "grupo": "Umbanda"
     },
     {
@@ -109,7 +130,11 @@
       "horarios": "Por agendamento",
       "servicos": "Consulta espiritual particular",
       "verificado": "",
+      "confirmadoEm": "",
       "regras": "Entra em contato para mais detalhes",
+      "grupos": [
+        "Outros"
+      ],
       "grupo": "Outros"
     },
     {
@@ -127,7 +152,11 @@
       "horarios": "Com agendamento",
       "servicos": "Cartomancia",
       "verificado": "",
+      "confirmadoEm": "",
       "regras": "Seja bem-vindo(a)! 🌿\n\nEste é um espaço dedicado ao acolhimento, ao autoconhecimento e à orientação espiritual por meio do Baralho Cigano, fundamentado nos princípios de respeito e ética da Umbanda.\n\nAntes de iniciar seu atendimento, procure estar em um ambiente tranquilo e faça suas perguntas com sinceridade. As leituras têm como objetivo oferecer direcionamento, clareza e fortalecimento emocional, sempre respeitando seu livre-arbítrio.\n\nTodas as informações compartilhadas durante a consulta são tratadas com total sigilo e respeito. Lembre-se de que o oráculo orienta caminhos e possibilidades, não substituindo acompanhamento médico, psicológico ou jurídico quando necessário.\n\nQue sua visita seja um momento de luz, reflexão e conexão com sua própria essência. Seja muito bem-vindo(a)!",
+      "grupos": [
+        "Umbanda"
+      ],
       "grupo": "Umbanda"
     },
     {
@@ -145,7 +174,11 @@
       "horarios": "Segunda a segunda. Com hora marcada .",
       "servicos": "Cartomancia, Trabalhos espirituais, Magia hoodoo. Atendimentos com Exu e Pombo gira .",
       "verificado": "sim",
+      "confirmadoEm": "",
       "regras": "",
+      "grupos": [
+        "Quimbanda"
+      ],
       "grupo": "Quimbanda"
     },
     {
@@ -163,7 +196,11 @@
       "horarios": "Seg A sábado ds 9 as 19",
       "servicos": "Cartomancia",
       "verificado": "",
+      "confirmadoEm": "",
       "regras": "Oque o baralho cigano tem para te dizer? Esclarece dúvidas, orientações  e conselhos",
+      "grupos": [
+        "Umbanda"
+      ],
       "grupo": "Umbanda"
     },
     {
@@ -181,7 +218,11 @@
       "horarios": "Segunda e quinta",
       "servicos": "Jogo de Búzios",
       "verificado": "",
+      "confirmadoEm": "",
       "regras": "",
+      "grupos": [
+        "Candomblé"
+      ],
       "grupo": "Candomblé"
     },
     {
@@ -199,7 +240,11 @@
       "horarios": "Quintas feiras 19:30h",
       "servicos": "Todos os trabalhos mencionados acima",
       "verificado": "",
+      "confirmadoEm": "",
       "regras": "",
+      "grupos": [
+        "Candomblé"
+      ],
       "grupo": "Candomblé"
     },
     {
@@ -217,7 +262,11 @@
       "horarios": "Atendimento com horário marcado",
       "servicos": "Cartomancia",
       "verificado": "sim",
+      "confirmadoEm": "",
       "regras": "Instagram @isabellereato",
+      "grupos": [
+        "Outros"
+      ],
       "grupo": "Outros"
     },
     {
@@ -235,7 +284,11 @@
       "horarios": "De 15 em 15 dias nas segundas tocamos mais temos também nossas consultas particulares só marca o dia temos jogos de búzios, ebó, banhos jogos de cartas lembrando que nossas consultas temos seu Zé pilintra, seu tranca rua de embaré, seu Marabó toquinho entre outros",
       "servicos": "Consulta espiritual particular",
       "verificado": "",
+      "confirmadoEm": "",
       "regras": "Vir com roupas comportadas, de preferência roupas claras serão muito bem vindos a sua presença é nosso maior ASÉ para mais informações entra em contato com o número dechado ou também nesse número se preferir 19997441756",
+      "grupos": [
+        "Candomblé"
+      ],
       "grupo": "Candomblé"
     },
     {
@@ -253,7 +306,12 @@
       "horarios": "Seg a sab - 09hrs as 19hrs",
       "servicos": "Cartomancia",
       "verificado": "",
+      "confirmadoEm": "",
       "regras": "Consultas apenas online.",
+      "grupos": [
+        "Holístico/Terapia",
+        "Magia"
+      ],
       "grupo": "Holístico/Terapia"
     },
     {
@@ -271,7 +329,11 @@
       "horarios": "Segunda a sábado",
       "servicos": "Cartomancia",
       "verificado": "",
+      "confirmadoEm": "",
       "regras": "Seja bem-vindo(a)! 🌿\n\nEste é um espaço dedicado ao acolhimento, ao autoconhecimento e à orientação espiritual por meio do Baralho Cigano, fundamentado nos princípios de respeito e ética da Umbanda.\n\nAntes de iniciar seu atendimento, procure estar em um ambiente tranquilo e faça suas perguntas com sinceridade. As leituras têm como objetivo oferecer direcionamento, clareza e fortalecimento emocional, sempre respeitando seu livre-arbítrio.\n\nTodas as informações compartilhadas durante a consulta são tratadas com total sigilo e respeito. Lembre-se de que o oráculo orienta caminhos e possibilidades, não substituindo acompanhamento médico, psicológico ou jurídico quando necessário.\n\nQue sua visita seja um momento de luz, reflexão e conexão com sua própria essência. Seja muito bem-vindo(a)!",
+      "grupos": [
+        "Umbanda"
+      ],
       "grupo": "Umbanda"
     },
     {
@@ -289,7 +351,12 @@
       "horarios": "De segunda a sábado",
       "servicos": "Consulta espiritual particular",
       "verificado": "",
+      "confirmadoEm": "",
       "regras": "",
+      "grupos": [
+        "Umbanda",
+        "Quimbanda"
+      ],
       "grupo": "Umbanda"
     },
     {
@@ -307,7 +374,11 @@
       "horarios": "Atendimentos agendados",
       "servicos": "Cartomancia/tarot",
       "verificado": "sim",
+      "confirmadoEm": "",
       "regras": "Agendamento por WhatsApp ou Instagram para atendimento on-line",
+      "grupos": [
+        "Magia"
+      ],
       "grupo": "Magia"
     },
     {
@@ -325,7 +396,11 @@
       "horarios": "7 as 22hs",
       "servicos": "Cartomancia",
       "verificado": "",
+      "confirmadoEm": "",
       "regras": "",
+      "grupos": [
+        "Candomblé"
+      ],
       "grupo": "Candomblé"
     },
     {
@@ -343,7 +418,11 @@
       "horarios": "Aos finais de semana, horário marcado",
       "servicos": "Cartomancia",
       "verificado": "",
+      "confirmadoEm": "",
       "regras": "Consulta oracular por meio de baralho cigano, com fotos + explicação ou ligação via vídeo por whatsapp, também com orientações de auto cuidado, proteçãoz banhos, patuás e afins",
+      "grupos": [
+        "Umbanda"
+      ],
       "grupo": "Umbanda"
     },
     {
@@ -361,7 +440,11 @@
       "horarios": "Trabalho de segunda a sexta das 07 as 19 horas",
       "servicos": "Consulta espiritual particular",
       "verificado": "sim",
+      "confirmadoEm": "",
       "regras": "Atendo consulta individual ou casal, para maiores informações ligar no watsapp",
+      "grupos": [
+        "Umbanda"
+      ],
       "grupo": "Umbanda"
     },
     {
@@ -379,7 +462,11 @@
       "horarios": "Todos os dias, mediante agendamento.",
       "servicos": "Cartomancia",
       "verificado": "",
+      "confirmadoEm": "",
       "regras": "",
+      "grupos": [
+        "Quimbanda"
+      ],
       "grupo": "Quimbanda"
     },
     {
@@ -397,7 +484,11 @@
       "horarios": "Quinta feira às 20:30 gira aberta",
       "servicos": "Consultas oracular,giras de umbanda",
       "verificado": "",
+      "confirmadoEm": "",
       "regras": "Temos giras de umbanda e também consulta oracular particular",
+      "grupos": [
+        "Umbanda"
+      ],
       "grupo": "Umbanda"
     },
     {
@@ -415,7 +506,11 @@
       "horarios": "Consultas todos os dias. Giras quinzenais",
       "servicos": "Todos ( exceto ifá) apenas jogo de Exu",
       "verificado": "",
+      "confirmadoEm": "",
       "regras": "Respeito ao espaço sagrado, trazer velas!",
+      "grupos": [
+        "Umbanda"
+      ],
       "grupo": "Umbanda"
     },
     {
@@ -433,7 +528,11 @@
       "horarios": "Trabalho são  todas as Sexta-feira   das 20 horas ate 22 horas",
       "servicos": "Consulta espiritual particular",
       "verificado": "sim",
+      "confirmadoEm": "",
       "regras": "NÃO  USAR  Roupas  Curtas Nem cores Preto e Vermelha",
+      "grupos": [
+        "Umbanda"
+      ],
       "grupo": "Umbanda"
     },
     {
@@ -451,7 +550,11 @@
       "horarios": "Os trabalhos acontecem aos sábados sendo 2 sim um não (giras gratuitas)",
       "servicos": "Aplicação de cone hindu,magias  limpezas espirituais.",
       "verificado": "",
+      "confirmadoEm": "",
       "regras": "Proibido roupas curtas,e pessoas alcoolizadas",
+      "grupos": [
+        "Umbanda"
+      ],
       "grupo": "Umbanda"
     },
     {
@@ -469,7 +572,11 @@
       "horarios": "Aos sábados, quinzenais, a partir das 19:30",
       "servicos": "Todos acima",
       "verificado": "",
+      "confirmadoEm": "",
       "regras": "Não vir de roupa decotada, transparente, ou justa/curta. Mandar mensagem no WhatsApp do terreiro pedindo para guardar senha.",
+      "grupos": [
+        "Umbanda"
+      ],
       "grupo": "Umbanda"
     },
     {
@@ -487,7 +594,11 @@
       "horarios": "Segunda feira às 19:30",
       "servicos": "Tarot, atendimento particular,passes",
       "verificado": "",
+      "confirmadoEm": "",
       "regras": "Cuidado com vestimenta e ir com muita fé nas entidades e orixás",
+      "grupos": [
+        "Umbanda"
+      ],
       "grupo": "Umbanda"
     },
     {
@@ -505,7 +616,11 @@
       "horarios": "Conforme agendamento",
       "servicos": "Cartomancia e trabalhos espirituais.",
       "verificado": "sim",
+      "confirmadoEm": "",
       "regras": "Agende pelo WhatsApp! Trabalhamos com cartomancia e trabalhos espirituais (financeiro, amoroso, mental, etc)",
+      "grupos": [
+        "Cartomancia/Tarô"
+      ],
       "grupo": "Cartomancia/Tarô"
     },
     {
@@ -523,7 +638,11 @@
       "horarios": "Segunda feira às 20:00",
       "servicos": "",
       "verificado": "",
+      "confirmadoEm": "",
       "regras": "Venha de coração aberto para receber o axé na sua vida",
+      "grupos": [
+        "Umbanda"
+      ],
       "grupo": "Umbanda"
     },
     {
@@ -541,7 +660,11 @@
       "horarios": "Todos os dias,  mediante agendamento",
       "servicos": "Cartomancia",
       "verificado": "sim",
+      "confirmadoEm": "",
       "regras": "",
+      "grupos": [
+        "Quimbanda"
+      ],
       "grupo": "Quimbanda"
     }
   ]
