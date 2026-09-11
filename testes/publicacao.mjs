@@ -39,6 +39,36 @@ const paginas = () => readdirSync(join(pasta, 'espaco')).sort();
 const casa = (nome, tel, cidade = 'Piracicaba', quando = '01/08/2026 10:00:00', dirigente = 'Pai Zé') =>
   `${quando},${nome},${dirigente},Umbanda,${cidade},"Rua A, 10",${tel},alguem@exemplo.com,Autorizo a divulgação`;
 
+secao('as duas cópias do leitor de planilha');
+{
+  // index.html precisa abrir sozinho, sem servidor e sem import, então carrega
+  // a própria cópia das regras. Duas cópias divergem com o tempo — e já
+  // divergiram: o navegador perdia a coluna Serviços da planilha de verdade.
+  const campos = txt => {
+    const i = txt.indexOf('const FIELDS = [');
+    const bloco = txt.slice(i, txt.indexOf('];', i));
+    const saida = {};
+    for (const m of bloco.matchAll(/key:'(\w+)'[\s\S]*?aliases:\[(.*?)\]/g))
+      saida[m[1]] = m[2].split(',').map(s => s.trim().replace(/^'|'$/g, '')).filter(Boolean).sort();
+    return saida;
+  };
+  const A = campos(readFileSync(join(RAIZ, 'index.html'), 'utf8'));
+  const B = campos(readFileSync(join(RAIZ, 'scripts/atualizar-dados.mjs'), 'utf8'));
+  ok('conhecem os mesmos campos',
+     JSON.stringify(Object.keys(A).sort()) === JSON.stringify(Object.keys(B).sort()));
+  const diferentes = Object.keys(B).filter(k => JSON.stringify(A[k]) !== JSON.stringify(B[k]));
+  ok('e os mesmos apelidos de coluna', diferentes.length === 0);
+  for (const k of diferentes) console.log('        divergem em ' + k);
+
+  const vertentes = txt => {
+    const i = txt.indexOf('const VERTENTES = [');
+    return txt.slice(i, txt.indexOf('];', i)).replace(/\s+/g, ' ');
+  };
+  ok('e as mesmas regras de vertente',
+     vertentes(readFileSync(join(RAIZ, 'index.html'), 'utf8'))
+     === vertentes(readFileSync(join(RAIZ, 'scripts/atualizar-dados.mjs'), 'utf8')));
+}
+
 secao('da planilha para o dados.json');
 escrever([casa('Casa Um', '19999990001')]);
 await sincronizar();
@@ -79,6 +109,46 @@ await sincronizar();
   let recusou = false;
   try { await sincronizar(); } catch { recusou = true; }
   ok('quem não autorizou não é publicado', recusou || dados().registros.length === 0);
+}
+
+secao('vertentes: um espaço pode ser de mais de uma');
+{
+  escrever([
+    casa('Casa A', '19999990001').replace(',Umbanda,', ',Quimbanda/Umbanda,'),
+    casa('Casa B', '19999990002').replace(',Umbanda,', ',Umbanda e também kardecismo,'),
+    casa('Casa C', '19999990003').replace(',Umbanda,', ',Luciferiana,')
+  ]);
+  await sincronizar();
+  const porNome = Object.fromEntries(dados().registros.map(r => [r.nome, r.grupos]));
+  ok('quem escreveu duas vertentes fica nas duas',
+     JSON.stringify(porNome['Casa A']) === JSON.stringify(['Umbanda','Quimbanda']));
+  ok('inclusive quando escreveu por extenso',
+     JSON.stringify(porNome['Casa B']) === JSON.stringify(['Umbanda','Espiritismo/Kardecismo']));
+  ok('e o que não casa com nada continua em Outros',
+     JSON.stringify(porNome['Casa C']) === JSON.stringify(['Outros']));
+  ok('a primeira continua sendo a principal, que dá a cor',
+     dados().registros.every(r => r.grupo === r.grupos[0]));
+}
+
+secao('página por vertente, para quem busca no Google');
+{
+  escrever([casa('Casa A', '19999990001').replace(',Umbanda,', ',Quimbanda/Umbanda,'),
+            casa('Casa B', '19999990002')]);
+  await sincronizar(); await gerar();
+  const feitas = readdirSync(join(pasta, 'vertente')).sort();
+  ok('gera uma pasta por vertente', feitas.includes('umbanda') && feitas.includes('quimbanda'));
+  const umbanda = readFileSync(join(pasta, 'vertente', 'umbanda', 'index.html'), 'utf8');
+  ok('lista os dois espaços de Umbanda', (umbanda.match(/<li>/g) || []).length === 2);
+  const quimbanda = readFileSync(join(pasta, 'vertente', 'quimbanda', 'index.html'), 'utf8');
+  ok('e o de vertente dupla aparece também na outra lista', quimbanda.includes('Casa A'));
+  ok('o título fala como as pessoas procuram', /Terreiros de Umbanda em/.test(umbanda));
+  ok('leva ao guia já filtrado', umbanda.includes('?vertente=umbanda'));
+  ok('e aponta as outras vertentes, para não ser um beco', /Outras vertentes/.test(umbanda));
+  ok('entra no sitemap', readFileSync(join(pasta, 'sitemap.xml'), 'utf8').includes('/vertente/umbanda/'));
+  ok('"Outros" não vira página', !feitas.includes('outros'));
+  const espaco = readFileSync(join(pasta, 'espaco', 'casa-a-0001', 'index.html'), 'utf8');
+  ok('a página do espaço leva às vertentes dele',
+     espaco.includes('vertente/umbanda/') && espaco.includes('vertente/quimbanda/'));
 }
 
 secao('das páginas geradas');

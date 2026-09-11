@@ -44,6 +44,15 @@ secao('acender e apagar o selo');
   ok('e diz por quê', /linhas iguais/i.test(html.normalize('NFC')));
 }
 
+{
+  const s = abrir([CAB, linha('Casa Um', '19998290709')]);
+  s.get({ nome:'Casa Um', tel:'19998290709', valor:'sim' });
+  ok('o painel do dono também anota a data',
+     /^\d{2}\/\d{2}\/\d{4}/.test(s.L[1][s.coluna('Confirmado em')] || ''));
+  s.get({ nome:'Casa Um', tel:'19998290709', valor:'nao' });
+  ok('e apaga a data ao tirar o selo', s.L[1][s.coluna('Confirmado em')] === '');
+}
+
 secao('a mensagem que leva o link privado');
 {
   const s = abrir([CAB, linha('Casa Um', '19998290709')]);

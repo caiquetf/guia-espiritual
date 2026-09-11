@@ -70,6 +70,7 @@ const FIELDS = [
   { key:'horarios',  label:'Dias e Horários das Giras, Trabalhos ou Consultas', aliases:['quais dias e horarios acontecem os trabalhos','dias e horarios','horarios','giras','dias e horarios das giras, trabalhos ou consultas','horario'] },
   { key:'servicos',  label:'Serviços Prestados e Trabalhos oferecidos',   aliases:['quais tipos de atendimentos realizados','tipos de atendimentos','tipos de atendimento','atendimentos realizados','servicos prestados','servicos','trabalhos oferecidos','servicos prestados e trabalhos oferecidos'] },
   { key:'verificado',label:'Verificado',                                  aliases:['verificado','confirmado','verificacao','confirmacao','conferido'] },
+  { key:'confirmadoEm', label:'Confirmado em',                        aliases:['confirmado em','data da confirmacao','confirmado'] },
   { key:'regras',    label:'Orientações ao Visitante / Regras do Espaço', aliases:['orientacoes para visitantes','orientacoes ao visitante','orientacoes','regras','regras do espaco','orientacoes ao visitante / regras do espaco','observacoes'] }
 ];
 
@@ -132,18 +133,35 @@ function mapHeaders(headers){
 
 /** Agrupa a resposta numa das categorias, só para o filtro. O texto original
     é sempre preservado em `tradicao` e é ele que aparece na tela. */
-function grupoTradicao(v){
+/**
+ * Em que vertentes o espaço se encaixa — pode ser mais de uma.
+ *
+ * Muita gente escreve "Quimbanda/Umbanda" ou "Umbanda e também kardecismo". O
+ * guia costumava guardar só a primeira que casava, e o espaço sumia do filtro
+ * da outra — justamente para quem procurava aquilo. Nada é deduzido aqui: só
+ * entram as vertentes que a própria pessoa escreveu.
+ */
+const VERTENTES = [
+  ['Umbanda',                /umbanda/],
+  ['Candomblé',              /candombl|ile ax|axe/],
+  ['Quimbanda',              /quimbanda|esquerda|exu|pombagira/],
+  ['Jogo de Búzios',         /buzio|merindilogun/],
+  ['Cartomancia/Tarô',       /taro|cartoman|carta|baralho|oracul/],
+  ['Holístico/Terapia',      /holist|terapia|reiki|floral|cristal|yoga|integrativ/],
+  ['Magia',                  /magia|bruxa|wicca|feiti/],
+  ['Espiritismo/Kardecismo', /espiritismo|kardec|doutrina espirita|centro espirita/]
+];
+
+function gruposTradicao(v){
   const n = norm(v);
-  if (!n) return '';
-  if (/umbanda/.test(n)) return 'Umbanda';
-  if (/candombl|ile ax|axe/.test(n)) return 'Candomblé';
-  if (/quimbanda|esquerda|exu|pombagira/.test(n)) return 'Quimbanda';
-  if (/buzio|merindilogun/.test(n)) return 'Jogo de Búzios';
-  if (/taro|cartoman|carta|baralho|oracul/.test(n)) return 'Cartomancia/Tarô';
-  if (/holist|terapia|reiki|floral|cristal|yoga|integrativ/.test(n)) return 'Holístico/Terapia';
-  if (/magia|bruxaria|wicca|feiti/.test(n)) return 'Magia';
-  if (/espiritismo|kardec|doutrina espirita|centro espirita/.test(n)) return 'Espiritismo/Kardecismo';
-  return 'Outros';
+  if (!n) return [];
+  const achados = VERTENTES.filter(([, regra]) => regra.test(n)).map(([nome]) => nome);
+  return achados.length ? achados : ['Outros'];
+}
+
+/** A vertente principal — a primeira que casou. Dá a cor do cartão. */
+function grupoTradicao(v){
+  return gruposTradicao(v)[0] || '';
 }
 
 function matchModality(v){
@@ -340,7 +358,8 @@ for (let r = 1; r < linhas.length; r++){
 
   rec.tradicao   = corrigirGrafia(rec.tradicao);
   rec.cidade     = corrigirCidade(rec.cidade);
-  rec.grupo      = grupoTradicao(rec.tradicao);
+  rec.grupos     = gruposTradicao(rec.tradicao);
+  rec.grupo      = rec.grupos[0] || '';
   rec.verificado = /^(sim|s|x|ok|1|true|verdadeiro|confirmado|verificado)$/i.test(rec.verificado) ? 'sim' : '';
   rec.modalidade = matchModality(rec.modalidade);
   registros.push(rec);

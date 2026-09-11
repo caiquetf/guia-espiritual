@@ -41,6 +41,9 @@ var PLANILHA = '';
 /** Nome da coluna que o guia lê. Criada automaticamente se ainda não existir. */
 var COLUNA = 'Verificado';
 
+/** Quando o selo foi aceso. Também criada sozinha. */
+var COLUNA_DATA = 'Confirmado em';
+
 /** Endereço do site — para onde as respostas desta janelinha podem falar. */
 var ORIGEM_DO_SITE = 'https://caiquetf.github.io';
 
@@ -115,6 +118,16 @@ function doGet(e) {
     }
 
     aba.getRange(achados[0], colVerificado + 1).setValue(valor);
+
+    // A data vai junto: um selo sem data não diz se foi ontem ou há dois anos.
+    var colData = acharColuna(cabecalho, COLUNA_DATA);
+    if (colData === -1) {
+      colData = cabecalho.length;
+      aba.getRange(1, colData + 1).setValue(COLUNA_DATA);
+    }
+    aba.getRange(achados[0], colData + 1).setValue(valor
+      ? Utilities.formatDate(new Date(), 'America/Sao_Paulo', 'dd/MM/yyyy HH:mm:ss') : '');
+
     return resposta('ok', valor ? 'Marcado como confirmado.' : 'Selo removido.');
   } catch (err) {
     return resposta('erro', String(err));

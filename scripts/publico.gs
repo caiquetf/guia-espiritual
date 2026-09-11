@@ -57,6 +57,7 @@ var LIMITE_POR_MINUTO = 8;
 /** Colunas de controle, criadas sozinhas. Nenhuma é publicada no site. */
 var COL_CHAVE = 'Chave';
 var COL_REMOVIDO = 'Removido';
+var COL_CONFIRMADO_EM = 'Confirmado em';
 
 /**
  * Campos aceitos e onde cada um cai na planilha.
@@ -273,9 +274,18 @@ function removerCadastro(corpo) {
   return json({ ok:true });
 }
 
+/**
+ * Acende ou apaga o selo, anotando quando foi.
+ *
+ * "Confirmado pelo responsável" sem data não diz se foi ontem ou há dois anos —
+ * e o selo vale justamente por dizer que alguém olhou. A data é gravada junto,
+ * e sai junto quando o selo sai.
+ */
 function marcarConfirmado(alvo, valor) {
   var col = colunaControle(alvo.aba, alvo.cabecalho, 'Verificado');
   alvo.aba.getRange(alvo.linha, col + 1).setValue(valor);
+  var colData = colunaControle(alvo.aba, alvo.cabecalho, COL_CONFIRMADO_EM);
+  alvo.aba.getRange(alvo.linha, colData + 1).setValue(valor ? carimbo() : '');
 }
 
 /* ══════════ Chaves ══════════ */

@@ -561,6 +561,7 @@ const FIELDS = [
   { key:'horarios',  label:'Dias e Horários das Giras, Trabalhos ou Consultas', aliases:['quais dias e horarios acontecem os trabalhos','dias e horarios','horarios','giras','dias e horarios das giras, trabalhos ou consultas','horario'] },
   { key:'servicos',  label:'Serviços Prestados e Trabalhos oferecidos',   aliases:['quais tipos de atendimentos realizados','tipos de atendimentos','tipos de atendimento','atendimentos realizados','servicos prestados','servicos','trabalhos oferecidos','servicos prestados e trabalhos oferecidos'] },
   { key:'verificado',label:'Verificado',                                  aliases:['verificado','confirmado','verificacao','confirmacao','conferido'] },
+  { key:'confirmadoEm', label:'Confirmado em',                        aliases:['confirmado em','data da confirmacao','confirmado'] },
   { key:'regras',    label:'Orientações ao Visitante / Regras do Espaço', aliases:['orientacoes para visitantes','orientacoes ao visitante','orientacoes','regras','regras do espaco','orientacoes ao visitante / regras do espaco','observacoes'] }
 ];
 
@@ -620,6 +621,22 @@ const CANAL_CORRECAO = 'https://wa.me/5519974118980';
    envelhecido. Casa muda de endereço e de horário; o formulário é respondido
    uma vez só. */
 const MESES_PARA_AVISO = 12;
+
+/**
+ * "Confirmado pelo responsável" — e quando, se soubermos.
+ *
+ * A data só aparece quando existe: as confirmações feitas antes de a coluna
+ * existir ficam sem ela, e inventar um "há pouco" seria dizer o que não se
+ * sabe. O selo sozinho continua valendo; com a data, vale mais.
+ */
+function selosConfirmado(d){
+  const m = /(\d{1,2})\/(\d{1,2})\/(\d{4})/.exec(d.confirmadoEm || '');
+  if (!m) return 'Confirmado pelo responsável';
+  const data = new Date(+m[3], +m[2] - 1, +m[1]);
+  if (isNaN(data)) return 'Confirmado pelo responsável';
+  return `Confirmado pelo responsável em ${MESES[data.getMonth()]} de ${data.getFullYear()}`;
+}
+
 
 /**
  * Código do GoatCounter, para saber quantas pessoas chegaram ao guia.
@@ -714,8 +731,23 @@ function mostrarCadastro(){
 }
 
 /** Se o endereço aponta para um espaço, abre a ficha dele de cara. */
+/** Apelido de endereço para uma vertente: 'Cartomancia/Tarô' → 'cartomancia-taro'. */
+const apelidoVertente = nome => (nome || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+  .toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+
 function abrirEspacoDoEndereco(){
-  const ap = new URLSearchParams(location.search).get('espaco');
+  const busca = new URLSearchParams(location.search);
+
+  // As páginas de vertente (/vertente/umbanda/) trazem para cá já filtrado —
+  // senão elas seriam becos: quem chega pelo buscador via a lista e não tinha
+  // como continuar de dentro do guia.
+  const vertente = busca.get('vertente');
+  if (vertente){
+    const achada = TRADITIONS.find(t => apelidoVertente(t.name) === vertente);
+    if (achada){ state.trads.add(achada.name); render(); }
+  }
+
+  const ap = busca.get('espaco');
   if (!ap) return;
   const d = porApelido(ap);
   if (d) openDetails(d.id);
@@ -755,7 +787,8 @@ function normalize(r){
   FIELDS.forEach(f => o[f.key] = (r[f.key] ?? '').toString().trim());
   o.tradicao   = corrigirGrafia(o.tradicao);
   o.cidade     = corrigirCidade(o.cidade);
-  o.grupo      = r.grupo || grupoTradicao(o.tradicao);
+  o.grupos     = (r.grupos && r.grupos.length) ? r.grupos : gruposTradicao(o.tradicao);
+  o.grupo      = o.grupos[0] || '';
   o.verificado = ehVerificado(o.verificado) ? 'sim' : '';
   o.modalidade = matchModality(o.modalidade);
   return o;
@@ -835,20 +868,35 @@ function corrigirCidade(texto){
 
 /** Agrupa a resposta numa categoria — usado só para a cor do selo e para o
     filtro. O que aparece na tela é sempre o texto que a pessoa escreveu. */
-function grupoTradicao(v){
+/**
+ * Em que vertentes o espaço se encaixa — pode ser mais de uma.
+ *
+ * Muita gente escreve "Quimbanda/Umbanda" ou "Umbanda e também kardecismo". O
+ * guia costumava guardar só a primeira que casava, e o espaço sumia do filtro
+ * da outra — justamente para quem procurava aquilo. Nada é deduzido aqui: só
+ * entram as vertentes que a própria pessoa escreveu.
+ */
+const VERTENTES = [
+  ['Umbanda',                /umbanda/],
+  ['Candomblé',              /candombl|ile ax|axe/],
+  ['Quimbanda',              /quimbanda|esquerda|exu|pombagira/],
+  ['Jogo de Búzios',         /buzio|merindilogun/],
+  ['Cartomancia/Tarô',       /taro|cartoman|carta|baralho|oracul/],
+  ['Holístico/Terapia',      /holist|terapia|reiki|floral|cristal|yoga|integrativ/],
+  ['Magia',                  /magia|bruxa|wicca|feiti/],
+  ['Espiritismo/Kardecismo', /espiritismo|kardec|doutrina espirita|centro espirita/]
+];
+
+function gruposTradicao(v){
   const n = norm(v);
-  if (!n) return '';
-  const exact = TRADITIONS.find(t => norm(t.name) === n);
-  if (exact) return exact.name;
-  if (/umbanda/.test(n)) return 'Umbanda';
-  if (/candombl|ile ax|axe/.test(n)) return 'Candomblé';
-  if (/quimbanda|esquerda|exu|pombagira/.test(n)) return 'Quimbanda';
-  if (/buzio|merindilogun/.test(n)) return 'Jogo de Búzios';
-  if (/taro|cartoman|carta|baralho|oracul/.test(n)) return 'Cartomancia/Tarô';
-  if (/holist|terapia|reiki|floral|cristal|yoga|integrativ/.test(n)) return 'Holístico/Terapia';
-  if (/magia|bruxaria|wicca|feiti/.test(n)) return 'Magia';
-  if (/espiritismo|kardec|doutrina espirita|centro espirita/.test(n)) return 'Espiritismo/Kardecismo';
-  return 'Outros';
+  if (!n) return [];
+  const achados = VERTENTES.filter(([, regra]) => regra.test(n)).map(([nome]) => nome);
+  return achados.length ? achados : ['Outros'];
+}
+
+/** A vertente principal — a primeira que casou. Dá a cor do cartão. */
+function grupoTradicao(v){
+  return gruposTradicao(v)[0] || '';
 }
 /** Aceita as formas que uma pessoa escreveria numa planilha: sim, x, ok, 1… */
 function ehVerificado(v){
@@ -983,7 +1031,8 @@ function filtered(){
   return DATA.filter(d => {
     if (state.city && d.cidade !== state.city) return false;
     if (state.soConfirmados && !d.verificado) return false;
-    if (state.trads.size && !state.trads.has(d.grupo)) return false;
+    // Um espaço aparece em toda vertente que ele declarou, não só na primeira.
+    if (state.trads.size && !(d.grupos || [d.grupo]).some(g => state.trads.has(g))) return false;
     if (state.mods.size){
       // quem atende "Ambas" aparece tanto no filtro Presencial quanto no Online
       // sem modalidade preenchida, o cadastro não é alcançado por esse filtro
@@ -1241,7 +1290,7 @@ function renderCityOptions(){
 
 function renderChips(){
   const counts = {};
-  DATA.forEach(d => { if (d.grupo) counts[d.grupo] = (counts[d.grupo]||0)+1; });
+  DATA.forEach(d => (d.grupos || [d.grupo]).forEach(g => { if (g) counts[g] = (counts[g]||0)+1; }));
 
   document.getElementById('tradChips').innerHTML = TRADITIONS
     .filter(t => counts[t.name] || state.trads.has(t.name))
@@ -1334,7 +1383,7 @@ function openDetails(id){
       ${badge(d)}
       <h2 class="serifa" style="margin:.5rem 0 0; font-size:23px; line-height:1.22; color:#fbf3e7">${esc(d.nome)}${
         d.verificado ? `<span class="verificado" title="Dados confirmados pelo responsável">${ic('i-selo')}</span>` : ''}</h2>
-      ${d.verificado ? `<p class="rubrica" style="color:var(--folha-viva); margin-top:.35rem">Confirmado pelo responsável</p>` : ''}
+      ${d.verificado ? `<p class="rubrica" style="color:var(--folha-viva); margin-top:.35rem">${esc(selosConfirmado(d))}</p>` : ''}
       ${d.dirigente ? `<p style="margin:.3rem 0 0; color:#cbae94; font-size:14px">${esc(d.dirigente)}</p>` : ''}
       <div class="ornamento" style="margin:.85rem 0 .1rem; max-width:11rem"><i></i></div>
       ${d.modalidade ? `<p class="rubrica flex items-center gap-1.5" style="margin-top:.55rem">${modIcone(d.modalidade)}${esc(d.modalidade)}</p>` : ''}

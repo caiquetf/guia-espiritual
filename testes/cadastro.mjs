@@ -115,6 +115,26 @@ secao('o responsável cuidando do próprio cadastro');
   ok('varrer chaves no escuro fecha a porta', s.post({ acao:'ler', chave }).ok === false);
 }
 
+secao('a data da confirmação');
+{
+  const s = novo();
+  s.post(BASE);
+  const chave = s.L[1][s.coluna('Chave')];
+  s.post({ acao:'confirmar', chave });
+  const data = s.L[1][s.coluna('Confirmado em')];
+  ok('confirmar anota quando foi', /^\d{2}\/\d{2}\/\d{4}/.test(data));
+  s.post({ acao:'remover', chave });
+  ok('e a data sai junto quando o selo sai', s.L[1][s.coluna('Confirmado em')] === '');
+}
+{
+  const s = novo();
+  s.post(BASE);
+  const chave = s.L[1][s.coluna('Chave')];
+  s.post({ acao:'salvar', chave, dados:{ ...BASE } });
+  ok('salvar correções também anota a data',
+     /^\d{2}\/\d{2}\/\d{4}/.test(s.L[1][s.coluna('Confirmado em')]));
+}
+
 secao('autoteste do endereço');
 {
   const s = novo();
