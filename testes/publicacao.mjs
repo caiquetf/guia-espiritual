@@ -146,6 +146,11 @@ secao('página por vertente, para quem busca no Google');
   ok('e aponta as outras vertentes, para não ser um beco', /Outras vertentes/.test(umbanda));
   ok('entra no sitemap', readFileSync(join(pasta, 'sitemap.xml'), 'utf8').includes('/vertente/umbanda/'));
   ok('"Outros" não vira página', !feitas.includes('outros'));
+  // O robô da sincronização só comita a lista de arquivos que estiver no
+  // workflow. Uma pasta gerada e não listada some do site sem ninguém notar.
+  const fluxo = readFileSync(join(RAIZ, '.github/workflows/sincronizar-planilha.yml'), 'utf8');
+  for (const pasta of ['dados.json','espaco','espaco-apelidos.json','vertente','sitemap.xml','robots.txt'])
+    ok(`a sincronização publica "${pasta}"`, new RegExp('git add [^\n]*\\b' + pasta.replace('.','\\.') + '\\b').test(fluxo));
   const espaco = readFileSync(join(pasta, 'espaco', 'casa-a-0001', 'index.html'), 'utf8');
   ok('a página do espaço leva às vertentes dele',
      espaco.includes('vertente/umbanda/') && espaco.includes('vertente/quimbanda/'));
