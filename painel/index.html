@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Painel — Guia Espiritual</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" type="image/png" href="../favicon.png" />
+<meta name="theme-color" content="#150f0c" />
+<style>
+  :root{ --tinta:#150f0c; --alta:#1e1613; --topo:#261c17; --linha:#3a2a21; --linha-viva:#5a4032;
+         --papel:#f3e7d6; --meio:#c4ac92; --baixo:#9f8771; --brasa:#c9713f; --folha:#6f8f5f;
+         --folha-viva:#8fb87a; --ouro:#d6a545; }
+  *{ box-sizing:border-box }
+  body{ margin:0; padding:1.4rem 1rem 4rem; background:var(--tinta); color:var(--papel);
+        font:15px/1.55 Inter,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+        background-image:radial-gradient(50rem 26rem at 50% -8%, rgba(201,113,63,.12), transparent 62%); }
+  main{ max-width:48rem; margin:0 auto }
+  .rubrica{ font-size:11px; font-weight:600; letter-spacing:.13em; text-transform:uppercase; color:var(--baixo) }
+  h1{ font:600 23px/1.25 'Iowan Old Style',Palatino,Georgia,serif; margin:.1rem 0 .3rem }
+  .det{ color:var(--meio); font-size:13px; margin:.25rem 0 0 }
+
+  /* Abas */
+  .abas{ display:flex; gap:.4rem; flex-wrap:wrap; margin:1.3rem 0 0;
+         border-bottom:1px solid var(--linha); padding-bottom:.7rem }
+  .aba{ font:inherit; font-size:13.5px; font-weight:600; cursor:pointer; padding:.5rem .9rem;
+        border-radius:10px; border:1px solid transparent; background:transparent; color:var(--baixo) }
+  .aba:hover{ color:var(--papel); background:var(--topo) }
+  .aba[aria-selected="true"]{ background:var(--topo); border-color:var(--linha-viva); color:var(--papel) }
+  .aba b{ color:var(--brasa); margin-left:.3rem; font-variant-numeric:tabular-nums }
+  section[hidden]{ display:none }
+
+  .placar{ display:flex; gap:.5rem; flex-wrap:wrap; margin:1.2rem 0 1.2rem }
+  .pilula{ padding:.4rem .8rem; border:1px solid var(--linha); border-radius:999px;
+           font-size:12.5px; color:var(--meio) }
+  .pilula b{ color:var(--papel) }
+  .chip{ font:inherit; font-size:12.5px; cursor:pointer; padding:.4rem .8rem; border-radius:999px;
+         border:1px solid var(--linha); background:var(--topo); color:var(--meio) }
+  .chip b{ color:var(--papel); margin-left:.25rem }
+  .chip[aria-pressed="true"]{ border-color:var(--brasa); color:var(--papel) }
+  .chip.limpo[aria-pressed="true"]{ border-color:var(--folha) }
+
+  .cartao{ background:var(--alta); border:1px solid var(--linha); border-radius:13px;
+           padding:.9rem 1.05rem; margin-bottom:.7rem }
+  .cartao.feito, .cartao.selado{ opacity:.6 }
+  .cartao.enviado{ border-color:var(--ouro) }
+  .cartao.ok{ border-color:rgba(111,143,95,.5) }
+  .topo-cartao{ display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap }
+  .nome{ font:600 16px/1.3 'Iowan Old Style',Palatino,Georgia,serif; margin:0 }
+  .acoes{ display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.8rem }
+  button{ font:inherit; font-size:13px; font-weight:600; cursor:pointer; padding:.5rem .85rem;
+          border-radius:10px; border:1px solid var(--linha); background:var(--topo); color:var(--papel) }
+  button:hover{ background:#31241d; border-color:var(--linha-viva) }
+  button.zap{ background:linear-gradient(170deg,var(--folha),#4f6b41); border-color:#4f6b41; color:#f2f7ee }
+  button.confirmar{ background:linear-gradient(170deg,var(--folha),#4f6b41); border-color:#4f6b41; color:#f2f7ee }
+  button.sutil{ background:transparent; color:var(--baixo) }
+  .selo{ font-size:10.5px; font-weight:600; letter-spacing:.09em; text-transform:uppercase; color:var(--ouro) }
+  .selo.ok{ color:var(--folha) }
+  .semfone{ color:#e79a8c; font-size:12.5px; margin:.5rem 0 0 }
+  .falta{ display:inline-block; font-size:11.5px; padding:.2rem .55rem; border-radius:999px;
+          border:1px solid rgba(201,113,63,.45); color:#eaa87e; margin:.35rem .3rem 0 0 }
+  .falta.leve{ border-color:rgba(214,165,69,.4); color:#e8c777 }
+  .falta.boa{ border-color:rgba(111,143,95,.45); color:var(--folha-viva) }
+  .porque{ color:var(--baixo); font-size:12.5px; margin:.5rem 0 0 }
+
+  .caixa{ background:var(--alta); border:1px solid var(--linha); border-radius:13px;
+          padding:1rem 1.15rem; margin:1.2rem 0; font-size:14px; color:var(--meio) }
+  .caixa strong{ color:var(--papel) }
+  .caixa.alerta{ background:rgba(214,165,69,.07); border-color:rgba(214,165,69,.3); color:#e8c777 }
+  .nota{ color:var(--baixo); font-size:12.5px; border-top:1px solid var(--linha);
+         padding-top:1rem; margin-top:2.4rem }
+  .nota a{ color:var(--brasa) }
+  #toast{ position:fixed; left:50%; bottom:1.2rem; transform:translateX(-50%); background:#241a16;
+          border:1px solid var(--linha-viva); padding:.65rem 1.1rem; border-radius:12px;
+          font-size:13.5px; max-width:90vw; text-align:center; z-index:9 }
+</style>
+</head>
+<body>
+<main>
+  <p class="rubrica">Ferramenta de quem mantém o guia</p>
+  <h1>Painel</h1>
+  <p class="det" id="resumoTopo">Carregando os cadastros…</p>
+
+  <div class="abas" role="tablist">
+    <button class="aba" role="tab" data-aba="avisar"   aria-selected="true">Avisar<b id="cAvisar"></b></button>
+    <button class="aba" role="tab" data-aba="selo"     aria-selected="false">Conferir selo<b id="cSelo"></b></button>
+    <button class="aba" role="tab" data-aba="revisar"  aria-selected="false">Revisar dados<b id="cRevisar"></b></button>
+    <button class="aba" role="tab" data-aba="ajustes"  aria-selected="false">Ajustes</button>
+  </div>
+
+  <section id="aba-avisar">
+    <p class="det" style="max-width:40rem">
+      Qualquer pessoa pode cadastrar qualquer espaço. Avisar o número informado é como
+      o responsável descobre que está no guia — e ganha o link para conferir, corrigir ou sair.
+    </p>
+    <div class="placar" id="placarAvisar"></div>
+    <div id="listaAvisar"></div>
+  </section>
+
+  <section id="aba-selo" hidden>
+    <p class="det" style="max-width:40rem">
+      O selo diz que <b>o responsável</b> conferiu os dados. Acender por aqui é para o caso
+      em que ele confirmou por fora — por mensagem ou pessoalmente. O caminho normal é ele
+      mesmo confirmar pelo link dele.
+    </p>
+    <div class="placar" id="placarSelo"></div>
+    <div id="listaSelo"></div>
+  </section>
+
+  <section id="aba-revisar" hidden>
+    <p class="det" style="max-width:40rem">
+      O que falta em cada cadastro, e o que a falta custa a quem procura.
+      Campo em branco nem sempre é erro — endereço de quem atende só online, por exemplo.
+    </p>
+    <div class="placar" id="placarRevisar"></div>
+    <div class="acoes" id="barraRevisar"></div>
+    <div id="listaRevisar" style="margin-top:1rem"></div>
+  </section>
+
+  <section id="aba-ajustes" hidden>
+    <div class="caixa">
+      <p><strong>Quem consegue abrir esta página</strong></p>
+      <p>Qualquer pessoa que souber o endereço. O site é feito de páginas soltas, sem
+      servidor — não existe senha para pedir. A página fica fora dos buscadores, mas isso
+      é não estar divulgada, não é estar protegida.</p>
+      <p><strong>Quem consegue mudar alguma coisa: só você.</strong> Acender selo e montar
+      a mensagem com o link privado passam pelo Apps Script publicado como
+      <b>somente eu</b>. Quem abrir sem estar logado na sua conta Google vê a tela de
+      login e não grava nada. É essa a fechadura — e ela está do lado certo, no que escreve.</p>
+    </div>
+
+    <div class="caixa">
+      <p><strong>Endereço do Apps Script</strong></p>
+      <p class="det" id="enderecoDono">—</p>
+      <div class="acoes">
+        <button type="button" id="btnTestar">Testar este endereço</button>
+        <span id="resultadoTeste" style="align-self:center"></span>
+      </div>
+      <p class="det" style="margin-top:.8rem">Vale testar antes de sair avisando gente de
+      verdade: já aconteceu de o endereço apontar para o script errado, e o erro só
+      aparecer depois da mensagem enviada.</p>
+    </div>
+
+    <div class="caixa">
+      <p><strong>O que fica guardado neste navegador</strong></p>
+      <p>Quem você já avisou e quais selos estão esperando a sincronização. Em outro
+      aparelho a lista aparece zerada — nada disso vai para a planilha.</p>
+      <div class="acoes">
+        <button type="button" class="sutil" id="btnLimparAvisados">Esquecer quem já avisei</button>
+        <button type="button" class="sutil" id="btnLimparPendentes">Esquecer selos pendentes</button>
+      </div>
+    </div>
+
+    <div class="caixa" id="caixaSincronia"></div>
+  </section>
+
+  <p class="nota">
+    <a href="../">Ver o guia</a> · <a href="../cadastrar/">Cadastrar um espaço</a> ·
+    <a href="../sobre/">Como o guia funciona</a>
+  </p>
+</main>
+
+<script>
+/* ═══════════ Comum ═══════════ */
+
+const SITE = location.origin + location.pathname.replace(/\/painel\/?(index\.html)?$/, '');
+
+/**
+ * Apps Script "somente eu". Vem do dados.json, escrito pela sincronização a
+ * partir da variável VERIFICAR_URL — ninguém precisa editar HTML para trocá-lo.
+ */
+let API_DONO = '';
+let DADOS = [];
+
+const CHAVE_AVISADOS = 'guia-espiritual-avisados';
+const CHAVE_PENDENTES = 'guia-espiritual-selos-pendentes';
+
+const deaccent = s => (s||'').normalize('NFD').replace(/[̀-ͯ]/g,'');
+const digitos  = s => (s||'').replace(/\D/g,'');
+const esc = s => (s ?? '').toString()
+  .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+/** O mesmo apelido que o gerador de páginas usa, para os links baterem. */
+function apelido(d){
+  const base = deaccent(d.nome || d.dirigente || '')
+    .toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,48);
+  return [base || 'espaco', digitos(d.telefone).slice(-4)].filter(Boolean).join('-');
+}
+
+function numeroWhats(tel){
+  let n = digitos(tel).replace(/^0+/,'');
+  if (!n) return '';
+  if (!n.startsWith('55')) n = '55' + n;
+  return n.length >= 12 ? n : '';
+}
+
+const ehVerificado = v => /^(sim|s|x|ok|1|true|verdadeiro|confirmado|verificado)$/i.test((v||'').trim());
+
+const guardado = chave => { try { return JSON.parse(localStorage.getItem(chave)) || {}; } catch { return {}; } };
+const guardar = (chave, v) => localStorage.setItem(chave, JSON.stringify(v));
+
+function quando(d){
+  const m = /(\d{1,2})\/(\d{1,2})\/(\d{4})(?:[ ,]+(\d{1,2}):(\d{2}))?/.exec(d.timestamp || '');
+  if (!m) return 0;
+  return new Date(+m[3], +m[2]-1, +m[1], +(m[4]||0), +(m[5]||0)).getTime() || 0;
+}
+
+function toast(txt){
+  document.getElementById('toast')?.remove();
+  const el = document.createElement('div');
+  el.id = 'toast'; el.textContent = txt;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 4200);
+}
+
+const temApi = () => /^https:\/\/script\.google\.com\//.test(API_DONO);
+
+/** Abre a janelinha do Apps Script. Só ela leva a sessão do Google junto. */
+function abrirScript(parametros, nomeJanela){
+  if (!temApi()){ toast('O endereço do Apps Script ainda não está configurado — veja em Ajustes.'); return null; }
+  const url = API_DONO + (API_DONO.includes('?') ? '&' : '?') + new URLSearchParams(parametros);
+  const janela = window.open(url, nomeJanela, 'width=460,height=560');
+  if (!janela) toast('O navegador bloqueou a janela. Libere os pop-ups deste site e clique de novo.');
+  return janela;
+}
+
+/* ═══════════ Abas ═══════════ */
+
+const ABAS = ['avisar','selo','revisar','ajustes'];
+
+function mostrarAba(qual){
+  if (!ABAS.includes(qual)) qual = 'avisar';
+  ABAS.forEach(a => {
+    document.getElementById('aba-' + a).hidden = a !== qual;
+    document.querySelector(`.aba[data-aba="${a}"]`).setAttribute('aria-selected', String(a === qual));
+  });
+  history.replaceState(null, '', '#' + qual);
+}
+document.querySelectorAll('.aba').forEach(b =>
+  b.addEventListener('click', () => mostrarAba(b.dataset.aba)));
+
+/* ═══════════ Avisar ═══════════ */
+
+function mensagemSimples(d){
+  const nome = d.nome || d.dirigente;
+  return `Olá! O espaço *${nome}* foi cadastrado no Guia Espiritual — Piracicaba e Região, `
+       + `um guia gratuito de terreiros, casas de axé, oraculistas e terapeutas da região.\n\n`
+       + `A página dele é esta:\n${SITE}/espaco/${apelido(d)}/\n\n`
+       + `Se alguma informação estiver errada, ou se preferir não aparecer no guia, `
+       + `é só responder esta mensagem que eu corrijo ou removo.`;
+}
+
+function marcarAvisado(ap, valor){
+  const m = guardado(CHAVE_AVISADOS);
+  if (valor) m[ap] = new Date().toISOString(); else delete m[ap];
+  guardar(CHAVE_AVISADOS, m);
+  desenharTudo();
+}
+
+/**
+ * Pede ao Apps Script a mensagem com o link privado. Ela é montada lá, e não
+ * aqui, porque carrega a chave do cadastro — e esta página é pública.
+ */
+function avisar(ap){
+  const d = DADOS.find(x => apelido(x) === ap);
+  if (!d) return;
+  const janela = temApi()
+    ? abrirScript({ acao:'avisar', site:SITE, nome:d.nome || d.dirigente || '', tel:digitos(d.telefone) }, 'guia-avisar')
+    : window.open(`https://wa.me/${numeroWhats(d.telefone)}?text=${encodeURIComponent(mensagemSimples(d))}`, '_blank');
+  // Janela bloqueada não pode virar "avisado": a pessoa sumiria da fila sem ter
+  // recebido nada, e ninguém notaria.
+  if (!janela) return;
+  marcarAvisado(ap, true);
+}
+
+async function copiarMensagem(ap){
+  const d = DADOS.find(x => apelido(x) === ap);
+  if (!d) return;
+  try { await navigator.clipboard.writeText(mensagemSimples(d)); toast('Mensagem copiada.'); }
+  catch { window.prompt('Copie a mensagem:', mensagemSimples(d)); }
+}
+
+function desenharAvisar(){
+  const marcados = guardado(CHAVE_AVISADOS);
+  const ordenados = [...DADOS].sort((a,b) => quando(b) - quando(a));
+  const pendentes = ordenados.filter(d => !marcados[apelido(d)] && numeroWhats(d.telefone));
+  const semFone = ordenados.filter(d => !numeroWhats(d.telefone));
+
+  document.getElementById('cAvisar').textContent = pendentes.length || '';
+  document.getElementById('placarAvisar').innerHTML = `
+    <span class="pilula"><b>${pendentes.length}</b> a avisar</span>
+    <span class="pilula"><b>${ordenados.length - pendentes.length - semFone.length}</b> já avisados</span>
+    ${semFone.length ? `<span class="pilula"><b>${semFone.length}</b> sem telefone válido</span>` : ''}`;
+
+  document.getElementById('listaAvisar').innerHTML = ordenados.map(d => {
+    const ap = apelido(d), num = numeroWhats(d.telefone), feito = !!marcados[ap];
+    const onde = [d.bairro, d.cidade].filter(Boolean).join(' · ');
+    const data = quando(d) ? new Date(quando(d)).toLocaleDateString('pt-BR') : '';
+    return `<div class="cartao ${feito ? 'feito' : ''}">
+      <div class="topo-cartao">
+        <p class="nome">${esc(d.nome || d.dirigente)}</p>
+        <span class="selo ${feito ? 'ok' : ''}">${feito ? 'avisado' : 'a avisar'}</span>
+        ${ehVerificado(d.verificado) ? '<span class="selo ok">✓ confirmado</span>' : ''}
+      </div>
+      <p class="det">${[onde, d.telefone, data && 'cadastrado em ' + data].filter(Boolean).map(esc).join(' · ')}</p>
+      ${num ? `<div class="acoes">
+          ${feito
+            ? `<button class="sutil" data-desavisar="${ap}">Desmarcar</button>`
+            : `<button class="zap" data-avisar="${ap}">Avisar no WhatsApp</button>
+               <button data-copiar="${ap}">Copiar mensagem</button>
+               <button class="sutil" data-javisei="${ap}">Já avisei</button>`}
+        </div>`
+        : '<p class="semfone">Sem telefone válido com DDD — não dá para avisar por WhatsApp.</p>'}
+    </div>`;
+  }).join('');
+}
+
+/* ═══════════ Conferir selo ═══════════ */
+
+function anotarPendente(ap, valor){
+  const m = guardado(CHAVE_PENDENTES);
+  if (valor === null) delete m[ap]; else m[ap] = valor;
+  guardar(CHAVE_PENDENTES, m);
+}
+
+/**
+ * A planilha é a verdade; o pendente é o clique que ainda não voltou pela
+ * sincronização. Quando a planilha concorda, o clique é esquecido — senão a
+ * tela mentiria para sempre depois de um erro.
+ */
+function estadoSelo(d){
+  const naPlanilha = ehVerificado(d.verificado);
+  const p = guardado(CHAVE_PENDENTES)[apelido(d)];
+  if (p === undefined) return naPlanilha ? 'selado' : 'aberto';
+  if ((p === 'sim') === naPlanilha){ anotarPendente(apelido(d), null); return naPlanilha ? 'selado' : 'aberto'; }
+  return 'enviado';
+}
+
+function marcarSelo(ap, valor){
+  const d = DADOS.find(x => apelido(x) === ap);
+  if (!d) return;
+  const janela = abrirScript({ nome:d.nome || d.dirigente || '', tel:digitos(d.telefone), valor }, 'guia-selo');
+  if (!janela) return;
+  anotarPendente(ap, valor);
+  desenharTudo();
+}
+
+function desenharSelo(){
+  const estados = DADOS.map(estadoSelo);
+  const selados = estados.filter(e => e === 'selado').length;
+  const enviados = estados.filter(e => e === 'enviado').length;
+
+  document.getElementById('cSelo').textContent = (DADOS.length - selados - enviados) || '';
+  document.getElementById('placarSelo').innerHTML = `
+    <span class="pilula"><b>${selados}</b> com selo</span>
+    <span class="pilula"><b>${DADOS.length - selados - enviados}</b> sem selo</span>
+    ${enviados ? `<span class="pilula"><b>${enviados}</b> aguardando a sincronização</span>` : ''}`;
+
+  document.getElementById('listaSelo').innerHTML = DADOS.map((d, i) => {
+    const e = estados[i], ap = apelido(d);
+    const onde = [d.bairro, d.cidade].filter(Boolean).join(' · ');
+    const quandoSelo = d.confirmadoEm ? ' · confirmado em ' + esc(String(d.confirmadoEm).split(' ')[0]) : '';
+    const acao = !temApi() ? ''
+      : e === 'selado'   ? `<button class="sutil" data-selo="${ap}" data-valor="nao">Tirar selo</button>`
+      : e === 'enviado'  ? `<button class="sutil" data-desfazer="${ap}">Desmarcar aqui</button>`
+                         : `<button class="confirmar" data-selo="${ap}" data-valor="sim">Confirmar</button>`;
+    return `<div class="cartao ${e === 'selado' ? 'selado' : e === 'enviado' ? 'enviado' : ''}">
+      <div class="topo-cartao">
+        <p class="nome">${esc(d.nome || d.dirigente || 'Sem nome')}</p>
+        <span class="selo ${e === 'selado' ? 'ok' : ''}">${
+          e === 'selado' ? '✓ com selo' : e === 'enviado' ? '⏳ aguardando a planilha' : 'sem selo'}</span>
+      </div>
+      <p class="det">${[onde, d.telefone].filter(Boolean).map(esc).join(' · ') || '—'}${quandoSelo}</p>
+      ${acao ? `<div class="acoes">${acao}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+/* ═══════════ Revisar dados ═══════════ */
+
+const MESES_PARA_AVISO = 12;
+
+function mesesDesde(d){
+  const t = quando(d);
+  return t ? (Date.now() - t) / (1000*60*60*24*30.44) : null;
+}
+
+/**
+ * Cada regra diz o que falta e o que a falta custa. Sem a segunda parte a lista
+ * viraria cobrança de formulário completo — e há campos que ficam em branco com
+ * razão.
+ */
+const REGRAS = [
+  { id:'cidade', peso:3, rotulo:'sem cidade',
+    porque:'não aparece quando alguém filtra por cidade', falta: d => !d.cidade },
+  { id:'modalidade', peso:3, rotulo:'sem modalidade',
+    porque:'não aparece nos filtros Presencial, Online e Ambas', falta: d => !d.modalidade },
+  { id:'whats', peso:3, rotulo:'sem WhatsApp utilizável',
+    porque:'o cartão fica sem o botão verde, e não dá para avisar o responsável',
+    falta: d => !numeroWhats(d.telefone) },
+  { id:'vertente', peso:2, rotulo:'sem vertente',
+    porque:'fica de fora dos chips de tradição', falta: d => !d.tradicao },
+  { id:'horarios', peso:2, rotulo:'sem dias e horários',
+    porque:'quem procura não sabe quando pode ir', falta: d => !d.horarios },
+  { id:'onde', peso:2, rotulo:'sem endereço nem bairro',
+    porque:'atende presencialmente, mas não há como saber onde',
+    falta: d => /Presencial|Ambas/i.test(d.modalidade) && !d.endereco && !d.bairro },
+  { id:'servicos', peso:1, rotulo:'sem serviços',
+    porque:'não é encontrado por busca de serviço', falta: d => !d.servicos },
+  { id:'antigo', peso:1, leve:true, rotulo:'cadastro antigo',
+    porque:'passou de ' + MESES_PARA_AVISO + ' meses e o site já exibe o aviso de confirmar antes de ir',
+    falta: d => { const m = mesesDesde(d); return m !== null && m >= MESES_PARA_AVISO; } },
+  { id:'confirmar', peso:1, leve:true, rotulo:'ainda sem selo',
+    porque:'o responsável ainda não abriu o link dele para confirmar os dados',
+    falta: d => !ehVerificado(d.verificado) }
+];
+
+let filtroRevisar = '';
+const problemas = d => REGRAS.filter(r => r.falta(d));
+const gravidade = d => problemas(d).reduce((s, r) => s + r.peso, 0);
+
+function selecionados(){
+  const ordem = (a,b) => gravidade(b) - gravidade(a) || (a.nome||'').localeCompare(b.nome||'','pt-BR');
+  if (filtroRevisar === 'completos') return DADOS.filter(d => problemas(d).every(r => r.leve)).sort(ordem);
+  const r = REGRAS.find(x => x.id === filtroRevisar);
+  return (r ? DADOS.filter(r.falta) : [...DADOS]).sort(ordem);
+}
+
+function desenharRevisar(){
+  const contagem = {};
+  REGRAS.forEach(r => contagem[r.id] = DADOS.filter(r.falta).length);
+  const completos = DADOS.filter(d => problemas(d).every(r => r.leve));
+  const graves = DADOS.filter(d => problemas(d).some(r => !r.leve)).length;
+
+  document.getElementById('cRevisar').textContent = graves || '';
+  document.getElementById('placarRevisar').innerHTML =
+    `<button class="chip limpo" data-f="completos" aria-pressed="${filtroRevisar==='completos'}">
+       nada a corrigir <b>${completos.length}</b></button>` +
+    REGRAS.filter(r => contagem[r.id]).map(r =>
+      `<button class="chip" data-f="${r.id}" aria-pressed="${filtroRevisar===r.id}">
+         ${r.rotulo} <b>${contagem[r.id]}</b></button>`).join('');
+
+  document.getElementById('barraRevisar').innerHTML = filtroRevisar
+    ? `<button data-limpar>Ver todos os ${DADOS.length}</button>
+       <button data-copiar-lista>Copiar os nomes desta lista</button>`
+    : `<span class="det">${DADOS.length} cadastros, do que mais precisa de atenção para o que já está pronto.</span>`;
+
+  document.getElementById('listaRevisar').innerHTML = selecionados().map(d => {
+    const ps = problemas(d);
+    const limpo = ps.every(r => r.leve);
+    const onde = [d.bairro, d.cidade].filter(Boolean).join(' · ');
+    return `<div class="cartao ${limpo ? 'ok' : ''}">
+      <p class="nome">${esc(d.nome || d.dirigente || 'Sem nome')}</p>
+      <p class="det">${[onde, d.tradicao, d.telefone].filter(Boolean).map(esc).join(' · ') || '—'}</p>
+      <div>${ps.length
+        ? ps.map(r => `<span class="falta ${r.leve ? 'leve' : ''}">${r.rotulo}</span>`).join('')
+        : '<span class="falta boa">completo</span>'}</div>
+      ${ps.length ? `<p class="porque">${ps.map(r => esc(r.porque)).join(' · ')}</p>` : ''}
+    </div>`;
+  }).join('') || '<p class="det">Nenhum cadastro nesta lista.</p>';
+}
+
+/* ═══════════ Ajustes ═══════════ */
+
+function testarEndereco(){
+  const onde = document.getElementById('resultadoTeste');
+  if (!temApi()){
+    onde.textContent = '⚠ Nenhum endereço configurado.';
+    onde.style.color = '#eaa87e';
+    return;
+  }
+  onde.textContent = 'perguntando…';
+  onde.style.color = '';
+  if (!abrirScript({ acao:'quemsou' }, 'guia-teste')){
+    onde.textContent = '⚠ O navegador bloqueou a janela.';
+    onde.style.color = '#eaa87e';
+    return;
+  }
+  clearTimeout(window.__relogioTeste);
+  window.__relogioTeste = setTimeout(() => {
+    if (onde.textContent === 'perguntando…'){
+      onde.textContent = '⚠ Não reconheci a resposta — veja a janelinha.';
+      onde.style.color = '#eaa87e';
+    }
+  }, 12000);
+}
+
+/* A janelinha avisa quando termina. Só a origem do Apps Script vale: sem essa
+   checagem, qualquer página poderia forjar o "gravado na planilha" — e é
+   justamente essa mensagem que faz parar de conferir. */
+window.addEventListener('message', ev => {
+  if (ev.origin !== 'https://script.google.com') return;
+  const m = ev.data;
+  if (!m || m.guia !== 'verificar') return;
+  if (m.texto && /painel do dono/i.test(m.texto)){
+    const onde = document.getElementById('resultadoTeste');
+    onde.textContent = (m.estado === 'ok' ? '✓ ' : '⚠ ') + m.texto;
+    onde.style.color = m.estado === 'ok' ? '#6f8f5f' : '#eaa87e';
+    return;
+  }
+  toast(m.estado === 'ok'
+    ? 'Gravado na planilha. O selo aparece no site na próxima sincronização.'
+    : 'A planilha recusou a gravação — veja a mensagem na janelinha.');
+});
+
+/* ═══════════ Cliques ═══════════ */
+
+document.addEventListener('click', e => {
+  const alvo = (attr) => e.target.closest('[' + attr + ']')?.getAttribute(attr);
+  const ap = alvo('data-avisar');      if (ap) return avisar(ap);
+  const c  = alvo('data-copiar');      if (c)  return copiarMensagem(c);
+  const j  = alvo('data-javisei');     if (j)  return marcarAvisado(j, true);
+  const dv = alvo('data-desavisar');   if (dv) return marcarAvisado(dv, false);
+  const df = alvo('data-desfazer');    if (df){ anotarPendente(df, null); return desenharTudo(); }
+
+  const bs = e.target.closest('[data-selo]');
+  if (bs) return marcarSelo(bs.getAttribute('data-selo'), bs.dataset.valor);
+
+  const chip = e.target.closest('[data-f]');
+  if (chip){ filtroRevisar = filtroRevisar === chip.dataset.f ? '' : chip.dataset.f; return desenharRevisar(); }
+  if (e.target.closest('[data-limpar]')){ filtroRevisar = ''; return desenharRevisar(); }
+  if (e.target.closest('[data-copiar-lista]')) return copiarLista();
+});
+
+async function copiarLista(){
+  const texto = selecionados().map(d => d.nome || d.dirigente).join('\n');
+  if (!texto) return;
+  try { await navigator.clipboard.writeText(texto); toast('Nomes copiados.'); }
+  catch { window.prompt('Copie os nomes:', texto); }
+}
+
+document.getElementById('btnTestar').addEventListener('click', testarEndereco);
+document.getElementById('btnLimparAvisados').addEventListener('click', () => {
+  if (!confirm('Esquecer quem você já avisou?\n\nA lista volta a mostrar todos como pendentes. Nada muda na planilha.')) return;
+  localStorage.removeItem(CHAVE_AVISADOS); desenharTudo(); toast('Marcações de aviso apagadas.');
+});
+document.getElementById('btnLimparPendentes').addEventListener('click', () => {
+  if (!confirm('Esquecer os selos que estão aguardando a sincronização?\n\nNada muda na planilha.')) return;
+  localStorage.removeItem(CHAVE_PENDENTES); desenharTudo(); toast('Pendências apagadas.');
+});
+
+/* ═══════════ Início ═══════════ */
+
+function desenharTudo(){
+  desenharAvisar();
+  desenharSelo();
+  desenharRevisar();
+}
+
+fetch('../dados.json', { cache:'no-store' })
+  .then(r => r.ok ? r.json() : Promise.reject(r.status))
+  .then(j => {
+    DADOS = j.registros || [];
+    if (!temApi()) API_DONO = (j.apiVerificar || '').trim();
+
+    const quando = j.geradoEm ? new Date(j.geradoEm) : null;
+    document.getElementById('resumoTopo').textContent =
+      `${DADOS.length} cadastros` + (quando
+        ? ` · lista atualizada em ${quando.toLocaleDateString('pt-BR')} às ${quando.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}`
+        : '');
+
+    document.getElementById('enderecoDono').textContent = temApi()
+      ? API_DONO.replace(/^https:\/\/script\.google\.com\/macros\/s\//, '…/').slice(0, 46) + '…'
+      : 'não configurado';
+
+    document.getElementById('caixaSincronia').innerHTML = `
+      <p><strong>Quando o site muda</strong></p>
+      <p>A lista é refeita de hora em hora a partir da planilha. O que você fizer aqui
+      aparece no guia na sincronização seguinte, não na hora.</p>
+      <p class="det">Para adiantar: no GitHub, Actions → Sincronizar planilha do formulário →
+      Run workflow.</p>`;
+
+    if (!temApi()){
+      document.getElementById('placarAvisar').insertAdjacentHTML('beforebegin',
+        `<div class="caixa alerta">O endereço do Apps Script não está configurado.
+         Dá para ver as listas, mas não para acender selo nem montar a mensagem com o
+         link privado. Veja em <b>Ajustes</b>.</div>`);
+    }
+    desenharTudo();
+  })
+  .catch(() => {
+    document.getElementById('resumoTopo').textContent =
+      'Não consegui carregar os cadastros. Abra esta página pelo site publicado.';
+  });
+
+mostrarAba((location.hash || '').replace('#',''));
+</script>
+</body>
+</html>

@@ -114,6 +114,60 @@ secao('o cadastro pelo site');
   await p.close();
 }
 
+secao('o painel do dono');
+{
+  const p = await navegador.newPage({ viewport:{ width:900, height:1000 } });
+  await semRede(p);
+  const abertas = [];
+  await p.addInitScript(() => { window.__abertas = [];
+    window.open = (u) => { window.__abertas.push(u); return { closed:false }; }; });
+  await p.goto(B + '/painel/'); await p.evaluate(() => localStorage.clear());
+  await p.reload(); await p.waitForTimeout(900);
+
+  ok('fora do índice dos buscadores',
+     /noindex/.test(await p.evaluate(() => document.querySelector('meta[name=robots]').content)));
+  const robots = await p.evaluate(async u => (await (await fetch(u)).text()), B + '/robots.txt');
+  ok('robots.txt também bloqueia', /Disallow: \/painel\//.test(robots));
+
+  ok('abre na aba de avisar', !(await p.locator('#aba-avisar').isHidden()));
+  const total = await p.evaluate(async u => (await (await fetch(u)).json()).registros.length, B + '/dados.json');
+  ok(`lista os ${total} cadastros para avisar`, await p.locator('#listaAvisar .cartao').count() === total);
+
+  await p.click('.aba[data-aba="selo"]'); await p.waitForTimeout(300);
+  ok('a aba do selo mostra os mesmos cadastros',
+     await p.locator('#listaSelo .cartao').count() === total && await p.locator('#aba-avisar').isHidden());
+
+  await p.click('.aba[data-aba="revisar"]'); await p.waitForTimeout(300);
+  ok('a aba de revisão traz os chips de problema', await p.locator('#placarRevisar .chip').count() > 1);
+
+  await p.click('.aba[data-aba="ajustes"]'); await p.waitForTimeout(300);
+  const ajustes = await p.locator('#aba-ajustes').innerText();
+  ok('os ajustes dizem a verdade sobre quem consegue abrir',
+     /qualquer pessoa que souber o endereço/i.test(ajustes));
+  ok('e onde fica a fechadura de verdade', /somente eu/i.test(ajustes));
+  ok('tem o botão de testar o endereço', await p.locator('#btnTestar').isVisible());
+
+  // Voltar para avisar e usar de fato
+  await p.click('.aba[data-aba="avisar"]'); await p.waitForTimeout(300);
+  const antes = await p.locator('#placarAvisar').innerText();
+  await p.locator('#listaAvisar .cartao').first().locator('[data-avisar]').click();
+  await p.waitForTimeout(400);
+  const url = (await p.evaluate(() => window.__abertas))[0] || '';
+  ok('avisar abre o Apps Script, que é quem tem a chave',
+     /script\.google\.com/.test(url) && /acao=avisar/.test(url));
+  ok('e marca como avisado', (await p.locator('#placarAvisar').innerText()) !== antes);
+  ok('a marcação sobrevive ao recarregar', await (async () => {
+    await p.reload(); await p.waitForTimeout(900);
+    return (await p.locator('#placarAvisar').innerText()) !== antes;
+  })());
+
+  ok('o endereço antigo encaminha para cá', await (async () => {
+    await p.goto(B + '/avisos/'); await p.waitForTimeout(600);
+    return /painel/.test(p.url()) || (await p.content()).includes('painel/#avisar');
+  })());
+  await p.close();
+}
+
 secao('o guia');
 {
   const p = await navegador.newPage({ viewport:{ width:1280, height:900 } });
