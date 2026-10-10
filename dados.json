@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-09-11T00:39:15.456Z",
+  "geradoEm": "2026-10-10T17:50:19.178Z",
   "formulario": "https://docs.google.com/forms/d/e/1FAIpQLSdha6CPyRtEe_2-ZSJM5NsMNOnXead1ZhU49ZoX3h0ZbIWifg/viewform?usp=header",
   "apiVerificar": "https://script.google.com/macros/s/AKfycbya_mjHgaMdzr2NPX4SwFy5inm2G2qnGuNhq-TuJpwtOuguxym56fnjgl7RnJb5VDA-aA/exec",
   "apiPublica": "https://script.google.com/macros/s/AKfycbyGzZR9M3IQZCdR1cbCRvvdciMl7Ixtz_NSYwUEHsinjVH2q2HNqLtk5kVhhufM-0dA/exec",
@@ -482,10 +482,10 @@
       "telefone": "19996721211",
       "redes": "",
       "horarios": "Quinta feira às 20:30 gira aberta",
-      "servicos": "Consultas oracular,giras de umbanda",
-      "verificado": "",
-      "confirmadoEm": "",
-      "regras": "Temos giras de umbanda e também consulta oracular particular",
+      "servicos": "Jogo de buzios,giras de umbanda",
+      "verificado": "sim",
+      "confirmadoEm": "10/10/2026 13:52:12",
+      "regras": "Temos giras de umbanda ,jogo de búzios, trabalhos espirituais",
       "grupos": [
         "Umbanda"
       ],
@@ -530,6 +530,28 @@
       "verificado": "sim",
       "confirmadoEm": "",
       "regras": "NÃO  USAR  Roupas  Curtas Nem cores Preto e Vermelha",
+      "grupos": [
+        "Umbanda"
+      ],
+      "grupo": "Umbanda"
+    },
+    {
+      "timestamp": "10/10/2026 14:26:51",
+      "nome": "Tenda de Umbanda Caboclo Ventania e Exú Meia Noite",
+      "dirigente": "Fátima Fessel",
+      "tradicao": "Umbanda",
+      "tempo": "25 anos",
+      "cidade": "Piracicaba",
+      "bairro": "Vila Industrial",
+      "endereco": "Rua Luis Poppin, 237",
+      "modalidade": "Presencial",
+      "telefone": "#ERROR!",
+      "redes": "Facebook: Tenda de Umbanda Caboclo Ventania e Exu Meia Noite Instagran: ventaniaexumeianoite TikTok: tenda ventania Exu meia noite",
+      "horarios": "Todas as terças feiras às 20:00 hs\n\nDistribuição de senhas a partir das 19:30 hs",
+      "servicos": "Atendimentos, jogos da cartas com cigana, trabalhos.",
+      "verificado": "",
+      "confirmadoEm": "",
+      "regras": "Venha com respeito e fé.",
       "grupos": [
         "Umbanda"
       ],
