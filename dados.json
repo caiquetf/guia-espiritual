@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-10-10T17:50:19.178Z",
+  "geradoEm": "2026-10-12T20:16:21.827Z",
   "formulario": "https://docs.google.com/forms/d/e/1FAIpQLSdha6CPyRtEe_2-ZSJM5NsMNOnXead1ZhU49ZoX3h0ZbIWifg/viewform?usp=header",
   "apiVerificar": "https://script.google.com/macros/s/AKfycbya_mjHgaMdzr2NPX4SwFy5inm2G2qnGuNhq-TuJpwtOuguxym56fnjgl7RnJb5VDA-aA/exec",
   "apiPublica": "https://script.google.com/macros/s/AKfycbyGzZR9M3IQZCdR1cbCRvvdciMl7Ixtz_NSYwUEHsinjVH2q2HNqLtk5kVhhufM-0dA/exec",
@@ -268,6 +268,28 @@
         "Outros"
       ],
       "grupo": "Outros"
+    },
+    {
+      "timestamp": "12/10/2026 17:00:59",
+      "nome": "Jogo de Cartas com Cigana Jade",
+      "dirigente": "Fátima Fessel",
+      "tradicao": "Umbanda",
+      "tempo": "25",
+      "cidade": "Piracicaba",
+      "bairro": "Vila Industrial",
+      "endereco": "Rua Luís Poppin, 237",
+      "modalidade": "Presencial",
+      "telefone": "19981703691",
+      "redes": "https://www.facebook.com/share/19cuMD7e21/",
+      "horarios": "Todos os dias com hora marcada.",
+      "servicos": "Jogos de cartas",
+      "verificado": "",
+      "confirmadoEm": "",
+      "regras": "Venha com respeito e fé",
+      "grupos": [
+        "Umbanda"
+      ],
+      "grupo": "Umbanda"
     },
     {
       "timestamp": "05/08/2026 06:44:43",
