@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-10-12T20:16:21.827Z",
+  "geradoEm": "2026-10-15T20:19:21.733Z",
   "formulario": "https://docs.google.com/forms/d/e/1FAIpQLSdha6CPyRtEe_2-ZSJM5NsMNOnXead1ZhU49ZoX3h0ZbIWifg/viewform?usp=header",
   "apiVerificar": "https://script.google.com/macros/s/AKfycbya_mjHgaMdzr2NPX4SwFy5inm2G2qnGuNhq-TuJpwtOuguxym56fnjgl7RnJb5VDA-aA/exec",
   "apiPublica": "https://script.google.com/macros/s/AKfycbyGzZR9M3IQZCdR1cbCRvvdciMl7Ixtz_NSYwUEHsinjVH2q2HNqLtk5kVhhufM-0dA/exec",
@@ -40,8 +40,8 @@
       "redes": "",
       "horarios": "Agendamento tarô e outras práticas",
       "servicos": "Tarô, baralho cigano, mesa rádionica, constelação familiar, cromoterapia, Reiki, alinhamento de Chakras",
-      "verificado": "",
-      "confirmadoEm": "",
+      "verificado": "sim",
+      "confirmadoEm": "15/10/2026 15:14:41",
       "regras": "",
       "grupos": [
         "Umbanda"
@@ -84,8 +84,8 @@
       "redes": "",
       "horarios": "Desenvolvimento 2z ao mês / atendimento com Oráculo com hora marcada",
       "servicos": "Consulta espiritual particular",
-      "verificado": "",
-      "confirmadoEm": "",
+      "verificado": "sim",
+      "confirmadoEm": "15/10/2026 15:14:48",
       "regras": "Tirar dúvidas e agendar consulta pelo WhatsApp",
       "grupos": [
         "Quimbanda"
@@ -530,6 +530,28 @@
       "verificado": "",
       "confirmadoEm": "",
       "regras": "Respeito ao espaço sagrado, trazer velas!",
+      "grupos": [
+        "Umbanda"
+      ],
+      "grupo": "Umbanda"
+    },
+    {
+      "timestamp": "15/10/2026 15:20:25",
+      "nome": "Templo de Umbanda Integrativa Caboclo Pena Branca",
+      "dirigente": "Paula Rodrigues",
+      "tradicao": "Umbanda",
+      "tempo": "Mais de 10 anos",
+      "cidade": "Piracicaba",
+      "bairro": "Centro",
+      "endereco": "Rua Benjamin Constant, 723",
+      "modalidade": "Presencial",
+      "telefone": "19997200336",
+      "redes": "www.instagram.com/t.u.i.caboclopenabranca",
+      "horarios": "Giras toda terça-feira às 20hr",
+      "servicos": "",
+      "verificado": "",
+      "confirmadoEm": "",
+      "regras": "Ir de preferência de roupas o mais clara possível. Evitar ir também com roupas justas, decotadas. Lá é um espaço religioso então o respeito tem que ser de acordo.",
       "grupos": [
         "Umbanda"
       ],
